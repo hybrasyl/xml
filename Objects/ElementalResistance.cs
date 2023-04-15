@@ -23,46 +23,38 @@ using System.Collections.Generic;
 [Serializable]
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
-[XmlTypeAttribute(AnonymousType=true, Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class ItemDamageSmall
+[XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
+public partial class ElementalResistance
 {
     #region Private fields
-    private float _min;
-    private float _max;
+    private ElementType _type;
+    private float _modifier;
     private static XmlSerializer _serializerXml;
     #endregion
     
-    public ItemDamageSmall()
-    {
-        _min = ((float)(0F));
-        _max = ((float)(0F));
-    }
-    
     [XmlAttribute]
-    [DefaultValue(typeof(float), "0")]
-    public float Min
+    public ElementType Type
     {
         get
         {
-            return _min;
+            return _type;
         }
         set
         {
-            _min = value;
+            _type = value;
         }
     }
     
     [XmlAttribute]
-    [DefaultValue(typeof(float), "0")]
-    public float Max
+    public float Modifier
     {
         get
         {
-            return _max;
+            return _modifier;
         }
         set
         {
-            _max = value;
+            _modifier = value;
         }
     }
     
@@ -72,7 +64,7 @@ public partial class ItemDamageSmall
         {
             if ((_serializerXml == null))
             {
-                _serializerXml = new XmlSerializerFactory().CreateSerializer(typeof(ItemDamageSmall));
+                _serializerXml = new XmlSerializerFactory().CreateSerializer(typeof(ElementalResistance));
             }
             return _serializerXml;
         }
@@ -80,7 +72,7 @@ public partial class ItemDamageSmall
     
     #region Serialize/Deserialize
     /// <summary>
-    /// Serialize ItemDamageSmall object
+    /// Serialize ElementalResistance object
     /// </summary>
     /// <returns>XML value</returns>
     public virtual string Serialize()
@@ -113,16 +105,16 @@ public partial class ItemDamageSmall
     }
     
     /// <summary>
-    /// Deserializes ItemDamageSmall object
+    /// Deserializes ElementalResistance object
     /// </summary>
     /// <param name="input">string to deserialize</param>
-    /// <param name="obj">Output ItemDamageSmall object</param>
+    /// <param name="obj">Output ElementalResistance object</param>
     /// <param name="exception">output Exception value if deserialize failed</param>
     /// <returns>true if this Serializer can deserialize the object; otherwise, false</returns>
-    public static bool Deserialize(string input, out ItemDamageSmall obj, out Exception exception)
+    public static bool Deserialize(string input, out ElementalResistance obj, out Exception exception)
     {
         exception = null;
-        obj = default(ItemDamageSmall);
+        obj = default(ElementalResistance);
         try
         {
             obj = Deserialize(input);
@@ -135,19 +127,19 @@ public partial class ItemDamageSmall
         }
     }
     
-    public static bool Deserialize(string input, out ItemDamageSmall obj)
+    public static bool Deserialize(string input, out ElementalResistance obj)
     {
         Exception exception = null;
         return Deserialize(input, out obj, out exception);
     }
     
-    public static ItemDamageSmall Deserialize(string input)
+    public static ElementalResistance Deserialize(string input)
     {
         StringReader stringReader = null;
         try
         {
             stringReader = new StringReader(input);
-            return ((ItemDamageSmall)(SerializerXml.Deserialize(XmlReader.Create(stringReader))));
+            return ((ElementalResistance)(SerializerXml.Deserialize(XmlReader.Create(stringReader))));
         }
         finally
         {
@@ -158,14 +150,14 @@ public partial class ItemDamageSmall
         }
     }
     
-    public static ItemDamageSmall Deserialize(Stream s)
+    public static ElementalResistance Deserialize(Stream s)
     {
-        return ((ItemDamageSmall)(SerializerXml.Deserialize(s)));
+        return ((ElementalResistance)(SerializerXml.Deserialize(s)));
     }
     #endregion
     
     /// <summary>
-    /// Serializes current ItemDamageSmall object into file
+    /// Serializes current ElementalResistance object into file
     /// </summary>
     /// <param name="fileName">full path of outupt xml file</param>
     /// <param name="exception">output Exception value if failed</param>
@@ -206,16 +198,16 @@ public partial class ItemDamageSmall
     }
     
     /// <summary>
-    /// Deserializes xml markup from file into an ItemDamageSmall object
+    /// Deserializes xml markup from file into an ElementalResistance object
     /// </summary>
     /// <param name="fileName">File to load and deserialize</param>
-    /// <param name="obj">Output ItemDamageSmall object</param>
+    /// <param name="obj">Output ElementalResistance object</param>
     /// <param name="exception">output Exception value if deserialize failed</param>
     /// <returns>true if this Serializer can deserialize the object; otherwise, false</returns>
-    public static bool LoadFromFile(string fileName, out ItemDamageSmall obj, out Exception exception)
+    public static bool LoadFromFile(string fileName, out ElementalResistance obj, out Exception exception)
     {
         exception = null;
-        obj = default(ItemDamageSmall);
+        obj = default(ElementalResistance);
         try
         {
             obj = LoadFromFile(fileName);
@@ -228,13 +220,13 @@ public partial class ItemDamageSmall
         }
     }
     
-    public static bool LoadFromFile(string fileName, out ItemDamageSmall obj)
+    public static bool LoadFromFile(string fileName, out ElementalResistance obj)
     {
         Exception exception = null;
         return LoadFromFile(fileName, out obj, out exception);
     }
     
-    public static ItemDamageSmall LoadFromFile(string fileName)
+    public static ElementalResistance LoadFromFile(string fileName)
     {
         FileStream file = null;
         StreamReader sr = null;
