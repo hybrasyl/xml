@@ -28,14 +28,13 @@ public partial class EquipmentRestriction
 {
     #region Private fields
     private EquipmentSlot _slot;
-    private List<WeaponType> _type;
+    private WeaponType _type;
     private string _value;
     private static XmlSerializer _serializerXml;
     #endregion
     
     public EquipmentRestriction()
     {
-        _type = new List<WeaponType>();
     }
     
     [XmlAttribute]
@@ -52,7 +51,7 @@ public partial class EquipmentRestriction
     }
     
     [XmlAttribute]
-    public List<WeaponType> Type
+    public WeaponType Type
     {
         get
         {

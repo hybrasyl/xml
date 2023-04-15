@@ -26,8 +26,8 @@ public abstract class HybrasylLoadable
     public T Clone<T>()
     {
         var ms = new MemoryStream();
-        var writer = new BsonWriter(ms);
-        var reader = new BsonReader(ms);
+        var writer = new BsonDataWriter(ms);
+        var reader = new BsonDataReader(ms);
         var serializer = new JsonSerializer();
         serializer.Serialize(writer, this);
         ms.Position = 0;

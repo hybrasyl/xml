@@ -27,18 +27,17 @@ using System.Collections.Generic;
 public partial class ElementTableTargetElement
 {
     #region Private fields
-    private List<ElementType> _element;
+    private ElementType _element;
     private double _multiplier;
     private static XmlSerializer _serializerXml;
     #endregion
     
     public ElementTableTargetElement()
     {
-        _element = new List<ElementType>();
     }
     
     [XmlAttribute]
-    public List<ElementType> Element
+    public ElementType Element
     {
         get
         {
