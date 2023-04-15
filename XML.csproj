@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <AssemblyName>Hybrasyl.Xml</AssemblyName>
+    <RootNamespace>Hybrasyl.Xml</RootNamespace>
+    <PackageVersion>0.9.2.0</PackageVersion>
+    <Version>0.9.2.0</Version>
+    <BuildDocFx Condition="'$(Configuration)'=='Debug'">false</BuildDocFx>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='XML|AnyCPU'" />
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Entities|AnyCPU'" />
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.2" />
+  </ItemGroup>
+
+</Project>
