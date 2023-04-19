@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class CastableCrossIntent : HybrasylXmlEntity<CastableCrossIntent>
+public partial class CastableCrossIntent : HybrasylEntity<CastableCrossIntent>
 {
     #region Private fields
     private byte _radius;

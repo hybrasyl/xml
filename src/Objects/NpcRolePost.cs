@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class NpcRolePost : HybrasylXmlEntity<NpcRolePost>
+public partial class NpcRolePost : HybrasylEntity<NpcRolePost>
 {
     #region Private fields
     private List<NpcRolePostSurcharge> _surcharge;

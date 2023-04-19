@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class ItemRestrictions : HybrasylXmlEntity<ItemRestrictions>
+public partial class ItemRestrictions : HybrasylEntity<ItemRestrictions>
 {
     #region Private fields
     private RestrictionsLevel _level;

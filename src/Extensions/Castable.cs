@@ -2,10 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class Castable
+public partial class Castable : ILoadOnStart<Castable>
 {
     public int Id
     {
@@ -18,7 +20,10 @@ public partial class Castable
         }
     }
 
-    public Guid Guid { get; set; }
+    public new static XmlLoadResult<Castable> LoadAll()
+    {
+        return new XmlLoadResult<Castable>();
+    }
 
     // Helper functions to deal with xml vagaries
     public List<AddStatus> AddStatuses => Effects.Statuses?.Add ?? new List<AddStatus>();

@@ -7,12 +7,13 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Serialization;
+using Hybrasyl.Xml.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class Item
+public partial class Item : ICategorizable<Item>
 {
     public static SHA256 sha = SHA256.Create();
 
@@ -21,13 +22,30 @@ public partial class Item
     [XmlIgnore] public Item ParentItem { get; set; }
 
     [XmlIgnore]
-    public List<string> Categories
+    public List<string> CategoryList
     {
         get
         {
             if (Properties?.Categories is not null)
                 return Properties.Categories.Select(selector: x => x.Value.ToLower()).ToList();
             return new List<string>();
+        }
+    }
+
+    [XmlIgnore]
+    public List<Category> Categories
+    {
+        get
+        {
+            Properties ??= new ItemProperties();
+            Properties.Categories ??= new List<Category>();
+            return Properties.Categories;
+        }
+        set
+        {
+            Properties ??= new ItemProperties();
+            Properties.Categories ??= new List<Category>();
+            Properties.Categories = value;
         }
     }
 

@@ -2,56 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Hybrasyl.Xml.src;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class CreatureBehaviorSet : HybrasylLoadable, IHybrasylLoadable<CreatureBehaviorSet>
+public partial class CreatureBehaviorSet
 {
-    public static string DataDirectory => "behaviorsets";
-
-    public static XmlLoadResponse<CreatureBehaviorSet> LoadAll(string baseDir)
-    {
-        var ret = new XmlLoadResponse<CreatureBehaviorSet>();
-        var imports = new Dictionary<string, CreatureBehaviorSet>();
-        foreach (var xml in GetXmlFiles(Path.Join(baseDir, DataDirectory)))
-        {
-            if (xml.Contains(".ignore"))
-                continue;
-
-            try
-            {
-                var set = LoadFromFile(xml);
-                if (!string.IsNullOrEmpty(set.Import))
-                    imports.Add(xml, set);
-                else
-                    ret.Results.Add(set);
-            }
-            catch (Exception e)
-            {
-                ret.Errors.Add(xml, e.ToString());
-            }
-        }
-
-        // Now process imports. This could be made nicer
-        foreach (var importset in imports)
-        {
-            var importedSet =
-                ret.Results.FirstOrDefault(predicate: s => s.Name.ToLower() == importset.Value.Import.ToLower());
-            if (importedSet == null)
-            {
-                ret.Errors.Add(importset.Key, $"Referenced import set {importset.Value.Import} not found");
-                continue;
-            }
-
-            var newSet = importedSet.Clone<CreatureBehaviorSet>();
-            var resolved = importset.Value & newSet;
-            resolved.Name = importset.Value.Name;
-            ret.Results.Add(resolved);
-        }
-
-        return ret;
-    }
 
     /// <summary>
     ///     Merge two behavior sets together

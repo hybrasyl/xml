@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class DataStore : HybrasylXmlEntity<DataStore>
+public partial class DataStore : HybrasylEntity<DataStore>
 {
     #region Private fields
     private string _username;

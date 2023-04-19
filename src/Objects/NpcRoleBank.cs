@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class NpcRoleBank : HybrasylXmlEntity<NpcRoleBank>
+public partial class NpcRoleBank : HybrasylEntity<NpcRoleBank>
 {
     #region Private fields
     private string _nation;

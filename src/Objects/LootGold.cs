@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class LootGold : HybrasylXmlEntity<LootGold>
+public partial class LootGold : HybrasylEntity<LootGold>
 {
     #region Private fields
     private uint _min;

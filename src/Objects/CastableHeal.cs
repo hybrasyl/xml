@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class CastableHeal : HybrasylXmlEntity<CastableHeal>
+public partial class CastableHeal : HybrasylEntity<CastableHeal>
 {
     #region Private fields
     private SimpleQuantity _simple;

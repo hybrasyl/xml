@@ -25,7 +25,7 @@ using System.Collections.Generic;
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
 [XmlRootAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02", IsNullable=false)]
-public partial class ServerConfig : HybrasylXmlEntity<ServerConfig>
+public partial class ServerConfig : HybrasylEntity<ServerConfig>
 {
     #region Private fields
     private List<LogConfig> _logging;

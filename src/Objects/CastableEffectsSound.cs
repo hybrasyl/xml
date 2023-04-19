@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(AnonymousType=true, Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class CastableEffectsSound : HybrasylXmlEntity<CastableEffectsSound>
+public partial class CastableEffectsSound : HybrasylEntity<CastableEffectsSound>
 {
     #region Private fields
     private byte _id;

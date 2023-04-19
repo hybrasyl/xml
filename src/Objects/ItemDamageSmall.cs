@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(AnonymousType=true, Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class ItemDamageSmall : HybrasylXmlEntity<ItemDamageSmall>
+public partial class ItemDamageSmall : HybrasylEntity<ItemDamageSmall>
 {
     #region Private fields
     private float _min;

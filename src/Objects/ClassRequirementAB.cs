@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(AnonymousType=true, Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class ClassRequirementAB : HybrasylXmlEntity<ClassRequirementAB>
+public partial class ClassRequirementAB : HybrasylEntity<ClassRequirementAB>
 {
     #region Private fields
     private byte _min;

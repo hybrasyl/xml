@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class CastableReactor : HybrasylXmlEntity<CastableReactor>
+public partial class CastableReactor : HybrasylEntity<CastableReactor>
 {
     #region Private fields
     private int _relativeX;

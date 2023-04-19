@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class GlobalBoard : HybrasylXmlEntity<GlobalBoard>
+public partial class GlobalBoard : HybrasylEntity<GlobalBoard>
 {
     #region Private fields
     private GlobalBoardAccessList _accessList;
