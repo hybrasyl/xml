@@ -28,7 +28,7 @@ using System.Collections.Generic;
 public partial class Status : HybrasylEntity<Status>
 {
     #region Private fields
-    private string _category;
+    private List<Category> _categories;
     private CastRestriction _castRestriction;
     private StatusEffects _effects;
     private string _prohibitedMessage;
@@ -41,19 +41,20 @@ public partial class Status : HybrasylEntity<Status>
     
     public Status()
     {
+        _categories = new List<Category>();
         _tick = 1;
     }
     
-    [StringLengthAttribute(255, MinimumLength=1)]
-    public string Category
+    [XmlArrayItemAttribute(IsNullable=false)]
+    public List<Category> Categories
     {
         get
         {
-            return _category;
+            return _categories;
         }
         set
         {
-            _category = value;
+            _categories = value;
         }
     }
     

@@ -7,6 +7,16 @@ namespace Hybrasyl.Xml.Objects;
 
 public partial class CreatureBehaviorSet
 {
+    private List<string> _skillCategories;
+    private List<string> _spellCategories;
+
+    public List<string> LearnSkillCategories => string.IsNullOrEmpty(Castables?.SkillCategories)
+        ? new List<string>()
+        : Castables.SkillCategories.Trim().ToLower().Split(" ").ToList();
+
+    public List<string> LearnSpellCategories => string.IsNullOrEmpty(Castables?.SpellCategories)
+        ? new List<string>()
+        : Castables.SpellCategories.Trim().ToLower().Split(" ").ToList();
 
     /// <summary>
     ///     Merge two behavior sets together

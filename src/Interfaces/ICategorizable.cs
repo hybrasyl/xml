@@ -10,6 +10,7 @@ public interface ICategorizable<T> where T : HybrasylEntity<T>
 {
     public List<string> CategoryList { get; }
     public List<Category> Categories { get; set; }
+    public string Name { get; set; }
 
     public void AddCategories(params string[] categories)
     {

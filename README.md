@@ -4,6 +4,8 @@ This package provides a number of objects that can be used to work
 with [Hybrasyl Server](https://github.com/hybrasyl/server)'s world
 data (maps, items, NPCs, warps, etc). 
 
+It can be found [on Nuget](https://www.nuget.org/packages/Hybrasyl.Xml)
+
 XML schemas for Hybrasyl XML data can be found in
 [XSD](https://github.com/hybrasyl/xml/tree/main/XSD). We use
 [xsd2code++](https://www.xsd2code.com/) to generate C# classes from

@@ -244,6 +244,7 @@
             <xs:element name="Comment" minOccurs="0" maxOccurs="1" type="hyb:String16" />
             <xs:element name="Properties" minOccurs="1" maxOccurs="1" type="hyb:ItemProperties" />
         </xs:sequence>
+        <xs:attribute name="IncludeInMetafile" use="optional" default="true" type="xs:boolean"/>
     </xs:complexType>
 
     <xs:complexType name="Variant">

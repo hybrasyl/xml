@@ -7,8 +7,9 @@ using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class Castable : ILoadOnStart<Castable>
+public partial class Castable : ILoadOnStart<Castable>, ICategorizable<Castable>
 {
+    [Obsolete("This behavior is undesirable")]
     public int Id
     {
         get
@@ -20,10 +21,10 @@ public partial class Castable : ILoadOnStart<Castable>
         }
     }
 
-    public new static XmlLoadResult<Castable> LoadAll()
-    {
-        return new XmlLoadResult<Castable>();
-    }
+    public override string PrimaryKey => Id.ToString();
+    public override List<string> SecondaryKeys => new() { Name };
+    
+    public new static XmlLoadResult<Castable> LoadAll(string path) => HybrasylEntity<Castable>.LoadAll(path);
 
     // Helper functions to deal with xml vagaries
     public List<AddStatus> AddStatuses => Effects.Statuses?.Add ?? new List<AddStatus>();
@@ -101,4 +102,27 @@ public class CastableComparer : IEqualityComparer<Castable>
         return hCode.GetHashCode();
     }
 }
+
+public partial class CastableHeal
+{
+    public bool IsSimple => string.IsNullOrEmpty(Formula);
+
+    // temporary silliness due to xsd issues
+    public bool IsEmpty => IsSimple && Simple.Value == 0 && Simple.Min == 0 && Simple.Max == 0;
+}
+
+public partial class CastableDamage
+{
+    public bool IsSimple => string.IsNullOrEmpty(Formula);
+
+    // temporary silliness due to xsd issues
+    public bool IsEmpty => IsSimple && Simple.Value == 0 && Simple.Min == 0 && Simple.Max == 0;
+}
+
+public partial class CastableIntent
+{
+    public bool IsShapeless =>
+        Cross.Count == 0 && Line.Count == 0 && Square.Count == 0 && Tile.Count == 0 && Map == null;
+}
+
 

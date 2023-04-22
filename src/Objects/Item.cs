@@ -32,11 +32,13 @@ public partial class Item : HybrasylEntity<Item>
     private string _unidentifiedName;
     private string _comment;
     private ItemProperties _properties;
+    private bool _includeInMetafile;
     #endregion
     
     public Item()
     {
         _properties = new ItemProperties();
+        _includeInMetafile = true;
     }
     
     [StringLengthAttribute(255, MinimumLength=1)]
@@ -87,6 +89,20 @@ public partial class Item : HybrasylEntity<Item>
         set
         {
             _properties = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(true)]
+    public bool IncludeInMetafile
+    {
+        get
+        {
+            return _includeInMetafile;
+        }
+        set
+        {
+            _includeInMetafile = value;
         }
     }
 }

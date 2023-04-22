@@ -6,14 +6,18 @@ using System.IO;
 using System.Linq;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;
+using Pluralize.NET;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class HybrasylEntity<T>
+public partial class HybrasylEntity<T> : IIndexable
 {
+    private static readonly Pluralizer Pluralizer = new Pluralizer();
     public Guid Guid { get; set; } = new Guid();
     public string Filename => string.IsNullOrWhiteSpace(LoadPath) ? null : Path.GetFileName(LoadPath);
     public string LoadPath { get; set; }
+    public virtual string PrimaryKey => $"{typeof(T).Name}-{Filename}";
+    public virtual List<string> SecondaryKeys => new();
 
     public T Clone<T>() where T : HybrasylEntity<T>
     {
@@ -46,6 +50,27 @@ public partial class HybrasylEntity<T>
 
         return new List<string>();
     }
-    public static XmlLoadResult<T> LoadAll(IWorldDataManager manager) => throw new NotImplementedException();
+
+    // C#11 was supposed to support virtual statics; eventually this can be redone with that support
+    public static XmlLoadResult<T> LoadAll(string rootPath)
+    {
+        var ret = new XmlLoadResult<T>();
+        foreach (var xmlFile in GetXmlFiles(Path.Join(rootPath, Pluralizer.Pluralize(typeof(T).Name.ToLower()))))
+        {
+            try
+            {
+                var entity = LoadFromFile(xmlFile);
+                if (entity is not HybrasylEntity<T> hybrasylEntity) throw new InvalidOperationException("Unsupported type {typeof(T).Name}");
+                hybrasylEntity.LoadPath = xmlFile;
+                ret.Results.Add(entity);
+                ret.TotalProcessed++;
+            }
+            catch (Exception ex)
+            {
+                ret.Errors.Add(xmlFile, ex.ToString());
+            }
+        }
+        return ret;
+    }
 
 }

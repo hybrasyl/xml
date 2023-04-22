@@ -1,18 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Objects;
 
 namespace Hybrasyl.Xml.Manager;
 
-public class XmlStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
+public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
 {
     private Dictionary<Guid, T> _store { get; set; } = new();
     private Dictionary<StoreKey, Guid> _index { get; set; } = new();
     private Dictionary<Guid, HashSet<StoreKey>> _reverseIndex { get; set; } = new();
 
     private object _lock { get; } = new();
+
+    
+    private Dictionary<string, HashSet<Guid>> _categories = new();
+
+    private void AddCategoriesToIndex(Guid entityGuid, params string[] categories)
+    {
+        foreach (var category in categories)
+        {
+            if (!_categories.TryGetValue(category, out var guid))
+                _categories[category] = new HashSet<Guid>();
+            _categories[category].Add(entityGuid);
+        }
+    }
+
+    private void RemoveCategoriesFromIndex(Guid entityGuid, params string[] categories)
+    {
+        foreach (var category in categories)
+        {
+            if (!_categories.TryGetValue(category, out var guid))
+                return;
+            _categories[category].Remove(entityGuid);
+        }
+    }
+
+    public void AddCategory(dynamic name, params string[] categories)
+    {
+        if (TryGetValue(name, out T result)) return;
+        if (result is ICategorizable<T> categorizable)
+            categorizable.AddCategories(categories);
+        AddCategoriesToIndex(result.Guid, categories);
+    }
+
+    public void RemoveCategory(dynamic name, params string[] categories)
+    {
+        if (TryGetValue(name, out T result)) return;
+        if (result is ICategorizable<T> categorizable)
+            categorizable.RemoveCategories(categories);
+        RemoveCategoriesFromIndex(result.Guid, categories);
+    }
 
     private void StoreItem(T entity, dynamic key, params dynamic[] indexes)
     {
