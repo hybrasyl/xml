@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;
 using Pluralize.NET;
@@ -13,11 +14,14 @@ namespace Hybrasyl.Xml.Objects;
 public partial class HybrasylEntity<T> : IIndexable
 {
     private static readonly Pluralizer Pluralizer = new Pluralizer();
-    public Guid Guid { get; set; } = new Guid();
+    public Guid Guid { get; set; } = Guid.NewGuid();
     public string Filename => string.IsNullOrWhiteSpace(LoadPath) ? null : Path.GetFileName(LoadPath);
     public string LoadPath { get; set; }
     public virtual string PrimaryKey => $"{typeof(T).Name}-{Filename}";
     public virtual List<string> SecondaryKeys => new();
+
+    public XmlError Error { get; set; } = XmlError.None;
+    public string ErrorMessage { get; set; } = string.Empty;
 
     public T Clone<T>() where T : HybrasylEntity<T>
     {
@@ -55,7 +59,7 @@ public partial class HybrasylEntity<T> : IIndexable
     public static XmlLoadResult<T> LoadAll(string rootPath)
     {
         var ret = new XmlLoadResult<T>();
-        foreach (var xmlFile in GetXmlFiles(Path.Join(rootPath, Pluralizer.Pluralize(typeof(T).Name.ToLower()))))
+        foreach (var xmlFile in GetXmlFiles(rootPath))
         {
             try
             {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Hybrasyl.Xml.Interfaces;
 
 namespace Hybrasyl.Xml.Manager;
@@ -16,4 +17,14 @@ public struct XmlLoadResult<T> : ILoadResult<T>
     public XmlLoadResult() {}
 
 }
+
+public struct XmlProcessResult<T> : IProcessResult<T>
+{
+    public XmlProcessResult() {}
+    public Dictionary<Guid, string> Errors { get; set; } = new();
+    public int ErrorCount => Errors.Count;
+    public int AdditionalCount => AdditionalItems.Count;
+    public List<T> AdditionalItems { get; set; } = new();
+}
+
 

@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Hybrasyl.Xml.Enums;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class CreatureBehaviorSet
+public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>, ILoadOnStart<CreatureBehaviorSet>
 {
     private List<string> _skillCategories;
     private List<string> _spellCategories;
@@ -17,6 +20,31 @@ public partial class CreatureBehaviorSet
     public List<string> LearnSpellCategories => string.IsNullOrEmpty(Castables?.SpellCategories)
         ? new List<string>()
         : Castables.SpellCategories.Trim().ToLower().Split(" ").ToList();
+
+
+    public new static XmlLoadResult<CreatureBehaviorSet> LoadAll(string path) =>
+        HybrasylEntity<CreatureBehaviorSet>.LoadAll(path);
+
+    public static XmlProcessResult<CreatureBehaviorSet> Process(IWorldDataManager manager)
+    {
+        var ret = new XmlProcessResult<CreatureBehaviorSet>();
+        foreach (var import in manager.Find<CreatureBehaviorSet>(x => !string.IsNullOrWhiteSpace(x.Import)))
+        {
+            if (!manager.TryGetValue(import, out CreatureBehaviorSet creatureBehaviorSet))
+            {
+                manager.FlagAsError(import, XmlError.ProcessingError,
+                    "{import.Filename}: Referenced import set {import.Import} not found");
+                ret.Errors.Add(import.Guid, "{import.Filename}: Referenced import set {import.Import} not found" );
+            }
+
+            var newSet = import.Clone<CreatureBehaviorSet>();
+            var resolved = import & newSet;
+            resolved.Name = import.Name;
+            ret.AdditionalItems.Add(resolved);
+        }
+
+        return ret;
+    }
 
     /// <summary>
     ///     Merge two behavior sets together

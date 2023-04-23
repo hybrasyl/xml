@@ -1,8 +1,10 @@
 ﻿using System;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class LootSet
+public partial class LootSet : ILoadOnStart<LootSet>
 {
     [Obsolete("This behavior is undesirable")]
     public int Id
@@ -15,4 +17,7 @@ public partial class LootSet
             }
         }
     }
+
+    public new static XmlLoadResult<LootSet> LoadAll(string path) => HybrasylEntity<LootSet>.LoadAll(path);
+
 }

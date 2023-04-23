@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Objects;
 using Pluralize.NET;
@@ -71,16 +72,13 @@ public class XmlDataManager : IWorldDataManager
     public bool TryGetValueByIndex<T>(dynamic index, out T result) where T : HybrasylEntity<T> =>
         GetStore<T>().TryGetValueByIndex(index, out result);
 
-    public IEnumerable<T> Values<T>() where T : HybrasylEntity<T> => GetStore<T>().Values;
+    public IEnumerable<T> Values<T>() where T : HybrasylEntity<T> => GetStore<T>().Items;
     public bool ContainsKey<T>(dynamic name) where T : HybrasylEntity<T> => GetStore<T>().ContainsKey(name);
     public bool ContainsIndex<T>(dynamic index) where T : HybrasylEntity<T> => GetStore<T>().ContainsIndex(index);
     public int Count<T>() where T : HybrasylEntity<T> => GetStore<T>().Count;
     public bool Remove<T>(dynamic name) where T : HybrasylEntity<T> => GetStore<T>().Remove(name);
     public bool RemoveByIndex<T>(dynamic index) where T : HybrasylEntity<T> => GetStore<T>().RemoveByIndex(index);
     public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : HybrasylEntity<T> => GetStore<T>().Find(condition);
-
-    public void ProcessAll<T>() where T : HybrasylEntity<T>, IPostProcessable<T> => throw new NotImplementedException();
-    public void ValidateAll<T>() where T : HybrasylEntity<T>, IAdditionalValidationRequired<T> => throw new NotImplementedException();
 
     public IEnumerable<Castable> FindSkills(long str = 0, long @int = 0, long wis = 0, long con = 0, long dex = 0,
         string category = null) => throw new NotImplementedException();
@@ -91,37 +89,8 @@ public class XmlDataManager : IWorldDataManager
 
     public string RootPath { get; set; }
 
-    public void LoadAll()
+    public void LoadData()
     {
-        // Makes heavy usage of reflection, which is a one-time performance hit (which is negligible
-        // compared to the overhead of reading XML from disk). If you care about this, you can
-        // use LoadAll<T> as needed.
-        // TODO: Consider rewriting to use LoadAll<T> via reflection / async?
-        //foreach (var kvp in _loadableTypes)
-        //{
-        //    var storeType = typeof(XmlDataStore<>);
-        //    var categoryStoreType = typeof(XmlCategoryStore<>);
-        //    var categorizingType = typeof(ICategorizable<>);
-        //    if (kvp.Key.IsGenericType && kvp.Key.GetGenericTypeDefinition() == categorizingType)
-        //    {
-        //        var type = categoryStoreType.MakeGenericType(kvp.Key);
-        //        _dataStore[type] = Activator.CreateInstance(type);
-        //    }
-        //    else
-        //    {
-        //        var type = storeType.MakeGenericType(kvp.Key);
-        //        _dataStore[type] = Activator.CreateInstance(type);
-        //    }
-
-        //    var loadMethod = GetMethod("LoadAll", kvp.Key);
-        //    if (loadMethod == null)
-        //        return;
-        //    dynamic result = loadMethod.Invoke(null, new object[] { this });
-
-
-        //}
-
-        // Find all ILoadOnStart types, and invoke LoadAll<T> for the types in question
         foreach (var kvp in _loadableTypes)
         {
             var method = typeof(XmlDataManager).GetMethods()
@@ -136,32 +105,94 @@ public class XmlDataManager : IWorldDataManager
                 throw new NotImplementedException();
             }
         }
+
+        foreach (var kvp in _processableTypes)
+        {
+            var method = typeof(XmlDataManager).GetMethods()
+                .FirstOrDefault(x => x.Name == "ProcessAll" && x.IsGenericMethod);
+            if (method != null)
+            {
+                var genMethod = method.MakeGenericMethod(kvp.Key);
+                genMethod.Invoke(this, new object[] { this });
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        foreach (var kvp in _validatableTypes)
+        {
+            var method = typeof(XmlDataManager).GetMethods()
+                .FirstOrDefault(x => x.Name == "ValidateAll" && x.IsGenericMethod);
+            if (method != null)
+            {
+                var genMethod = method.MakeGenericMethod(kvp.Key);
+                genMethod.Invoke(this, new object[] { this });
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
     }
 
     public void LoadAll<T>() where T : HybrasylEntity<T>, ILoadOnStart<T>
     {
-        if (!_dataStore.TryGetValue(typeof(T), out _)) 
-            _dataStore[typeof(T)] = new XmlDataStore<T>();
-
-        if (_dataStore[typeof(T)] is not XmlDataStore<T> store) return;
         var result = T.LoadAll(Path.Join(RootPath, Pluralizer.Pluralize(typeof(T).Name)));
 
         foreach (var entity in result.Results)
         {
-            if (entity.SecondaryKeys.Count > 0)
-                AddWithIndex(entity, entity.PrimaryKey, entity.SecondaryKeys.ToArray());
-            else
-                Add(entity, entity.PrimaryKey);
-    
-            if (entity is ICategorizable<T> categoryEntity)
-            {
-                store.AddCategory(entity.PrimaryKey, categoryEntity.CategoryList.ToArray());
-            }
+            AddToStore(entity);
+        }
+    }
+
+    private void AddToStore<T>(T entity) where T : HybrasylEntity<T>
+    {
+        var store = GetStore<T>();
+
+        if (entity.SecondaryKeys.Count > 0)
+            AddWithIndex(entity, entity.PrimaryKey, entity.SecondaryKeys.ToArray());
+        else
+            Add(entity, entity.PrimaryKey);
+
+        if (entity is ICategorizable<T> categoryEntity)
+        {
+            store.AddCategory(entity.PrimaryKey, categoryEntity.CategoryList.ToArray());
+        }
+    }
+
+    public void ProcessAll<T>() where T : HybrasylEntity<T>, IPostProcessable<T>
+    {
+        var result = T.Process(this);
+        foreach (var error in result.Errors)
+        {
+            FlagAsError(GetByGuid<T>(error.Key), XmlError.ProcessingError, error.Value);
         }
 
+        foreach (var entity in result.AdditionalItems)
+        {
+            AddToStore(entity);
+        }
 
     }
 
+    public void ValidateAll<T>() where T : HybrasylEntity<T>, IAdditionalValidation<T>
+    {
+        var result = T.Validate(this);
+        foreach (var error in result.Errors)
+        {
+            FlagAsError(GetByGuid<T>(error.Key), XmlError.AdditionalValidationError, error.Value);
+        }
+
+        foreach (var entity in result.AdditionalItems)
+        {
+            AddToStore(entity);
+        }
+    }
+
+    public void FlagAsError<T>(T entity, XmlError error, string message) where T : HybrasylEntity<T> => GetStore<T>().FlagAsError(entity.Guid, error, message);
 
 }
 

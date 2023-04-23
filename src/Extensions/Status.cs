@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class Status : ICategorizable<Status>
+public partial class Status : ICategorizable<Status>, ILoadOnStart<Status>
 {
     public List<string> CategoryList => Categories.Select(x => x.Value).ToList();
 
@@ -20,6 +21,8 @@ public partial class Status : ICategorizable<Status>
             }
         }
     }
+    public new static XmlLoadResult<Status> LoadAll(string path) => HybrasylEntity<Status>.LoadAll(path);
+    
 }
 
 public partial class StatusHeal

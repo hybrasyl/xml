@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
 
@@ -12,6 +13,10 @@ namespace Hybrasyl.Xml.Interfaces
 {
     public interface IWorldDataStore<T> where T : HybrasylEntity<T>
     {
+        public IEnumerable<T> Errors { get; }
+        public int ErrorCount => Errors.Count();
+        public int ItemCount => Items.Count();
+
         public T GetByGuid(Guid guid);
         public T GetByIndex(dynamic index);
         public void Add(T entity, string key);
@@ -28,9 +33,10 @@ namespace Hybrasyl.Xml.Interfaces
         public IEnumerable<T> Find(Func<T, bool> condition);
 
         public T this[dynamic key] { get; }
-        public IEnumerable<T> Values { get; }
+        public IEnumerable<T> Items { get; }
         public IReadOnlyCollection<StoreKey> Keys { get; }
         public int Count { get; }
+        public void FlagAsError(Guid guid, XmlError type, string error);
 
     }
 }

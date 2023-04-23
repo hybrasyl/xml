@@ -1,6 +1,11 @@
-﻿namespace Hybrasyl.Xml.Objects;
+﻿using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 
-public partial class VariantGroup
+namespace Hybrasyl.Xml.Objects;
+
+public partial class VariantGroup : ILoadOnStart<VariantGroup>
 {
     public Variant RandomVariant() => Variant.PickRandom();
+    public new static XmlLoadResult<VariantGroup> LoadAll(string path) => HybrasylEntity<VariantGroup>.LoadAll(path);
+
 }

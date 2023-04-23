@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Objects;
 
 namespace Hybrasyl.Xml.Interfaces;
@@ -23,7 +24,10 @@ public interface IWorldDataManager
     public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : HybrasylEntity<T>;
     public void LoadAll<T>() where T : HybrasylEntity<T>, ILoadOnStart<T>;
     public void ProcessAll<T>() where T : HybrasylEntity<T>, IPostProcessable<T>;
-    public void ValidateAll<T>() where T : HybrasylEntity<T>, IAdditionalValidationRequired<T>;
+    public void ValidateAll<T>() where T : HybrasylEntity<T>, IAdditionalValidation<T>;
+    public void FlagAsError<T>(T entity, XmlError error, string message) where T : HybrasylEntity<T>;
+
+    public void LoadData();
 
     public IEnumerable<Castable> FindSkills(long str = 0, long @int = 0, long wis = 0, long con = 0, long dex = 0,
         string category = null);

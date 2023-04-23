@@ -15,3 +15,11 @@ public interface ILoadResult<T>
     public int TotalProcessed { get; }
     public List<T> Results { get; set; }
 }
+
+public interface IProcessResult<T>
+{
+    public Dictionary<Guid, string> Errors { get; set; }
+    public int ErrorCount => Errors.Count;
+    public int AdditionalCount => AdditionalItems.Count;
+    public List<T> AdditionalItems { get; set; }
+}

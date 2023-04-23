@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Objects;
 
@@ -13,18 +14,37 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
     private Dictionary<StoreKey, Guid> _index { get; set; } = new();
     private Dictionary<Guid, HashSet<StoreKey>> _reverseIndex { get; set; } = new();
 
+    private HashSet<Guid> _errors { get; set; }
+
+    public IEnumerable<T> Errors => _errors.Select(item => _store[item]).ToList();
+
     private object _lock { get; } = new();
 
-    
     private Dictionary<string, HashSet<Guid>> _categories = new();
+
+    public void FlagAsError(Guid guid, XmlError type, string error)
+    {
+        if (!_store.TryGetValue(guid, out var value))
+            throw new ArgumentException(
+                "Guid {guid} does not exist and cannot be flagged as containing an error");
+        lock (_lock)
+        {
+            _errors.Add(guid);
+            value.Error = type;
+            value.ErrorMessage = error;
+        }
+    }
 
     private void AddCategoriesToIndex(Guid entityGuid, params string[] categories)
     {
         foreach (var category in categories)
         {
-            if (!_categories.TryGetValue(category, out var guid))
-                _categories[category] = new HashSet<Guid>();
-            _categories[category].Add(entityGuid);
+            lock (_lock)
+            {
+                if (!_categories.TryGetValue(category, out var guid))
+                    _categories[category] = new HashSet<Guid>();
+                _categories[category].Add(entityGuid);
+            }
         }
     }
 
@@ -32,9 +52,12 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
     {
         foreach (var category in categories)
         {
-            if (!_categories.TryGetValue(category, out var guid))
-                return;
-            _categories[category].Remove(entityGuid);
+            lock (_lock)
+            {
+                if (!_categories.TryGetValue(category, out var guid))
+                    return;
+                _categories[category].Remove(entityGuid);
+            }
         }
     }
 
@@ -143,7 +166,7 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
         return result != null;
     }
 
-    public IEnumerable<T> Values => _store.Values;
+    public IEnumerable<T> Items => _store.Values;
     public IReadOnlyCollection<StoreKey> Keys => _index.Keys;
 
     // TODO: make this less expensive

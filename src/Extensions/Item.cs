@@ -8,12 +8,13 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Serialization;
 using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class Item : ICategorizable<Item>
+public partial class Item : ICategorizable<Item>, ILoadOnStart<Item>
 {
     public static SHA256 sha = SHA256.Create();
 
@@ -51,6 +52,8 @@ public partial class Item : ICategorizable<Item>
 
     [XmlIgnore] public Dictionary<string, List<Item>> Variants { get; set; }
 
+    public new static XmlLoadResult<Item> LoadAll(string path) => HybrasylEntity<Item>.LoadAll(path);
+
     public IEnumerable<SlotRestriction> SlotRequirements =>
         (Properties.Restrictions?.SlotRestrictions ?? new List<SlotRestriction>()).Where(predicate: x =>
             x.Type == SlotRestrictionType.ItemRequired);
@@ -71,18 +74,6 @@ public partial class Item : ICategorizable<Item>
         var hash = sha.ComputeHash(Encoding.ASCII.GetBytes(rawhash));
         return string.Concat(hash.Select(selector: b => b.ToString("x2")))[..8];
     }
-
-    public Item Clone()
-    {
-        var ms = new MemoryStream();
-        var writer = new BsonDataWriter(ms);
-        var reader = new BsonDataReader(ms);
-        var serializer = new JsonSerializer();
-        serializer.Serialize(writer, this);
-        ms.Position = 0;
-        var obj = serializer.Deserialize<Item>(reader);
-        ms.Close();
-        return obj;    }
 
     public Item RandomVariant(string variant)
     {
