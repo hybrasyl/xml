@@ -160,7 +160,6 @@
     <xs:complexType name="WorldMapPoints">
         <xs:sequence>
             <xs:element name="Point" type="hyb:WorldMapPoint" minOccurs="1" maxOccurs="unbounded" />
-            <xs:element name="Restrictions" minOccurs="0" maxOccurs="1" type="hyb:WarpRestrictions" />
         </xs:sequence>
     </xs:complexType>
 

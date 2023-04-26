@@ -8,6 +8,7 @@ namespace Hybrasyl.Xml.Objects;
 
 public partial class Status : ICategorizable<Status>, ILoadOnStart<Status>
 {
+    public override string PrimaryKey => Name;
     public List<string> CategoryList => Categories.Select(x => x.Value).ToList();
 
     [Obsolete("This behavior is undesirable")]
@@ -21,7 +22,7 @@ public partial class Status : ICategorizable<Status>, ILoadOnStart<Status>
             }
         }
     }
-    public new static XmlLoadResult<Status> LoadAll(string path) => HybrasylEntity<Status>.LoadAll(path);
+    public new static void LoadAll(IWorldDataManager manager, string path) => HybrasylEntity<Status>.LoadAll(manager, path);
     
 }
 

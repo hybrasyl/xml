@@ -17,9 +17,16 @@ namespace Hybrasyl.Xml.Interfaces
         public int ErrorCount => Errors.Count();
         public int ItemCount => Items.Count();
 
+        public IAdditionalValidationResult ValidationResult { get; }
+        public ILoadResult LoadResult { get; }
+        public IProcessResult ProcessResult { get; }
+        public IEnumerable<T> Items { get; }
+        public IReadOnlyCollection<StoreKey> Keys { get; }
+        public int Count { get; }
+
         public T GetByGuid(Guid guid);
         public T GetByIndex(dynamic index);
-        public void Add(T entity, string key);
+        public void Add(T entity, dynamic key);
         public void AddWithIndex(T entity, dynamic key, params dynamic[] indexes);
         public bool TryGetValue(dynamic key, out T result);
         public bool TryGetValueByIndex(dynamic key, out T result);
@@ -27,16 +34,12 @@ namespace Hybrasyl.Xml.Interfaces
         public bool ContainsIndex(dynamic index);
         public bool Remove(dynamic key);
         public bool RemoveByIndex(dynamic index);
-        public IEnumerable<KeyValuePair<HashSet<StoreKey>, T>> GetEnumerator();
         public void Clear();
         public bool Contains(T entity);
         public IEnumerable<T> Find(Func<T, bool> condition);
+        public IEnumerable<KeyValuePair<HashSet<StoreKey>, T>> GetEnumerator();
 
         public T this[dynamic key] { get; }
-        public IEnumerable<T> Items { get; }
-        public IReadOnlyCollection<StoreKey> Keys { get; }
-        public int Count { get; }
         public void FlagAsError(Guid guid, XmlError type, string error);
-
     }
 }

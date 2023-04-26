@@ -4,14 +4,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;
 using Pluralize.NET;
+using System.Threading.Tasks;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class HybrasylEntity<T> : IIndexable
+public partial class HybrasylEntity<T> : IIndexable where T : HybrasylEntity<T>
 {
     private static readonly Pluralizer Pluralizer = new Pluralizer();
     public Guid Guid { get; set; } = Guid.NewGuid();
@@ -21,9 +23,9 @@ public partial class HybrasylEntity<T> : IIndexable
     public virtual List<string> SecondaryKeys => new();
 
     public XmlError Error { get; set; } = XmlError.None;
-    public string ErrorMessage { get; set; } = string.Empty;
+    public string LoadErrorMessage { get; set; } = string.Empty;
 
-    public T Clone<T>() where T : HybrasylEntity<T>
+    public T Clone<T>(bool newGuid = false) where T : HybrasylEntity<T>
     {
         var ms = new MemoryStream();
         var writer = new BsonDataWriter(ms);
@@ -34,7 +36,7 @@ public partial class HybrasylEntity<T> : IIndexable
         var obj = serializer.Deserialize<T>(reader);
         ms.Close();
         if (obj == null) return null;
-        obj.Guid = Guid;
+        obj.Guid = newGuid ? Guid.NewGuid() : Guid;
         obj.LoadPath = LoadPath;
         return obj;
     }
@@ -55,24 +57,70 @@ public partial class HybrasylEntity<T> : IIndexable
         return new List<string>();
     }
 
-    // C#11 was supposed to support virtual statics; eventually this can be redone with that support
-    public static XmlLoadResult<T> LoadAll(string rootPath)
+    public static async Task<T> LoadFromFileAsync(string fileName)
     {
-        var ret = new XmlLoadResult<T>();
-        foreach (var xmlFile in GetXmlFiles(rootPath))
+        await using var file = new FileStream(fileName, FileMode.Open, FileAccess.Read);
+        using var sr = new StreamReader(file);
+        var dataString = await sr.ReadToEndAsync();
+        sr.Close();
+        file.Close();
+        return Deserialize(dataString);
+    }
+
+    public static async Task<XmlLoadResult> LoadAllAsync(IWorldDataManager manager, string rootPath)
+    {
+        var ret = new XmlLoadResult();
+        foreach (var xmlFile in GetXmlFiles(rootPath ?? manager.RootPath))
+        {
+            try
+            {
+                var entity = await LoadFromFileAsync(xmlFile);
+                if (entity is not HybrasylEntity<T> hybrasylEntity)
+                    throw new InvalidOperationException("Unsupported type {typeof(T).Name}");
+                hybrasylEntity.LoadPath = xmlFile;
+                ret.SuccessCount++;
+            }
+            catch (Exception ex)
+            {
+                ret.Errors.Add(xmlFile, ex.ToString());
+            }
+            ret.TotalProcessed++;
+
+        }
+
+        return ret;
+    }
+
+    // C#11 was supposed to support virtual statics; eventually this can be redone with that support
+    public static XmlLoadResult LoadAll(IWorldDataManager manager, string rootPath)
+    {
+        var ret = new XmlLoadResult();
+        var targetDir = rootPath ?? manager.RootPath;
+        var subPath = Path.Join(targetDir, Pluralizer.Pluralize(typeof(T).Name));
+        foreach (var xmlFile in GetXmlFiles(subPath))
         {
             try
             {
                 var entity = LoadFromFile(xmlFile);
                 if (entity is not HybrasylEntity<T> hybrasylEntity) throw new InvalidOperationException("Unsupported type {typeof(T).Name}");
                 hybrasylEntity.LoadPath = xmlFile;
-                ret.Results.Add(entity);
-                ret.TotalProcessed++;
+                if (entity is IIndexable indexable)
+                {
+                    manager.AddWithIndex(entity, indexable.PrimaryKey, indexable.SecondaryKeys.ToArray());
+                }
+
+                if (entity is ICategorizable<T> categorizable)
+                {
+                    manager.GetStore<T>().AddCategory(categorizable.Name, categorizable.CategoryList.ToArray());
+                }
+                ret.SuccessCount++;
+
             }
             catch (Exception ex)
             {
                 ret.Errors.Add(xmlFile, ex.ToString());
             }
+            ret.TotalProcessed++;
         }
         return ret;
     }

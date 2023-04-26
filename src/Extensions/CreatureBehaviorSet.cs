@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;
@@ -10,40 +11,42 @@ namespace Hybrasyl.Xml.Objects;
 
 public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>, ILoadOnStart<CreatureBehaviorSet>
 {
-    private List<string> _skillCategories;
-    private List<string> _spellCategories;
-
+    [XmlIgnore] 
     public List<string> LearnSkillCategories => string.IsNullOrEmpty(Castables?.SkillCategories)
         ? new List<string>()
         : Castables.SkillCategories.Trim().ToLower().Split(" ").ToList();
 
+    [XmlIgnore] 
     public List<string> LearnSpellCategories => string.IsNullOrEmpty(Castables?.SpellCategories)
         ? new List<string>()
         : Castables.SpellCategories.Trim().ToLower().Split(" ").ToList();
 
+    public override string PrimaryKey => Name;
 
-    public new static XmlLoadResult<CreatureBehaviorSet> LoadAll(string path) =>
-        HybrasylEntity<CreatureBehaviorSet>.LoadAll(path);
+    public new static void LoadAll(IWorldDataManager manager, string path) => HybrasylEntity<CreatureBehaviorSet>.LoadAll(manager, path);
 
-    public static XmlProcessResult<CreatureBehaviorSet> Process(IWorldDataManager manager)
+    public static void ProcessAll(IWorldDataManager manager)
     {
-        var ret = new XmlProcessResult<CreatureBehaviorSet>();
-        foreach (var import in manager.Find<CreatureBehaviorSet>(x => !string.IsNullOrWhiteSpace(x.Import)))
+        var ret = new XmlProcessResult();
+        foreach (var import in manager.Find<CreatureBehaviorSet>(x => !string.IsNullOrWhiteSpace(x.Import)).ToList())
         {
             if (!manager.TryGetValue(import, out CreatureBehaviorSet creatureBehaviorSet))
             {
                 manager.FlagAsError(import, XmlError.ProcessingError,
-                    "{import.Filename}: Referenced import set {import.Import} not found");
-                ret.Errors.Add(import.Guid, "{import.Filename}: Referenced import set {import.Import} not found" );
+                    $"{import.Filename}: Referenced import set {import.Import} not found");
+                ret.Errors.Add(import.Guid, $"{import.Filename}: Referenced import set {import.Import} not found" );
             }
 
-            var newSet = import.Clone<CreatureBehaviorSet>();
+            var newSet = import.Clone<CreatureBehaviorSet>(true);
             var resolved = import & newSet;
             resolved.Name = import.Name;
-            ret.AdditionalItems.Add(resolved);
+            manager.Add(resolved, resolved.Name);
+            ret.AdditionalCount++;
+            ret.TotalProcessed++;
         }
 
-        return ret;
+        manager.UpdateStatus<CreatureBehaviorSet>(ret);
+
     }
 
     /// <summary>

@@ -30,7 +30,7 @@ public partial class WorldMap : HybrasylEntity<WorldMap>
     #region Private fields
     private string _name;
     private string _description;
-    private WorldMapPoints _points;
+    private List<WorldMapPoint> _points;
     private string _clientMap;
     #endregion
     
@@ -60,7 +60,8 @@ public partial class WorldMap : HybrasylEntity<WorldMap>
         }
     }
     
-    public WorldMapPoints Points
+    [XmlArrayItemAttribute("Point", IsNullable=false)]
+    public List<WorldMapPoint> Points
     {
         get
         {

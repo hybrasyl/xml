@@ -6,6 +6,8 @@ namespace Hybrasyl.Xml.Objects;
 
 public partial class LootSet : ILoadOnStart<LootSet>
 {
+    public override string PrimaryKey => Name;
+
     [Obsolete("This behavior is undesirable")]
     public int Id
     {
@@ -18,6 +20,6 @@ public partial class LootSet : ILoadOnStart<LootSet>
         }
     }
 
-    public new static XmlLoadResult<LootSet> LoadAll(string path) => HybrasylEntity<LootSet>.LoadAll(path);
+    public new static void LoadAll(IWorldDataManager manager, string path) => HybrasylEntity<LootSet>.LoadAll(manager, path);
 
 }

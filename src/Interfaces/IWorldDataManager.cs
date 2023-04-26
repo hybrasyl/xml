@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Hybrasyl.Xml.Enums;
+using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
 
 namespace Hybrasyl.Xml.Interfaces;
@@ -11,6 +12,7 @@ public interface IWorldDataManager
     public T Get<T>(dynamic name) where T : HybrasylEntity<T>;
     public T GetByIndex<T>(dynamic index) where T : HybrasylEntity<T>;
     public T GetByGuid<T>(Guid guid) where T : HybrasylEntity<T>;
+    public XmlDataStore<T> GetStore<T>() where T : HybrasylEntity<T>;
     public void Add<T>(T entity, dynamic key) where T : HybrasylEntity<T>;
     public void AddWithIndex<T>(T entity, dynamic key, params dynamic[] indexes) where T : HybrasylEntity<T>;
     public bool TryGetValue<T>(dynamic key, out T result) where T : HybrasylEntity<T>;
@@ -23,9 +25,22 @@ public interface IWorldDataManager
     public bool RemoveByIndex<T>(dynamic index) where T : HybrasylEntity<T>;
     public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : HybrasylEntity<T>;
     public void LoadAll<T>() where T : HybrasylEntity<T>, ILoadOnStart<T>;
+    public void LoadAllAsync<T>() where T : HybrasylEntity<T>, ILoadOnStart<T>;
     public void ProcessAll<T>() where T : HybrasylEntity<T>, IPostProcessable<T>;
     public void ValidateAll<T>() where T : HybrasylEntity<T>, IAdditionalValidation<T>;
     public void FlagAsError<T>(T entity, XmlError error, string message) where T : HybrasylEntity<T>;
+
+    public void UpdateStatus<T>(IProcessResult result) where T : HybrasylEntity<T>;
+    public void UpdateStatus<T>(ILoadResult result) where T : HybrasylEntity<T>;
+    public void UpdateStatus<T>(IAdditionalValidationResult result) where T : HybrasylEntity<T>;
+
+    public ILoadResult GetLoadStatus<T>() where T : HybrasylEntity<T>;
+    public IProcessResult GetProcessStatus<T>() where T : HybrasylEntity<T>;
+    public IAdditionalValidationResult GetAdditionalValidationStatus<T>() where T : HybrasylEntity<T>;
+
+    public void AddCategory<T>(string name, params string[] categories) where T : HybrasylEntity<T>, ICategorizable<T>;
+
+    //public IDataStatus<T> GetStatus<T>() where T : HybrasylEntity<T>, ILoadOnStart<T>;
 
     public void LoadData();
 

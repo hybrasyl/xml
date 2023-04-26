@@ -24,7 +24,7 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable<Castable>
     public override string PrimaryKey => Id.ToString();
     public override List<string> SecondaryKeys => new() { Name };
     
-    public new static XmlLoadResult<Castable> LoadAll(string path) => HybrasylEntity<Castable>.LoadAll(path);
+    public new static void LoadAll(IWorldDataManager manager, string path) => HybrasylEntity<Castable>.LoadAll(manager, path);
 
     // Helper functions to deal with xml vagaries
     public List<AddStatus> AddStatuses => Effects.Statuses?.Add ?? new List<AddStatus>();

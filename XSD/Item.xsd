@@ -74,20 +74,10 @@
     </xs:complexType>
 
     <xs:complexType name="ItemDamage">
-        <xs:sequence>
-            <xs:element name="Small" minOccurs="1">
-                <xs:complexType>
-                    <xs:attribute name="Min" default="0" type="xs:float" />
-                    <xs:attribute name="Max" default="0" type="xs:float" />
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="Large">
-                <xs:complexType>
-                    <xs:attribute name="Min" default="0" type="xs:float" />
-                    <xs:attribute name="Max" default="0" type="xs:float" />
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
+        <xs:attribute name="LargeMin" use="optional" type="xs:float" default="0.0"/> 
+        <xs:attribute name="LargeMax" use="optional" type="xs:float" default="0.0"/> 
+        <xs:attribute name="SmallMin" use="required" type="xs:float"/> 
+        <xs:attribute name="SmallMax" use="required" type="xs:float"/> 
     </xs:complexType>
 
     <xs:complexType name="Physical">

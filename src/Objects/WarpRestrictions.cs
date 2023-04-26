@@ -27,44 +27,131 @@ using System.Collections.Generic;
 public partial class WarpRestrictions : HybrasylEntity<WarpRestrictions>
 {
     #region Private fields
-    private WarpRestrictionsLevel _level;
-    private WarpRestrictionsAB _ab;
-    private bool _noMobUse;
+    private byte _minLev;
+    private byte _maxLev;
+    private byte _minAb;
+    private byte _maxAb;
+    private bool _mobUse;
+    private string _requireCookie;
+    private string _prohibitCookie;
+    private string _message;
     #endregion
     
-    public WarpRestrictionsLevel Level
+    public WarpRestrictions()
+    {
+        _minLev = ((byte)(0));
+        _maxLev = ((byte)(255));
+        _minAb = ((byte)(0));
+        _maxAb = ((byte)(255));
+        _mobUse = true;
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(typeof(byte), "0")]
+    public byte MinLev
     {
         get
         {
-            return _level;
+            return _minLev;
         }
         set
         {
-            _level = value;
+            _minLev = value;
         }
     }
     
-    public WarpRestrictionsAB Ab
+    [XmlAttribute]
+    [DefaultValue(typeof(byte), "255")]
+    public byte MaxLev
     {
         get
         {
-            return _ab;
+            return _maxLev;
         }
         set
         {
-            _ab = value;
+            _maxLev = value;
         }
     }
     
-    public bool NoMobUse
+    [XmlAttribute]
+    [DefaultValue(typeof(byte), "0")]
+    public byte MinAb
     {
         get
         {
-            return _noMobUse;
+            return _minAb;
         }
         set
         {
-            _noMobUse = value;
+            _minAb = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(typeof(byte), "255")]
+    public byte MaxAb
+    {
+        get
+        {
+            return _maxAb;
+        }
+        set
+        {
+            _maxAb = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(true)]
+    public bool MobUse
+    {
+        get
+        {
+            return _mobUse;
+        }
+        set
+        {
+            _mobUse = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public string RequireCookie
+    {
+        get
+        {
+            return _requireCookie;
+        }
+        set
+        {
+            _requireCookie = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public string ProhibitCookie
+    {
+        get
+        {
+            return _prohibitCookie;
+        }
+        set
+        {
+            _prohibitCookie = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public string Message
+    {
+        get
+        {
+            return _message;
+        }
+        set
+        {
+            _message = value;
         }
     }
 }

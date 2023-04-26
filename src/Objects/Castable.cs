@@ -48,6 +48,7 @@ public partial class Castable : HybrasylEntity<Castable>
     private bool _isAssail;
     private bool _reflectable;
     private bool _breakStealth;
+    private bool _includeInMetafile;
     #endregion
     
     public Castable()
@@ -68,6 +69,7 @@ public partial class Castable : HybrasylEntity<Castable>
         _isAssail = false;
         _reflectable = true;
         _breakStealth = true;
+        _includeInMetafile = true;
     }
     
     [XmlArrayItemAttribute(IsNullable=false)]
@@ -327,6 +329,20 @@ public partial class Castable : HybrasylEntity<Castable>
         set
         {
             _breakStealth = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(true)]
+    public bool IncludeInMetafile
+    {
+        get
+        {
+            return _includeInMetafile;
+        }
+        set
+        {
+            _includeInMetafile = value;
         }
     }
 }

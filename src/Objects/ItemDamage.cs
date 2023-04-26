@@ -27,37 +27,69 @@ using System.Collections.Generic;
 public partial class ItemDamage : HybrasylEntity<ItemDamage>
 {
     #region Private fields
-    private ItemDamageSmall _small;
-    private ItemDamageLarge _large;
+    private float _largeMin;
+    private float _largeMax;
+    private float _smallMin;
+    private float _smallMax;
     #endregion
     
     public ItemDamage()
     {
-        _large = new ItemDamageLarge();
-        _small = new ItemDamageSmall();
+        _largeMin = ((float)(0F));
+        _largeMax = ((float)(0F));
     }
     
-    public ItemDamageSmall Small
+    [XmlAttribute]
+    [DefaultValue(typeof(float), "0")]
+    public float LargeMin
     {
         get
         {
-            return _small;
+            return _largeMin;
         }
         set
         {
-            _small = value;
+            _largeMin = value;
         }
     }
     
-    public ItemDamageLarge Large
+    [XmlAttribute]
+    [DefaultValue(typeof(float), "0")]
+    public float LargeMax
     {
         get
         {
-            return _large;
+            return _largeMax;
         }
         set
         {
-            _large = value;
+            _largeMax = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public float SmallMin
+    {
+        get
+        {
+            return _smallMin;
+        }
+        set
+        {
+            _smallMin = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public float SmallMax
+    {
+        get
+        {
+            return _smallMax;
+        }
+        set
+        {
+            _smallMax = value;
         }
     }
 }

@@ -14,13 +14,17 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
     private Dictionary<StoreKey, Guid> _index { get; set; } = new();
     private Dictionary<Guid, HashSet<StoreKey>> _reverseIndex { get; set; } = new();
 
-    private HashSet<Guid> _errors { get; set; }
+    private HashSet<Guid> _errors { get; set; } = new HashSet<Guid>();
 
     public IEnumerable<T> Errors => _errors.Select(item => _store[item]).ToList();
 
     private object _lock { get; } = new();
 
     private Dictionary<string, HashSet<Guid>> _categories = new();
+
+    public ILoadResult LoadResult { get; set; }
+    public IProcessResult ProcessResult { get; set; }
+    public IAdditionalValidationResult ValidationResult { get; set; }
 
     public void FlagAsError(Guid guid, XmlError type, string error)
     {
@@ -31,7 +35,7 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
         {
             _errors.Add(guid);
             value.Error = type;
-            value.ErrorMessage = error;
+            value.LoadErrorMessage = error;
         }
     }
 
@@ -64,16 +68,16 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
     public void AddCategory(dynamic name, params string[] categories)
     {
         if (TryGetValue(name, out T result)) return;
-        if (result is ICategorizable<T> categorizable)
-            categorizable.AddCategories(categories);
+        if (result is not ICategorizable<T> categorizable) return;
+        categorizable.AddCategories(categories);
         AddCategoriesToIndex(result.Guid, categories);
     }
 
     public void RemoveCategory(dynamic name, params string[] categories)
     {
         if (TryGetValue(name, out T result)) return;
-        if (result is ICategorizable<T> categorizable)
-            categorizable.RemoveCategories(categories);
+        if (result is not ICategorizable<T> categorizable) return;
+        categorizable.RemoveCategories(categories);
         RemoveCategoriesFromIndex(result.Guid, categories);
     }
 
@@ -140,7 +144,7 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
 
     public T GetByFilename(string filename) => GetByIndex(filename);
 
-    public void Add(T entity, string name) => StoreItem(entity, name);
+    public void Add(T entity, dynamic name) => StoreItem(entity, name);
 
     public void AddWithIndex(T entity, dynamic name, params dynamic[] indexes) => StoreItem(entity, name, indexes);
 

@@ -6,6 +6,6 @@ namespace Hybrasyl.Xml.Objects;
 
 public partial class Npc : ILoadOnStart<Npc>
 {
-    public new static XmlLoadResult<Npc> LoadAll(string path) => HybrasylEntity<Npc>.LoadAll(path);
+    public new static void LoadAll(IWorldDataManager manager, string path) => HybrasylEntity<Npc>.LoadAll(manager, path);
 
 }

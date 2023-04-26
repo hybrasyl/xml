@@ -13,13 +13,11 @@ namespace Hybrasyl.Xml.Manager;
 
 public class XmlDataManager : IWorldDataManager
 {
+    private static readonly Pluralizer Pluralizer = new();
     private Dictionary<Type, MethodInfo> _loadableTypes = new();
     private Dictionary<Type, MethodInfo> _processableTypes = new();
     private Dictionary<Type, MethodInfo> _validatableTypes = new();
-
     private Dictionary<Type, dynamic> _dataStore = new();
-
-    private static readonly Pluralizer Pluralizer = new();
 
     public XmlDataManager(string rootPath)
     {
@@ -50,7 +48,7 @@ public class XmlDataManager : IWorldDataManager
         }
     }
 
-    private XmlDataStore<T> GetStore<T>() where T : HybrasylEntity<T>
+    public XmlDataStore<T> GetStore<T>() where T : HybrasylEntity<T>
     {
         if (_dataStore.TryGetValue(typeof(T), out var dataStore) && dataStore is XmlDataStore<T> cast)
             return cast;
@@ -113,7 +111,7 @@ public class XmlDataManager : IWorldDataManager
             if (method != null)
             {
                 var genMethod = method.MakeGenericMethod(kvp.Key);
-                genMethod.Invoke(this, new object[] { this });
+                genMethod.Invoke(this, null);
             }
             else
             {
@@ -128,7 +126,7 @@ public class XmlDataManager : IWorldDataManager
             if (method != null)
             {
                 var genMethod = method.MakeGenericMethod(kvp.Key);
-                genMethod.Invoke(this, new object[] { this });
+                genMethod.Invoke(this, null);
             }
             else
             {
@@ -138,15 +136,7 @@ public class XmlDataManager : IWorldDataManager
 
     }
 
-    public void LoadAll<T>() where T : HybrasylEntity<T>, ILoadOnStart<T>
-    {
-        var result = T.LoadAll(Path.Join(RootPath, Pluralizer.Pluralize(typeof(T).Name)));
-
-        foreach (var entity in result.Results)
-        {
-            AddToStore(entity);
-        }
-    }
+    public void LoadAll<T>() where T : HybrasylEntity<T>, ILoadOnStart<T> => T.LoadAll(this);
 
     private void AddToStore<T>(T entity) where T : HybrasylEntity<T>
     {
@@ -163,36 +153,33 @@ public class XmlDataManager : IWorldDataManager
         }
     }
 
-    public void ProcessAll<T>() where T : HybrasylEntity<T>, IPostProcessable<T>
+    public void ProcessAll<T>() where T : HybrasylEntity<T>, IPostProcessable<T> => T.ProcessAll(this);
+
+    public void ValidateAll<T>() where T : HybrasylEntity<T>, IAdditionalValidation<T> => T.ValidateAll(this);
+
+    public void FlagAsError<T>(T entity, XmlError error, string message) where T : HybrasylEntity<T> =>
+        GetStore<T>().FlagAsError(entity.Guid, error, message);
+
+    public void LoadAllAsync<T>() where T : HybrasylEntity<T>, ILoadOnStart<T>
     {
-        var result = T.Process(this);
-        foreach (var error in result.Errors)
-        {
-            FlagAsError(GetByGuid<T>(error.Key), XmlError.ProcessingError, error.Value);
-        }
-
-        foreach (var entity in result.AdditionalItems)
-        {
-            AddToStore(entity);
-        }
-
+        throw new NotImplementedException();
     }
 
-    public void ValidateAll<T>() where T : HybrasylEntity<T>, IAdditionalValidation<T>
-    {
-        var result = T.Validate(this);
-        foreach (var error in result.Errors)
-        {
-            FlagAsError(GetByGuid<T>(error.Key), XmlError.AdditionalValidationError, error.Value);
-        }
+    public void AddCategory<T>(string name, params string[] categories)
+        where T : HybrasylEntity<T>, ICategorizable<T> => GetStore<T>().AddCategory(name, categories);
 
-        foreach (var entity in result.AdditionalItems)
-        {
-            AddToStore(entity);
-        }
-    }
+    public void UpdateStatus<T>(ILoadResult result) where T : HybrasylEntity<T> =>
+        GetStore<T>().LoadResult = result;
 
-    public void FlagAsError<T>(T entity, XmlError error, string message) where T : HybrasylEntity<T> => GetStore<T>().FlagAsError(entity.Guid, error, message);
+    public void UpdateStatus<T>(IProcessResult result) where T : HybrasylEntity<T> =>
+        GetStore<T>().ProcessResult = result;
+
+    public void UpdateStatus<T>(IAdditionalValidationResult result) where T : HybrasylEntity<T> =>
+        GetStore<T>().ValidationResult = result;
+
+    public IAdditionalValidationResult GetAdditionalValidationStatus<T>() where T : HybrasylEntity<T> => GetStore<T>().ValidationResult;
+    public ILoadResult GetLoadStatus<T>() where T : HybrasylEntity<T> => GetStore<T>().LoadResult;
+    public IProcessResult GetProcessStatus<T>() where T : HybrasylEntity<T> => GetStore<T>().ProcessResult;
 
 }
 

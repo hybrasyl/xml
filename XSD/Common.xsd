@@ -639,21 +639,14 @@
 
     <!-- Map warp restrictions type (used by warps/worldwarps) -->
     <xs:complexType name="WarpRestrictions">
-        <xs:sequence minOccurs="0" maxOccurs="1">
-            <xs:element name="Level" minOccurs="0" maxOccurs="1">
-                <xs:complexType>
-                    <xs:attribute name="Min" type="xs:unsignedByte" default="0" />
-                    <xs:attribute name="Max" type="xs:unsignedByte" default="255" />
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="Ab" minOccurs="0" maxOccurs="1">
-                <xs:complexType>
-                    <xs:attribute name="Min" type="xs:unsignedByte" default="0" />
-                    <xs:attribute name="Max" type="xs:unsignedByte" default="255" />
-                </xs:complexType>
-            </xs:element>
-            <xs:element name="NoMobUse" minOccurs="0" maxOccurs="1" type="xs:boolean" />
-        </xs:sequence>
+        <xs:attribute name="MinLev" type="xs:unsignedByte" default="0" />
+        <xs:attribute name="MaxLev" type="xs:unsignedByte" default="255" />
+        <xs:attribute name="MinAb" type="xs:unsignedByte" default="0" />
+        <xs:attribute name="MaxAb" type="xs:unsignedByte" default="255" />
+        <xs:attribute name="MobUse" type="xs:boolean" default="true"/>
+        <xs:attribute name="RequireCookie" type="xs:string"/>
+        <xs:attribute name="ProhibitCookie" type="xs:string"/>
+        <xs:attribute name="Message" type="xs:string"/>
     </xs:complexType>
 
     <!-- Variant property type (string, must be numeric or contain a percent sign -->
