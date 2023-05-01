@@ -23,6 +23,8 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
+      - name: Check out ceridwen
+        run: cd /tmp && git clone git@github.com:hybrasyl/ceridwen.git 
       - name: Test
         run: dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage"
       - name: Codecov
