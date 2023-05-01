@@ -31,7 +31,7 @@ jobs:
       - name: Check out ceridwen
         uses: actions/checkout@v3
         with:
-          repository: hybrasyl/xml
+          repository: hybrasyl/ceridwen
           path: ceridwen
       - name: test
         run: ls -la /home/runner/work/xml/xml; ls -la /home/runner/work/xml; ls -la /home/runner/work; ls -la /home/runner/work/xml/xml/ceridwen ; ls -la /home/runner/work/xml/xml/ceridwen/xml
