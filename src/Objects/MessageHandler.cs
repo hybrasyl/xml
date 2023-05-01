@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class MessageHandler : HybrasylXmlEntity<MessageHandler>
+public partial class MessageHandler : HybrasylEntity<MessageHandler>
 {
     #region Private fields
     private List<string> _target;

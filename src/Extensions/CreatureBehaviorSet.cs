@@ -2,55 +2,51 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Hybrasyl.Xml.src;
+using System.Xml.Serialization;
+using Hybrasyl.Xml.Enums;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class CreatureBehaviorSet : HybrasylLoadable, IHybrasylLoadable<CreatureBehaviorSet>
+public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>, ILoadOnStart<CreatureBehaviorSet>
 {
-    public static string DataDirectory => "behaviorsets";
+    [XmlIgnore] 
+    public List<string> LearnSkillCategories => string.IsNullOrEmpty(Castables?.SkillCategories)
+        ? new List<string>()
+        : Castables.SkillCategories.Trim().ToLower().Split(" ").ToList();
 
-    public static XmlLoadResponse<CreatureBehaviorSet> LoadAll(string baseDir)
+    [XmlIgnore] 
+    public List<string> LearnSpellCategories => string.IsNullOrEmpty(Castables?.SpellCategories)
+        ? new List<string>()
+        : Castables.SpellCategories.Trim().ToLower().Split(" ").ToList();
+
+    public override string PrimaryKey => Name;
+
+    public new static void LoadAll(IWorldDataManager manager, string path) => HybrasylEntity<CreatureBehaviorSet>.LoadAll(manager, path);
+
+    public static void ProcessAll(IWorldDataManager manager)
     {
-        var ret = new XmlLoadResponse<CreatureBehaviorSet>();
-        var imports = new Dictionary<string, CreatureBehaviorSet>();
-        foreach (var xml in GetXmlFiles(Path.Join(baseDir, DataDirectory)))
+        var ret = new XmlProcessResult();
+        foreach (var import in manager.Find<CreatureBehaviorSet>(x => !string.IsNullOrWhiteSpace(x.Import)).ToList())
         {
-            if (xml.Contains(".ignore"))
-                continue;
+            if (!manager.TryGetValue(import.Import, out CreatureBehaviorSet creatureBehaviorSet))
+            {
+                manager.FlagAsError(import, XmlError.ProcessingError,
+                    $"{import.Filename}: Referenced import set {import.Import} not found");
+                ret.Errors.Add(import.Guid, $"{import.Filename}: Referenced import set {import.Import} not found" );
+            }
 
-            try
-            {
-                var set = LoadFromFile(xml);
-                if (!string.IsNullOrEmpty(set.Import))
-                    imports.Add(xml, set);
-                else
-                    ret.Results.Add(set);
-            }
-            catch (Exception e)
-            {
-                ret.Errors.Add(xml, e.ToString());
-            }
+            var newSet = import.Clone<CreatureBehaviorSet>(true);
+            var resolved = import & newSet;
+            resolved.Name = import.Name;
+            manager.Add(resolved, resolved.Name);
+            ret.AdditionalCount++;
+            ret.TotalProcessed++;
         }
 
-        // Now process imports. This could be made nicer
-        foreach (var importset in imports)
-        {
-            var importedSet =
-                ret.Results.FirstOrDefault(predicate: s => s.Name.ToLower() == importset.Value.Import.ToLower());
-            if (importedSet == null)
-            {
-                ret.Errors.Add(importset.Key, $"Referenced import set {importset.Value.Import} not found");
-                continue;
-            }
+        manager.UpdateStatus<CreatureBehaviorSet>(ret);
 
-            var newSet = importedSet.Clone<CreatureBehaviorSet>();
-            var resolved = importset.Value & newSet;
-            resolved.Name = importset.Value.Name;
-            ret.Results.Add(resolved);
-        }
-
-        return ret;
     }
 
     /// <summary>

@@ -1,29 +1,16 @@
-﻿using System;
-using System.IO;
-using Hybrasyl.Xml.src;
+﻿using System.Reflection.Metadata.Ecma335;
+using System.Xml.Serialization;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class SpawnGroup : HybrasylLoadable, IHybrasylLoadable<SpawnGroup>
+// For some reason xsd2code doesn't add this and it breaks spawngroup parsing
+[XmlRoot(Namespace = "http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
+public partial class SpawnGroup : ILoadOnStart<SpawnGroup>
 {
-    public static string Directory => "spawngroups";
-
-    public static XmlLoadResponse<SpawnGroup> LoadAll(string baseDir)
-    {
-        var ret = new XmlLoadResponse<SpawnGroup>();
-        foreach (var xml in GetXmlFiles(Path.Join(baseDir, Directory)))
-            try
-            {
-                var group = LoadFromFile(xml);
-                ret.Results.Add(group);
-            }
-            catch (Exception e)
-            {
-                ret.Errors.Add(xml, e.ToString());
-            }
-
-        return ret;
-    }
+    public override string PrimaryKey => Name;
+    public ushort MapId { get; set; }
 
     public static SpawnGroup operator +(SpawnGroup sg1, SpawnGroup sg2)
     {
@@ -31,4 +18,6 @@ public partial class SpawnGroup : HybrasylLoadable, IHybrasylLoadable<SpawnGroup
         merged.Spawns.AddRange(sg2.Spawns);
         return merged;
     }
+    public new static void LoadAll(IWorldDataManager manager, string path) => HybrasylEntity<SpawnGroup>.LoadAll(manager, path);
+
 }

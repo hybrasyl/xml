@@ -2,11 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class Castable
+public partial class Castable : ILoadOnStart<Castable>, ICategorizable<Castable>
 {
+    [Obsolete("This behavior is undesirable")]
     public int Id
     {
         get
@@ -18,7 +21,10 @@ public partial class Castable
         }
     }
 
-    public Guid Guid { get; set; }
+    public override string PrimaryKey => Id.ToString();
+    public override List<string> SecondaryKeys => new() { Name };
+    
+    public new static void LoadAll(IWorldDataManager manager, string path) => HybrasylEntity<Castable>.LoadAll(manager, path);
 
     // Helper functions to deal with xml vagaries
     public List<AddStatus> AddStatuses => Effects.Statuses?.Add ?? new List<AddStatus>();
@@ -96,4 +102,27 @@ public class CastableComparer : IEqualityComparer<Castable>
         return hCode.GetHashCode();
     }
 }
+
+public partial class CastableHeal
+{
+    public bool IsSimple => string.IsNullOrEmpty(Formula);
+
+    // temporary silliness due to xsd issues
+    public bool IsEmpty => IsSimple && Simple.Value == 0 && Simple.Min == 0 && Simple.Max == 0;
+}
+
+public partial class CastableDamage
+{
+    public bool IsSimple => string.IsNullOrEmpty(Formula);
+
+    // temporary silliness due to xsd issues
+    public bool IsEmpty => IsSimple && Simple.Value == 0 && Simple.Min == 0 && Simple.Max == 0;
+}
+
+public partial class CastableIntent
+{
+    public bool IsShapeless =>
+        Cross.Count == 0 && Line.Count == 0 && Square.Count == 0 && Tile.Count == 0 && Map == null;
+}
+
 

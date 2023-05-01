@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class Chat : HybrasylXmlEntity<Chat>
+public partial class Chat : HybrasylEntity<Chat>
 {
     #region Private fields
     private bool _commandsEnabled;

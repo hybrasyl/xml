@@ -6,8 +6,6 @@ namespace Hybrasyl.Xml.Objects;
 
 public partial class CreatureCastingSet : IEquatable<CreatureCastingSet>
 {
-    public Guid Guid { get; set; } = Guid.Empty;
-
     public List<string> CategoryList => string.IsNullOrEmpty(Categories)
         ? new List<string>()
         : Categories.Trim().Split(" ").Select(selector: x => x.ToLower()).ToList();

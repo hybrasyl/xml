@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class ServerPlugins : HybrasylXmlEntity<ServerPlugins>
+public partial class ServerPlugins : HybrasylEntity<ServerPlugins>
 {
     #region Private fields
     private List<MessagePlugin> _message;

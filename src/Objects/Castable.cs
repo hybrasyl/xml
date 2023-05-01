@@ -25,7 +25,7 @@ using System.Collections.Generic;
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
 [XmlRootAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02", IsNullable=false)]
-public partial class Castable : HybrasylXmlEntity<Castable>
+public partial class Castable : HybrasylEntity<Castable>
 {
     #region Private fields
     private List<Description> _descriptions;
@@ -48,6 +48,7 @@ public partial class Castable : HybrasylXmlEntity<Castable>
     private bool _isAssail;
     private bool _reflectable;
     private bool _breakStealth;
+    private bool _includeInMetafile;
     #endregion
     
     public Castable()
@@ -68,6 +69,7 @@ public partial class Castable : HybrasylXmlEntity<Castable>
         _isAssail = false;
         _reflectable = true;
         _breakStealth = true;
+        _includeInMetafile = true;
     }
     
     [XmlArrayItemAttribute(IsNullable=false)]
@@ -327,6 +329,20 @@ public partial class Castable : HybrasylXmlEntity<Castable>
         set
         {
             _breakStealth = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(true)]
+    public bool IncludeInMetafile
+    {
+        get
+        {
+            return _includeInMetafile;
+        }
+        set
+        {
+            _includeInMetafile = value;
         }
     }
 }

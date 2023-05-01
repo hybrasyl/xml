@@ -25,18 +25,20 @@ using System.Collections.Generic;
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
 [XmlRootAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02", IsNullable=false)]
-public partial class Item : HybrasylXmlEntity<Item>
+public partial class Item : HybrasylEntity<Item>
 {
     #region Private fields
     private string _name;
     private string _unidentifiedName;
     private string _comment;
     private ItemProperties _properties;
+    private bool _includeInMetafile;
     #endregion
     
     public Item()
     {
         _properties = new ItemProperties();
+        _includeInMetafile = true;
     }
     
     [StringLengthAttribute(255, MinimumLength=1)]
@@ -87,6 +89,20 @@ public partial class Item : HybrasylXmlEntity<Item>
         set
         {
             _properties = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(true)]
+    public bool IncludeInMetafile
+    {
+        get
+        {
+            return _includeInMetafile;
+        }
+        set
+        {
+            _includeInMetafile = value;
         }
     }
 }

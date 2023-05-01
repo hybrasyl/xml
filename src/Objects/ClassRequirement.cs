@@ -25,7 +25,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class ClassRequirement : HybrasylXmlEntity<ClassRequirement>
+public partial class ClassRequirement : HybrasylEntity<ClassRequirement>
 {
     #region Private fields
     private ClassRequirementLevel _level;

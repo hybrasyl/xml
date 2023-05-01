@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class RecipeDuration : HybrasylXmlEntity<RecipeDuration>
+public partial class RecipeDuration : HybrasylEntity<RecipeDuration>
 {
     #region Private fields
     private ushort _length;

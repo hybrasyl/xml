@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class StatusAnimations : HybrasylXmlEntity<StatusAnimations>
+public partial class StatusAnimations : HybrasylEntity<StatusAnimations>
 {
     #region Private fields
     private Animation _target;

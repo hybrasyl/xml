@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class Time : HybrasylXmlEntity<Time>
+public partial class Time : HybrasylEntity<Time>
 {
     #region Private fields
     private List<HybrasylAge> _ages;

@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class ItemProperties : HybrasylXmlEntity<ItemProperties>
+public partial class ItemProperties : HybrasylEntity<ItemProperties>
 {
     #region Private fields
     private Appearance _appearance;

@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(AnonymousType=true, Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class WarpRestrictionsAB : HybrasylXmlEntity<WarpRestrictionsAB>
+public partial class WarpRestrictionsAB : HybrasylEntity<WarpRestrictionsAB>
 {
     #region Private fields
     private byte _min;

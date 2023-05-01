@@ -25,11 +25,11 @@ using System.Collections.Generic;
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
 [XmlRootAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02", IsNullable=false)]
-public partial class Status : HybrasylXmlEntity<Status>
+public partial class Status : HybrasylEntity<Status>
 {
     #region Private fields
-    private string _category;
-    private CastRestriction _castRestriction;
+    private List<Category> _categories;
+    private CastRestrictionList _castRestrictions;
     private StatusEffects _effects;
     private string _prohibitedMessage;
     private string _script;
@@ -41,31 +41,32 @@ public partial class Status : HybrasylXmlEntity<Status>
     
     public Status()
     {
+        _categories = new List<Category>();
         _tick = 1;
     }
     
-    [StringLengthAttribute(255, MinimumLength=1)]
-    public string Category
+    [XmlArrayItemAttribute(IsNullable=false)]
+    public List<Category> Categories
     {
         get
         {
-            return _category;
+            return _categories;
         }
         set
         {
-            _category = value;
+            _categories = value;
         }
     }
     
-    public CastRestriction CastRestriction
+    public CastRestrictionList CastRestrictions
     {
         get
         {
-            return _castRestriction;
+            return _castRestrictions;
         }
         set
         {
-            _castRestriction = value;
+            _castRestrictions = value;
         }
     }
     

@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class CastableLineIntent : HybrasylXmlEntity<CastableLineIntent>
+public partial class CastableLineIntent : HybrasylEntity<CastableLineIntent>
 {
     #region Private fields
     private byte _length;

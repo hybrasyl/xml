@@ -1,45 +1,16 @@
 ﻿using System;
 using System.IO;
-using Hybrasyl.Xml.src;
+using System.Linq;
+using System.Security.Principal;
+using System.Xml.Serialization;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class Creature : HybrasylLoadable, IHybrasylLoadable<Creature>
+public partial class Creature : ILoadOnStart<Creature>, IPostProcessable<Creature>
 {
-    // eventually calculate this from type name
-    public static string Directory => "creatures";
-
-    public static XmlLoadResponse<Creature> LoadAll(string baseDir)
-    {
-        var ret = new XmlLoadResponse<Creature>();
-
-        foreach (var xml in GetXmlFiles(Path.Join(baseDir, Directory)))
-            try
-            {
-                var c = LoadFromFile(xml);
-                // Resolve subtypes
-                foreach (var subtype in c.Types)
-                {
-                    var creatureVariant = c & subtype;
-                    // xml is really annoying sometimes
-                    if (string.IsNullOrEmpty(creatureVariant.Name))
-                        ret.Errors.Add(xml, "subtype found with no name");
-                    else
-                        ret.Results.Add(c);
-                }
-
-                if (!string.IsNullOrEmpty(c.Name))
-                    ret.Results.Add(c);
-                else
-                    ret.Errors.Add(xml, "Creature has no name");
-            }
-            catch (Exception e)
-            {
-                ret.Errors.Add(xml, e.ToString());
-            }
-
-        return ret;
-    }
+    [XmlIgnore] public Guid ParentGuid { get; set; }
 
     public static Creature operator &(Creature c1, Creature c2)
     {
@@ -51,4 +22,25 @@ public partial class Creature : HybrasylLoadable, IHybrasylLoadable<Creature>
         creatureMerge.Loot = c2.Loot + c1.Loot;
         return c1;
     }
+
+    public new static void LoadAll(IWorldDataManager manager, string path) => HybrasylEntity<Creature>.LoadAll(manager, path);
+
+    public static void ProcessAll(IWorldDataManager manager)
+    {
+        var ret = new XmlProcessResult();
+        foreach (var template in manager.Values<Creature>().ToList())
+        {
+            foreach (var subtemplate in template.Types)
+            {
+                subtemplate.ParentGuid = template.Guid;
+                manager.Add(subtemplate, subtemplate.Name);
+                ret.AdditionalCount++;
+            }
+
+            ret.TotalProcessed++;
+        }
+
+        manager.UpdateStatus<Creature>(ret);
+    }
+
 }

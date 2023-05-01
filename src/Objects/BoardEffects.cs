@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class BoardEffects : HybrasylXmlEntity<BoardEffects>
+public partial class BoardEffects : HybrasylEntity<BoardEffects>
 {
     #region Private fields
     private ushort _onEntry;

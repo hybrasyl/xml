@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(AnonymousType=true, Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class WorldMapPointTarget : HybrasylXmlEntity<WorldMapPointTarget>
+public partial class WorldMapPointTarget : HybrasylEntity<WorldMapPointTarget>
 {
     #region Private fields
     private byte _x;

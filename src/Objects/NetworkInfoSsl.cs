@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class NetworkInfoSsl : HybrasylXmlEntity<NetworkInfoSsl>
+public partial class NetworkInfoSsl : HybrasylEntity<NetworkInfoSsl>
 {
     #region Private fields
     private string _chainCertificateFile;

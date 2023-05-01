@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class Death : HybrasylXmlEntity<Death>
+public partial class Death : HybrasylEntity<Death>
 {
     #region Private fields
     private DeathMap _map;

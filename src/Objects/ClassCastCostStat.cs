@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(AnonymousType=true, Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class ClassCastCostStat : HybrasylXmlEntity<ClassCastCostStat>
+public partial class ClassCastCostStat : HybrasylEntity<ClassCastCostStat>
 {
     #region Private fields
     private string _hp;

@@ -25,7 +25,7 @@ using System.Collections.Generic;
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
 [XmlRootAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02", IsNullable=false)]
-public partial class Creature : HybrasylXmlEntity<Creature>
+public partial class Creature : HybrasylEntity<Creature>
 {
     #region Private fields
     private string _description;

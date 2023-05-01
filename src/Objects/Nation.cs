@@ -25,7 +25,7 @@ using System.Collections.Generic;
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(AnonymousType=true, Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
 [XmlRootAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02", IsNullable=false)]
-public partial class Nation : HybrasylXmlEntity<Nation>
+public partial class Nation : HybrasylEntity<Nation>
 {
     #region Private fields
     private string _name;

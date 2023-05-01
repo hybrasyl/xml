@@ -24,7 +24,7 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(AnonymousType=true, Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class NpcInventory : HybrasylXmlEntity<NpcInventory>
+public partial class NpcInventory : HybrasylEntity<NpcInventory>
 {
     #region Private fields
     private NpcInventoryItem _item;
