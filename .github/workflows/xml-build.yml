@@ -39,5 +39,6 @@ jobs:
         run: dotnet publish && dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage"
       - name: Codecov
         uses: codecov/codecov-action@v3
-        fail_ci_if_error: true
-        verbose: true
+        with:
+          fail_ci_if_error: true
+          verbose: true
