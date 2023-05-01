@@ -14,17 +14,27 @@ jobs:
         dotnet-version: ['7.0.x']
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Check out source
+        uses: actions/checkout@v3
       - name: Set up .NET SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install jq tool
+        run: |
+          sudo apt-get update
+          sudo apt-get install jq
       - name: Install dependencies
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Check out ceridwen
-        run: cd /tmp && git clone git@github.com:hybrasyl/ceridwen.git 
+        uses: actions/checkout@v3
+        with:
+          repository: hybrasyl/xml
+          path: ceridwen
+      - name: update test settings
+        run: jq '.WorldDataDirectory' = "$GITHUB_WORKSPACE/ceridwen" Tests/xmltest-settings.json
       - name: Test
         run: dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage"
       - name: Codecov
