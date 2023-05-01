@@ -14,7 +14,7 @@ public partial class WorldMap : ILoadOnStart<WorldMap>
 
     public new static void LoadAll(IWorldDataManager manager, string path)
     {
-        var ret = HybrasylEntity<WorldMap>.LoadAll(manager, path);
+        HybrasylEntity<WorldMap>.LoadAll(manager, path);
         foreach (var wmap in manager.Values<WorldMap>())
         {
             foreach (var point in wmap.Points)
@@ -22,7 +22,6 @@ public partial class WorldMap : ILoadOnStart<WorldMap>
                 manager.Add<WorldMapPoint>(point, point.Id);
             }
         }
-        manager.UpdateStatus<WorldMap>(ret);
     }
 
     public byte[] GetBytes()

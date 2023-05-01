@@ -85,6 +85,15 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
     {
         lock (_lock)
         {
+            // If this is an overwrite, clean old entries up first & make sure the indexes are cleaned up
+            if (_index.TryGetValue(GetStoreKey(key, true), out Guid existing))
+            {
+                foreach (var entry in _reverseIndex[existing])
+                    _index.Remove(entry);
+                _reverseIndex.Remove(existing);
+                _store.Remove(existing);
+            }
+
             _store[entity.Guid] = entity;
             _reverseIndex[entity.Guid] = new HashSet<StoreKey>();
             _index[GetStoreKey(key, true)] = entity.Guid;
@@ -143,6 +152,12 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
         _index.TryGetValue(new StoreKey(index, false), out Guid guid) ? _store[guid] : null;
 
     public T GetByFilename(string filename) => GetByIndex(filename);
+
+    public void Add(T entity)
+    {
+        if (entity is IIndexable i)
+            AddWithIndex(entity, i.PrimaryKey, i.SecondaryKeys.ToArray());
+    }
 
     public void Add(T entity, dynamic name) => StoreItem(entity, name);
 

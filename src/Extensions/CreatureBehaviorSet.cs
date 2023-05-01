@@ -30,7 +30,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
         var ret = new XmlProcessResult();
         foreach (var import in manager.Find<CreatureBehaviorSet>(x => !string.IsNullOrWhiteSpace(x.Import)).ToList())
         {
-            if (!manager.TryGetValue(import, out CreatureBehaviorSet creatureBehaviorSet))
+            if (!manager.TryGetValue(import.Import, out CreatureBehaviorSet creatureBehaviorSet))
             {
                 manager.FlagAsError(import, XmlError.ProcessingError,
                     $"{import.Filename}: Referenced import set {import.Import} not found");

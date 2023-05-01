@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Objects;
 
 namespace Hybrasyl.Xml.Manager;
 
@@ -23,5 +25,3 @@ public struct XmlProcessResult : IProcessResult
     public int TotalProcessed { get; set; }
     public int AdditionalCount { get; set; }
 }
-
-

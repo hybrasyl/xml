@@ -29,7 +29,7 @@ public partial class Status : HybrasylEntity<Status>
 {
     #region Private fields
     private List<Category> _categories;
-    private CastRestriction _castRestriction;
+    private CastRestrictionList _castRestrictions;
     private StatusEffects _effects;
     private string _prohibitedMessage;
     private string _script;
@@ -58,15 +58,15 @@ public partial class Status : HybrasylEntity<Status>
         }
     }
     
-    public CastRestriction CastRestriction
+    public CastRestrictionList CastRestrictions
     {
         get
         {
-            return _castRestriction;
+            return _castRestrictions;
         }
         set
         {
-            _castRestriction = value;
+            _castRestrictions = value;
         }
     }
     

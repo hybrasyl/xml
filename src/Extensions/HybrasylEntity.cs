@@ -92,7 +92,7 @@ public partial class HybrasylEntity<T> : IIndexable where T : HybrasylEntity<T>
     }
 
     // C#11 was supposed to support virtual statics; eventually this can be redone with that support
-    public static XmlLoadResult LoadAll(IWorldDataManager manager, string rootPath)
+    public static void LoadAll(IWorldDataManager manager, string rootPath)
     {
         var ret = new XmlLoadResult();
         var targetDir = rootPath ?? manager.RootPath;
@@ -122,7 +122,7 @@ public partial class HybrasylEntity<T> : IIndexable where T : HybrasylEntity<T>
             }
             ret.TotalProcessed++;
         }
-        return ret;
+        manager.UpdateStatus<T>(ret);
     }
 
 }

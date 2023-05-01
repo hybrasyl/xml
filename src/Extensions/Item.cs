@@ -97,11 +97,18 @@ public partial class Item : ICategorizable<Item>, ILoadOnStart<Item>, IPostProce
                     continue;
                 }
 
-                var variants = toApply.ResolveVariants(item);
-                foreach (var variant in variants)
+                try
                 {
-                    manager.Add(variant, variant.Name);
-                    ret.AdditionalCount++;
+                    var variants = toApply.ResolveVariants(item);
+                    foreach (var variant in variants)
+                    {
+                        manager.Add(variant, variant.Name);
+                        ret.AdditionalCount++;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ret.Errors[item.Guid] = $"{item.Name}: failed to apply variant {toApply.Name}: {ex}";
                 }
             }
             ret.TotalProcessed++;

@@ -47,15 +47,21 @@
     <xs:complexType name="Status">
         <xs:sequence>
             <xs:element name="Categories" type="hyb:Categories" />
-            <xs:element minOccurs="0" name="CastRestriction" type="hyb:CastRestriction" />
-            <xs:element minOccurs="0" name="Effects" type="hyb:StatusEffects" />
-            <xs:element minOccurs="0" name="ProhibitedMessage" type="hyb:String8" />
-            <xs:element minOccurs="0" name="Script" type="hyb:String8" />
+            <xs:element minOccurs="0" maxOccurs="1" name="CastRestrictions" type="hyb:CastRestrictionList" />
+            <xs:element minOccurs="0" maxOccurs="1" name="Effects" type="hyb:StatusEffects" />
+            <xs:element minOccurs="0" maxOccurs="1" name="ProhibitedMessage" type="hyb:String8" />
+            <xs:element minOccurs="0" maxOccurs="1" name="Script" type="hyb:String8" />
         </xs:sequence>
         <xs:attribute name="Duration" type="xs:int" use="optional" />
         <xs:attribute name="Tick" type="xs:int" default="1" use="optional" />
         <xs:attribute name="Icon" type="xs:unsignedShort" use="required" />
         <xs:attribute name="Name" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="CastRestrictionList">
+        <xs:sequence>
+            <xs:element name="CastRestriction" type="CastRestriction" minOccurs="1"/>
+        </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="CastRestriction">
