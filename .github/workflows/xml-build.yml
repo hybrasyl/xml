@@ -34,7 +34,7 @@ jobs:
           repository: hybrasyl/xml
           path: ceridwen
       - name: test
-        run: ls -la /home/runner/work/xml/xml; ls -la /home/runner/work/xml; ls -la /home/runner/work
+        run: ls -la /home/runner/work/xml/xml; ls -la /home/runner/work/xml; ls -la /home/runner/work; ls -la /home/runner/work/xml/xml/ceridwen ; ls -la /home/runner/work/xml/xml/ceridwen/xml
       - name: update test settings
         run: cat <<< $(jq --arg wdd "$GITHUB_WORKSPACE/ceridwen/xml" '.WorldDataDirectory = $wdd' tests/xmltest-settings.json) > tests/xmltest-settings.json && cat tests/xmltest-settings.json
       - name: Test
