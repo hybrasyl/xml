@@ -1,5 +1,10 @@
-name: dotnet package
-on: [push]
+name: XML packaging and testing
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]  
 
 jobs:
   build:
@@ -19,4 +24,6 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Test
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage"
+      - name: Codecov
+      	uses: codecov/codecov-action@v1.5.2
