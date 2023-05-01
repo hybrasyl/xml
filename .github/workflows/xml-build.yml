@@ -33,8 +33,10 @@ jobs:
         with:
           repository: hybrasyl/xml
           path: ceridwen
+      - name: what is actually here
+        run: ls -la
       - name: update test settings
-        run: jq '.WorldDataDirectory' = "$GITHUB_WORKSPACE/ceridwen" Tests/xmltest-settings.json
+        run: cat <<< $(jq '.WorldDataDirectory = "hurr/burr/durr"' tests/xmltest-settings.json) > tests/xmltest-settings.json
       - name: Test
         run: dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage"
       - name: Codecov
