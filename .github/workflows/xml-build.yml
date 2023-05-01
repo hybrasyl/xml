@@ -33,11 +33,11 @@ jobs:
         with:
           repository: hybrasyl/xml
           path: ceridwen
-      - name: what is actually here
-        run: ls -la
       - name: update test settings
         run: cat <<< $(jq '.WorldDataDirectory = "hurr/burr/durr"' tests/xmltest-settings.json) > tests/xmltest-settings.json
       - name: Test
-        run: dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage"
+        run: dotnet publish && dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage"
       - name: Codecov
-        uses: codecov/codecov-action@v1.5.2
+        uses: codecov/codecov-action@v3
+        fail_ci_if_error: true
+        verbose: true

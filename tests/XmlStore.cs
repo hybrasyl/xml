@@ -166,10 +166,10 @@ public class XmlStoreTests
         store.AddWithIndex(c1, c1.Name, "12345", 12345, 12345.0);
         store.RemoveByIndex(1234.0);
         Assert.Equal(1, store.Count);
-        Assert.Throws<KeyNotFoundException>(() => store.Get(Castable.Name));
-        Assert.Throws<KeyNotFoundException>(() => store.GetByIndex("1234"));
-        Assert.Throws<KeyNotFoundException>(() => store.GetByIndex(1234));
-        Assert.Throws<KeyNotFoundException>(() => store.GetByIndex(1234.0));
+        Assert.Null(store.Get(Castable.Name));
+        Assert.Null(store.GetByIndex("1234"));
+        Assert.Null(store.GetByIndex(1234));
+        Assert.Null(store.GetByIndex(1234.0));
     }
 
     [Fact]

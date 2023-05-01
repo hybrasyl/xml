@@ -96,7 +96,8 @@ public partial class HybrasylEntity<T> : IIndexable where T : HybrasylEntity<T>
     {
         var ret = new XmlLoadResult();
         var targetDir = rootPath ?? manager.RootPath;
-        var subPath = Path.Join(targetDir, Pluralizer.Pluralize(typeof(T).Name));
+        var subPath = Path.Join(targetDir, Pluralizer.Pluralize(typeof(T).Name)).ToLower();
+        //throw new InvalidOperationException($"subdir is {subPath} targetdir {targetDir}");
         foreach (var xmlFile in GetXmlFiles(subPath))
         {
             try
