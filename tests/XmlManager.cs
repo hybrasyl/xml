@@ -190,21 +190,31 @@ public class XmlManagerTests
         Log.Information($"LoadData Test\n-------------");
         Log.Information($"Time to load: {elapsedTime}");
         Log.Information($"Directory used: {Settings.XmlTests.JsonSettings.WorldDataDirectory}");
-        Log.Information($"Castables: {Manager.Count<Castable>()} Items: {Manager.Count<Item>()} NPCs: {Manager.Count<Npc>()} Maps: {Manager.Count<Map>()}");
-        Log.Information($"Creatures: {Manager.Count<Creature>()} Variants: {Manager.Count<VariantGroup>()} Lootsets: {Manager.Count<LootSet>()} Nations: {Manager.Count<Nation>()}");
+        Log.Information(
+            $"Castables: {Manager.Count<Castable>()} Items: {Manager.Count<Item>()} NPCs: {Manager.Count<Npc>()} Maps: {Manager.Count<Map>()}");
+        Log.Information(
+            $"Creatures: {Manager.Count<Creature>()} Variants: {Manager.Count<VariantGroup>()} Lootsets: {Manager.Count<LootSet>()} Nations: {Manager.Count<Nation>()}");
         Log.Information(
             $"Statuses: {Manager.Count<Status>()} World Maps: {Manager.Count<WorldMap>()} Spawngroups: {Manager.Count<SpawnGroup>()} Behavior Sets: {Manager.Count<CreatureBehaviorSet>()}");
-        Assert.Equal(115, Manager.Count<Castable>());
+        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "castables"), "*.xml").Length,
+            Manager.Count<Castable>());
         Assert.Equal(286, Manager.Count<Item>());
-        Assert.Equal(47, Manager.Count<Npc>());
-        Assert.Equal(85, Manager.Count<Map>());
+        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "npcs"), "*.xml").Length, Manager.Count<Npc>());
+        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "maps"), "*.xml").Length, Manager.Count<Map>());
         Assert.Equal(17, Manager.Count<Creature>());
-        Assert.Equal(7, Manager.Count<VariantGroup>());
-        Assert.Equal(4, Manager.Count<LootSet>());
-        Assert.Equal(2, Manager.Count<Nation>());
-        Assert.Equal(75, Manager.Count<Status>());
-        Assert.Equal(1, Manager.Count<WorldMap>());
-        Assert.Equal(1, Manager.Count<SpawnGroup>());
-        Assert.Equal(9, Manager.Count<CreatureBehaviorSet>());
+        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "variantgroups"), "*.xml").Length,
+            Manager.Count<VariantGroup>());
+        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "lootsets"), "*.xml").Length,
+            Manager.Count<LootSet>());
+        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "nations"), "*.xml").Length,
+            Manager.Count<Nation>());
+        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "statuses"), "*.xml").Length,
+            Manager.Count<Status>());
+        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "worldmaps"), "*.xml").Length,
+            Manager.Count<WorldMap>());
+        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "spawngroups"), "*.xml").Length,
+            Manager.Count<SpawnGroup>());
+        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "creaturebehaviorsets"), "*.xml").Length,
+            Manager.Count<CreatureBehaviorSet>());
     }
 }

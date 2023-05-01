@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Net.Http.Headers;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Objects;
+using static System.Formats.Asn1.AsnWriter;
+using Xunit;
 
 namespace Hybrasyl.Xml.Manager;
 
@@ -122,8 +125,9 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
             var ret = _store.Remove(guid) && _index.Remove(GetStoreKey(key, true));
             foreach (var index in _reverseIndex[guid])
             {
-                ret = ret && _index.Remove(GetStoreKey(index, false));
+                var wtf = _index.Remove(index);
             }
+            ret = ret && _reverseIndex.Remove(guid);
 
             return ret;
         }
@@ -149,7 +153,7 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
     public T GetByGuid(Guid guid) => _store.TryGetValue(guid, out var ret) ? ret : null;
 
     public T GetByIndex(dynamic index) =>
-        _index.TryGetValue(new StoreKey(index, false), out Guid guid) ? _store[guid] : null;
+        _index.TryGetValue(new StoreKey(index, false), out var guid) ? _store[guid] : null;
 
     public T GetByFilename(string filename) => GetByIndex(filename);
 

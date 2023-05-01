@@ -14,6 +14,6 @@ public record StoreKey
     }
 
     public virtual bool Equals(StoreKey other) =>
-        other != null && Key == other.Key && IsPrimaryKey == other.IsPrimaryKey;
+        other != null && Key == other.Key && IsPrimaryKey == other.IsPrimaryKey && GetHashCode() == other.GetHashCode();
     public override int GetHashCode() => HashCode.Combine(Key, IsPrimaryKey);
 }

@@ -41,7 +41,7 @@ public class XmlStoreTests
         Assert.Equal(1, store.Count);
         Assert.Single(store.Items);
         Assert.Equal(1,store.Keys.Count);
-        Assert.Null(store[Castable.Name]);
+        Assert.NotNull(store[Castable.Name]);
     }
 
     [Fact]
@@ -118,13 +118,25 @@ public class XmlStoreTests
     [Fact]
     public void SetMultipleAndRemove()
     {
-
         var store = new XmlDataStore<Castable>();
         Assert.NotNull(store);
         var c1 = RandomCastable;
         var c2 = RandomCastable;
-        store.AddWithIndex(c1, c1.Name, "1234", 1234, 1234.0);
-        store.AddWithIndex(c2, c2.Name, "12345", 12345, 12345.0);
+        store.AddWithIndex(c1, c1.Name, "1234", 12345, 12345.6);
+        store.AddWithIndex(c2, c2.Name, "123456", 1234567, 1234567.8);
+        Assert.True(store.Remove(c1.Name));
+        Assert.True(store.Remove(c2.Name));
+        Assert.Equal(0, store.Count);
+        Assert.Null(store.Get(c1.Name));
+        Assert.Null(store.Get(c2.Name));
+        Assert.Null(store[c1.Name]);
+        Assert.Null(store[c2.Name]);
+        Assert.Null(store.GetByIndex("1234"));
+        Assert.Null(store.GetByIndex("12345"));
+        Assert.Null(store.GetByIndex("12345.6"));
+        Assert.Null(store.GetByIndex("123456"));
+        Assert.Null(store.GetByIndex("123457"));
+        Assert.Null(store.GetByIndex("1234567.8"));
     }
 
     [Fact]
@@ -159,28 +171,6 @@ public class XmlStoreTests
         Assert.Throws<KeyNotFoundException>(() => store.GetByIndex(1234));
         Assert.Throws<KeyNotFoundException>(() => store.GetByIndex(1234.0));
     }
-
-    [Fact]
-    public void SetNameRemoveIndex()
-    {
-        // If I set a value in the store, and then remove it by its index, I should
-        // not be able to retrieve it by its primary key or any other index
-        var store = new XmlDataStore<Castable>();
-        Assert.NotNull(store);
-        var c1 = RandomCastable;
-        store.Add(Castable, Castable.Name);
-        store.RemoveByIndex(1234.0);
-        Assert.Equal(0, store.Count);
-        Assert.Throws<KeyNotFoundException>(() => store.Get(Castable.Name));
-        Assert.Throws<KeyNotFoundException>(() => store.GetByIndex("1234"));
-        Assert.Throws<KeyNotFoundException>(() => store.GetByIndex(1234));
-        Assert.Throws<KeyNotFoundException>(() => store.GetByIndex(1234.0));
-    }
-
-    [Fact]
-    public void SetIndexRemoveName() {}
-    [Fact]
-    public void SetRemoveSecondaryIndex() { }
 
     [Fact]
     public void SetTryGetValue()
@@ -240,15 +230,59 @@ public class XmlStoreTests
     }
 
     [Fact]
-    public void SetCount() { }
+    public void SetCount()
+    {
+        var store = new XmlDataStore<Castable>();
+        Assert.NotNull(store);
+        store.Add(Castable, Castable.Name);
+        Assert.Equal(1, store.Count);
+    }
 
     [Fact]
-    public void SetRemoveCount() { }
+    public void SetRemoveCount()
+    {
+        var store = new XmlDataStore<Castable>();
+        Assert.NotNull(store);
+        store.Add(Castable, Castable.Name);
+        Assert.Equal(1, store.Count);
+        store.Remove(Castable.Name);
+        Assert.Equal(0, store.Count);
+
+    }
 
     [Fact]
-    public void SetRemoveByIndexCount() { }
+    public void SetRemoveByIndexCount()
+    {
+        var store = new XmlDataStore<Castable>();
+        Assert.NotNull(store);
+        store.AddWithIndex(Castable, Castable.Name, "1234", 12345, 12345.6);
+        Assert.Equal(1, store.Count);
+        store.RemoveByIndex(12345);
+        Assert.Equal(0, store.Count);
+    }
 
     [Fact]
-    public void SetValues() { }
+    public void SetAndRemoveItems()
+    {
+        var store = new XmlDataStore<Castable>();
+        Assert.NotNull(store);
+        var c1 = RandomCastable;
+        var c2 = RandomCastable;
+        store.AddWithIndex(Castable, Castable.Name, "1234", 12345, 12345.6);
+        store.AddWithIndex(c1, c1.Name, "12345678");
+        store.AddWithIndex(c2, c2.Name, "123456789");
+        Assert.Equal(3, store.Count);
+        Assert.Contains(Castable, store.Items);
+        Assert.Contains(c1, store.Items);
+        Assert.Contains(c2, store.Items);
+        Assert.Equal(3, store.Items.Count());
+        Assert.True(store.Remove(Castable.Name));
+        Assert.DoesNotContain(Castable, store.Items);
+        Assert.True(store.Remove(c1.Name));
+        Assert.DoesNotContain(c1, store.Items);
+        Assert.True(store.Remove(c2.Name));
+        Assert.DoesNotContain(c2, store.Items);
+        Assert.Empty(store.Items);
+    }
 
 }

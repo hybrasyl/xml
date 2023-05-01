@@ -30,9 +30,4 @@
     <PackageReference Include="xunit" Version="2.4.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="LICENSE" Pack="True" PackagePath="" />
-    <None Include="README.md" Pack="True" PackagePath="" />
-  </ItemGroup>
-
 </Project>
