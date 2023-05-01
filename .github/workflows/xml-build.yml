@@ -34,7 +34,7 @@ jobs:
           repository: hybrasyl/xml
           path: ceridwen
       - name: update test settings
-        run: cat <<< $(jq '.WorldDataDirectory = "hurr/burr/durr"' tests/xmltest-settings.json) > tests/xmltest-settings.json
+        run: cat <<< $(jq --arg wdd "$GITHUB_WORKSPACE/ceridwen/xml" '.WorldDataDirectory = $wdd' tests/xmltest-settings.json) > tests/xmltest-settings.json && cat tests/xmltest-settings.json
       - name: Test
         run: dotnet publish && dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage"
       - name: Codecov
