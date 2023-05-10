@@ -24,6 +24,7 @@ public partial class HybrasylEntity<T> : IIndexable where T : HybrasylEntity<T>
 
     public XmlError Error { get; set; } = XmlError.None;
     public string LoadErrorMessage { get; set; } = string.Empty;
+    public HybrasylEntity() {}
 
     public T Clone<T>(bool newGuid = false) where T : HybrasylEntity<T>
     {
@@ -105,14 +106,8 @@ public partial class HybrasylEntity<T> : IIndexable where T : HybrasylEntity<T>
                 if (entity is not HybrasylEntity<T> hybrasylEntity) throw new InvalidOperationException("Unsupported type {typeof(T).Name}");
                 hybrasylEntity.LoadPath = xmlFile;
                 if (entity is IIndexable indexable)
-                {
                     manager.AddWithIndex(entity, indexable.PrimaryKey, indexable.SecondaryKeys.ToArray());
-                }
 
-                if (entity is ICategorizable<T> categorizable)
-                {
-                    manager.GetStore<T>().AddCategory(categorizable.Name, categorizable.CategoryList.ToArray());
-                }
                 ret.SuccessCount++;
 
             }

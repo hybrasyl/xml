@@ -68,20 +68,18 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
         }
     }
 
-    public void AddCategory(dynamic name, params string[] categories)
+    public void AddCategory(T entity, params string[] categories)
     {
-        if (TryGetValue(name, out T result)) return;
-        if (result is not ICategorizable<T> categorizable) return;
-        categorizable.AddCategories(categories);
-        AddCategoriesToIndex(result.Guid, categories);
+        throw new NotImplementedException();
     }
 
-    public void RemoveCategory(dynamic name, params string[] categories)
+    public void RemoveCategory(T entity, params string[] categories) {}
+
+    public IEnumerable<T> GetByCategory(string category)
     {
-        if (TryGetValue(name, out T result)) return;
-        if (result is not ICategorizable<T> categorizable) return;
-        categorizable.RemoveCategories(categories);
-        RemoveCategoriesFromIndex(result.Guid, categories);
+        if (!_categories.TryGetValue(category, out var guids)) return new List<T>();
+        var ret = guids.Select(guid => _store[guid]).ToList();
+        return ret;
     }
 
     private void StoreItem(T entity, dynamic key, params dynamic[] indexes)
@@ -108,6 +106,9 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
                 _reverseIndex[entity.Guid].Add(new StoreKey(entity.Filename, false));
             }
 
+            if (entity is ICategorizable categorizable)
+                AddCategoriesToIndex(entity.Guid, categorizable.CategoryList.ToArray());
+
             foreach (var index in indexes)
             {
                 var storeKey = new StoreKey(index, false);
@@ -121,14 +122,15 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
     {
         lock (_lock)
         {
-            if (!_store.TryGetValue(guid, out _)) return false;
+            if (!_store.TryGetValue(guid, out var entity)) return false;
             var ret = _store.Remove(guid) && _index.Remove(GetStoreKey(key, true));
             foreach (var index in _reverseIndex[guid])
             {
-                var wtf = _index.Remove(index);
+                _index.Remove(index);
             }
             ret = ret && _reverseIndex.Remove(guid);
-
+            if (entity is ICategorizable categorizable)
+                RemoveCategoriesFromIndex(guid, categorizable.CategoryList.ToArray());
             return ret;
         }
     }

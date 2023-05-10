@@ -14,6 +14,7 @@ public interface IWorldDataManager
     public T GetByGuid<T>(Guid guid) where T : HybrasylEntity<T>;
     public XmlDataStore<T> GetStore<T>() where T : HybrasylEntity<T>;
     public void Add<T>(T entity, dynamic key) where T : HybrasylEntity<T>;
+    public void Add<T>(T entity) where T : HybrasylEntity<T>;
     public void AddWithIndex<T>(T entity, dynamic key, params dynamic[] indexes) where T : HybrasylEntity<T>;
     public bool TryGetValue<T>(dynamic key, out T result) where T : HybrasylEntity<T>;
     public bool TryGetValueByIndex<T>(dynamic key, out T result) where T : HybrasylEntity<T>;
@@ -37,10 +38,6 @@ public interface IWorldDataManager
     public ILoadResult GetLoadStatus<T>() where T : HybrasylEntity<T>;
     public IProcessResult GetProcessStatus<T>() where T : HybrasylEntity<T>;
     public IAdditionalValidationResult GetAdditionalValidationStatus<T>() where T : HybrasylEntity<T>;
-
-    public void AddCategory<T>(string name, params string[] categories) where T : HybrasylEntity<T>, ICategorizable<T>;
-
-    //public IDataStatus<T> GetStatus<T>() where T : HybrasylEntity<T>, ILoadOnStart<T>;
 
     public void LoadData();
 

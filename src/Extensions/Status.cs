@@ -6,7 +6,7 @@ using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class Status : ICategorizable<Status>, ILoadOnStart<Status>
+public partial class Status : ICategorizable, ILoadOnStart<Status>
 {
     public override string PrimaryKey => Name;
     public List<string> CategoryList => Categories.Select(x => x.Value).ToList();

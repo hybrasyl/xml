@@ -19,6 +19,8 @@ public class XmlDataManager : IWorldDataManager
     private Dictionary<Type, MethodInfo> _validatableTypes = new();
     private Dictionary<Type, dynamic> _dataStore = new();
 
+    private static string Sanitize(dynamic key) => key.ToString().Normalize().ToLower();
+
     public XmlDataManager(string rootPath)
     {
         RootPath = rootPath;
@@ -60,6 +62,7 @@ public class XmlDataManager : IWorldDataManager
     public T GetByIndex<T>(dynamic index) where T : HybrasylEntity<T> => GetStore<T>().GetByIndex(index);
     public T GetByGuid<T>(Guid guid) where T : HybrasylEntity<T> => GetStore<T>().GetByGuid(guid);
     public void Add<T>(T entity, dynamic name) where T : HybrasylEntity<T> => GetStore<T>().Add(entity, name);
+    public void Add<T>(T entity) where T : HybrasylEntity<T> => GetStore<T>().Add(entity);
 
     public void AddWithIndex<T>(T entity, dynamic name, params dynamic[] indexes) where T : HybrasylEntity<T> =>
         GetStore<T>().AddWithIndex(entity, name, indexes);
@@ -79,11 +82,49 @@ public class XmlDataManager : IWorldDataManager
     public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : HybrasylEntity<T> => GetStore<T>().Find(condition);
 
     public IEnumerable<Castable> FindSkills(long str = 0, long @int = 0, long wis = 0, long con = 0, long dex = 0,
-        string category = null) => throw new NotImplementedException();
+        string category = null) => GetCastables(str, @int, wis, con, dex, category, CastableFilter.SkillsOnly);
 
     public IEnumerable<Castable> FindSpells(long str = 0, long @int = 0, long wis = 0, long con = 0, long dex = 0,
-        string category = null) => throw new NotImplementedException();
+        string category = null) =>  GetCastables(str, @int, wis, con, dex, category, CastableFilter.SkillsOnly);
 
+
+    public HashSet<Castable> GetCastables(long Str = 0, long Int = 0, long Wis = 0,
+        long Con = 0, long Dex = 0, string category = null,
+        CastableFilter filter = CastableFilter.SkillsAndSpells)
+    {
+        HashSet<Castable> ret;
+        if (!string.IsNullOrEmpty(category))
+        {
+            var sanitized = Sanitize(category);
+            ret = GetStore<Castable>().GetByCategory(sanitized).ToHashSet(new CastableComparer());
+        }
+        else
+        {
+            ret = Values<Castable>().ToHashSet(new CastableComparer());
+        }
+
+        if (Str > 0 || Int > 0 || Wis > 0 || Con > 0 || Dex > 0)
+            // TODO: perhaps cache this information
+            foreach (var castable in ret)
+            {
+                if (castable.Requirements.Count == 0) continue;
+                var physreq = castable.Requirements.Where(predicate: x => x.Physical != null);
+                if (!physreq.Any()) continue;
+                foreach (var req in physreq)
+                    if (Str >= req.Physical.Str && Int >= req.Physical.Int && Wis >= req.Physical.Wis &&
+                        Con >= req.Physical.Con &&
+                        Dex >= req.Physical.Dex)
+                        continue;
+                    else
+                        ret.Remove(castable);
+            }
+
+        if (filter == CastableFilter.SkillsOnly)
+            ret = ret.Where(predicate: c => c.IsSkill).ToHashSet();
+        if (filter == CastableFilter.SpellsOnly)
+            ret = ret.Where(predicate: c => c.IsSpell).ToHashSet();
+        return ret;
+    }
 
     public string RootPath { get; set; }
 
@@ -147,10 +188,6 @@ public class XmlDataManager : IWorldDataManager
         else
             Add(entity, entity.PrimaryKey);
 
-        if (entity is ICategorizable<T> categoryEntity)
-        {
-            store.AddCategory(entity.PrimaryKey, categoryEntity.CategoryList.ToArray());
-        }
     }
 
     public void ProcessAll<T>() where T : HybrasylEntity<T>, IPostProcessable<T> => T.ProcessAll(this);
@@ -165,9 +202,6 @@ public class XmlDataManager : IWorldDataManager
         throw new NotImplementedException();
     }
 
-    public void AddCategory<T>(string name, params string[] categories)
-        where T : HybrasylEntity<T>, ICategorizable<T> => GetStore<T>().AddCategory(name, categories);
-
     public void UpdateStatus<T>(ILoadResult result) where T : HybrasylEntity<T> =>
         GetStore<T>().LoadResult = result;
 
@@ -177,7 +211,9 @@ public class XmlDataManager : IWorldDataManager
     public void UpdateStatus<T>(IAdditionalValidationResult result) where T : HybrasylEntity<T> =>
         GetStore<T>().ValidationResult = result;
 
-    public IAdditionalValidationResult GetAdditionalValidationStatus<T>() where T : HybrasylEntity<T> => GetStore<T>().ValidationResult;
+    public IAdditionalValidationResult GetAdditionalValidationStatus<T>() where T : HybrasylEntity<T> =>
+        GetStore<T>().ValidationResult;
+
     public ILoadResult GetLoadStatus<T>() where T : HybrasylEntity<T> => GetStore<T>().LoadResult;
     public IProcessResult GetProcessStatus<T>() where T : HybrasylEntity<T> => GetStore<T>().ProcessResult;
 

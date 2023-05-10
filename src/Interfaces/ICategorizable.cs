@@ -4,11 +4,10 @@ using System.Linq;
 
 namespace Hybrasyl.Xml.Interfaces;
 
-public interface ICategorizable<T>
+public interface ICategorizable : IIndexable
 {
     public List<string> CategoryList { get; }
     public List<Category> Categories { get; set; }
-    public string Name { get; set; }
 
     public void AddCategories(params string[] categories)
     {
