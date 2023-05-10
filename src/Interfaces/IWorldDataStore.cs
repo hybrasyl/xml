@@ -38,6 +38,8 @@ namespace Hybrasyl.Xml.Interfaces
         public bool Contains(T entity);
         public IEnumerable<T> Find(Func<T, bool> condition);
         public IEnumerable<KeyValuePair<HashSet<StoreKey>, T>> GetEnumerator();
+        public void AddCategory(T entity, params string[] categories);
+        public void RemoveCategory(T entity, params string[] categories);
 
         public T this[dynamic key] { get; }
         public void FlagAsError(Guid guid, XmlError type, string error);

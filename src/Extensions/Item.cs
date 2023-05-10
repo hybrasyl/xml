@@ -15,7 +15,7 @@ using Newtonsoft.Json.Bson;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class Item : ICategorizable<Item>, ILoadOnStart<Item>, IPostProcessable<Item>
+public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable<Item>
 {
 
     [XmlIgnore] public static SHA256 sha = SHA256.Create();

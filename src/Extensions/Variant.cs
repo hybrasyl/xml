@@ -37,7 +37,7 @@ public partial class Variant
         if (Properties.StatModifiers != null)
             variantItem.Properties.StatModifiers += Properties.StatModifiers;
 
-        if (Properties.Damage != null)
+        if (originalItem.Properties.Equipment.Slot == EquipmentSlot.Weapon && Properties.Damage != null)
         {
             variantItem.Properties.Damage.LargeMin =
                 (ushort) (originalItem.Properties.Damage.LargeMin * Properties.Damage.LargeMin);

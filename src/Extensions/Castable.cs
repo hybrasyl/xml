@@ -7,7 +7,7 @@ using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class Castable : ILoadOnStart<Castable>, ICategorizable<Castable>
+public partial class Castable : ILoadOnStart<Castable>, ICategorizable
 {
     [Obsolete("This behavior is undesirable")]
     public int Id
@@ -92,7 +92,7 @@ public class CastableComparer : IEqualityComparer<Castable>
         if (c1 == null && c2 == null) return true;
         if (c1 == null || c2 == null) return false;
 
-        return c1.Name.Trim().ToLower() == c2.Name.Trim().ToLower() &&
+        return String.Equals(c1.Name.Trim(), c2.Name.Trim(), StringComparison.CurrentCultureIgnoreCase) &&
                c1.Book == c2.Book;
     }
 

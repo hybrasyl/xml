@@ -1,6 +1,7 @@
 ﻿using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
 using System.Diagnostics;
+using Hybrasyl.Xml.Enums;
 using Serilog;
 using Serilog.Core;
 using Xunit.Abstractions;
@@ -13,7 +14,7 @@ public class XmlManagerTests
     private readonly ITestOutputHelper output;
     protected XmlDataManager Manager { get; set; }
     private Stopwatch Watch { get; set; }
-    
+
     public XmlManagerTests(ITestOutputHelper output)
     {
         this.output = output;
@@ -23,8 +24,15 @@ public class XmlManagerTests
         Manager.LoadData();
         Watch.Stop();
     }
-    
-    private Castable castable { get; set; } = new Castable { Book = Book.PrimarySkill, Name = "Test Skill" };
+
+    private Castable CategoryCastable { get; set; } = new Castable
+    {
+        Book = Book.PrimarySkill, Name = "Test Skill", Categories = new List<Category>()
+        {
+            new Category { Value = "Category 1" },
+            new Category { Value = "Category 2" }
+        }
+    };
 
     [Fact]
     public void LoadDataContainsNoLoadErrors()
@@ -157,27 +165,33 @@ public class XmlManagerTests
     {
         Log.Information("-- Load Data: Processing Checks --");
         var creatureStatus = Manager.GetProcessStatus<Creature>();
-        Log.Information($"creature process status: total {creatureStatus.TotalProcessed} additional {creatureStatus.AdditionalCount}");
+        Log.Information(
+            $"creature process status: total {creatureStatus.TotalProcessed} additional {creatureStatus.AdditionalCount}");
         foreach (var kvp in creatureStatus.Errors)
         {
             Log.Error($"{kvp.Key}: {kvp.Value}");
         }
+
         Assert.Equal(0, creatureStatus.ErrorCount);
-        
+
         var itemStatus = Manager.GetProcessStatus<Item>();
-        Log.Information($"item process status: total {itemStatus.TotalProcessed} additional {itemStatus.AdditionalCount}");
+        Log.Information(
+            $"item process status: total {itemStatus.TotalProcessed} additional {itemStatus.AdditionalCount}");
         foreach (var kvp in itemStatus.Errors)
         {
             Log.Error($"{kvp.Key}: {kvp.Value}");
         }
+
         Assert.Equal(0, itemStatus.ErrorCount);
 
         var creaturebehaviorsetStatus = Manager.GetProcessStatus<CreatureBehaviorSet>();
-        Log.Information($"creaturebehaviorset process status: total {creaturebehaviorsetStatus.TotalProcessed} additional {creaturebehaviorsetStatus.AdditionalCount}");
+        Log.Information(
+            $"creaturebehaviorset process status: total {creaturebehaviorsetStatus.TotalProcessed} additional {creaturebehaviorsetStatus.AdditionalCount}");
         foreach (var kvp in creaturebehaviorsetStatus.Errors)
         {
             Log.Error($"{kvp.Key}: {kvp.Value}");
         }
+
         Assert.Equal(0, creaturebehaviorsetStatus.ErrorCount);
     }
 
@@ -198,7 +212,7 @@ public class XmlManagerTests
             $"Statuses: {Manager.Count<Status>()} World Maps: {Manager.Count<WorldMap>()} Spawngroups: {Manager.Count<SpawnGroup>()} Behavior Sets: {Manager.Count<CreatureBehaviorSet>()}");
         Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "castables"), "*.xml").Length,
             Manager.Count<Castable>());
-        Assert.Equal(286, Manager.Count<Item>());
+        Assert.Equal(287, Manager.Count<Item>());
         Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "npcs"), "*.xml").Length, Manager.Count<Npc>());
         Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "maps"), "*.xml").Length, Manager.Count<Map>());
         Assert.Equal(17, Manager.Count<Creature>());
@@ -216,5 +230,87 @@ public class XmlManagerTests
             Manager.Count<SpawnGroup>());
         Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "creaturebehaviorsets"), "*.xml").Length,
             Manager.Count<CreatureBehaviorSet>());
+    }
+
+    [Fact]
+    public void Get()
+    {
+        Assert.NotNull(Manager.Get<Map>(500));
+        Assert.NotNull(Manager.Get<Nation>("Mileth"));
+    }
+
+    [Fact]
+    public void GetByIndex()
+    {
+        Assert.NotNull(Manager.GetByIndex<Castable>("Assail"));
+        Assert.NotNull(Manager.GetByIndex<Map>("Mileth Inn"));
+    }
+
+    [Fact]
+    public void GetByGuid()
+    {
+        var mInn = Manager.Get<Map>(500);
+        Assert.NotNull(mInn);
+        var mInnByGuid = Manager.GetByGuid<Map>(mInn.Guid);
+        Assert.NotNull(mInnByGuid);
+    }
+
+    [Fact]
+    public void TryGetValueByIndex()
+    {
+        var found = Manager.TryGetValueByIndex<Castable>("Assail", out var result);
+        Assert.True(found);
+        Assert.NotNull(result);
+    }
+
+    [Fact]
+    public void ContainsKey()
+    {
+        Assert.True(Manager.ContainsKey<Map>(500));
+    }
+
+    [Fact]
+    public void ContainsIndex()
+    {
+        Assert.True(Manager.ContainsIndex<Castable>("Assail"));
+    }
+
+    [Fact]
+    public void FindSkills()
+    {
+        var skills = Manager.FindSkills(25, 3, 3, 12, 12);
+        Assert.NotNull(skills);
+        Assert.NotEmpty(skills);
+    }
+
+    [Fact]
+    public void FindSpells()
+    {
+        var skills = Manager.FindSpells(25, 3,3,3,3);
+        Assert.NotNull(skills);
+        Assert.NotEmpty(skills);
+
+    }
+
+    [Fact]
+    public void AddToStore()
+    {
+        var c1 = CategoryCastable;
+        Manager.Add(c1);
+    }
+
+    [Fact]
+    public void FlagAsError()
+    {
+        var c1 = Manager.GetStore<Castable>().GetByFilename("all_tst_plus-wis.xml");
+        Assert.NotNull(c1);
+        Manager.FlagAsError(c1, XmlError.ProcessingError, "idk man its all wangled");
+        Assert.Equal(XmlError.ProcessingError, c1.Error);
+        Assert.Equal("idk man its all wangled", c1.LoadErrorMessage);
+    }
+
+    [Fact]
+    public void GetByCategory()
+    {
     }
 }
