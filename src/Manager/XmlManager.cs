@@ -1,9 +1,25 @@
-﻿using System;
+﻿// This file is part of Project Hybrasyl.
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the Affero General Public License as published by
+// the Free Software Foundation, version 3.
+// 
+// This program is distributed in the hope that it will be useful, but
+// without ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+// or FITNESS FOR A PARTICULAR PURPOSE. See the Affero General Public License
+// for more details.
+// 
+// You should have received a copy of the Affero General Public License along
+// with this program. If not, see <http://www.gnu.org/licenses/>.
+// 
+// (C) 2020-2023 ERISCO, LLC
+// 
+// For contributors and individual authors please refer to CONTRIBUTORS.MD.
+
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Objects;
@@ -14,12 +30,10 @@ namespace Hybrasyl.Xml.Manager;
 public class XmlDataManager : IWorldDataManager
 {
     private static readonly Pluralizer Pluralizer = new();
-    private Dictionary<Type, MethodInfo> _loadableTypes = new();
-    private Dictionary<Type, MethodInfo> _processableTypes = new();
-    private Dictionary<Type, MethodInfo> _validatableTypes = new();
-    private Dictionary<Type, dynamic> _dataStore = new();
-
-    private static string Sanitize(dynamic key) => key.ToString().Normalize().ToLower();
+    private readonly Dictionary<Type, dynamic> _dataStore = new();
+    private readonly Dictionary<Type, MethodInfo> _loadableTypes = new();
+    private readonly Dictionary<Type, MethodInfo> _processableTypes = new();
+    private readonly Dictionary<Type, MethodInfo> _validatableTypes = new();
 
     public XmlDataManager(string rootPath)
     {
@@ -30,9 +44,9 @@ public class XmlDataManager : IWorldDataManager
         var asdf = assembly.GetTypes();
 
         var targetTypes = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(a => a.GetTypes())
-            .Where(t => t.GetInterfaces()
-                .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == loadOnStartType));
+            .SelectMany(selector: a => a.GetTypes())
+            .Where(predicate: t => t.GetInterfaces()
+                .Any(predicate: i => i.IsGenericType && i.GetGenericTypeDefinition() == loadOnStartType));
 
         var storeType = typeof(XmlDataStore<>);
         foreach (var targetType in targetTypes)
@@ -73,7 +87,7 @@ public class XmlDataManager : IWorldDataManager
     public bool TryGetValueByIndex<T>(dynamic index, out T result) where T : HybrasylEntity<T> =>
         GetStore<T>().TryGetValueByIndex(index, out result);
 
-    public IEnumerable<T> Values<T>() where T : HybrasylEntity<T> => GetStore<T>().Items;
+    public IEnumerable<T> Values<T>() where T : HybrasylEntity<T> => GetStore<T>().Values;
     public bool ContainsKey<T>(dynamic name) where T : HybrasylEntity<T> => GetStore<T>().ContainsKey(name);
     public bool ContainsIndex<T>(dynamic index) where T : HybrasylEntity<T> => GetStore<T>().ContainsIndex(index);
     public int Count<T>() where T : HybrasylEntity<T> => GetStore<T>().Count;
@@ -86,6 +100,87 @@ public class XmlDataManager : IWorldDataManager
 
     public IEnumerable<Castable> FindSpells(long str = 0, long @int = 0, long wis = 0, long con = 0, long dex = 0,
         string category = null) =>  GetCastables(str, @int, wis, con, dex, category, CastableFilter.SkillsOnly);
+
+    public string RootPath { get; set; }
+
+    public void LoadData()
+    {
+        foreach (var kvp in _loadableTypes)
+        {
+            var method = typeof(XmlDataManager).GetMethods()
+                .FirstOrDefault(predicate: x => x.Name == "LoadAll" && x.IsGenericMethod);
+            if (method != null)
+            {
+                var genMethod = method.MakeGenericMethod(kvp.Key);
+                genMethod.Invoke(this, null);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        foreach (var kvp in _processableTypes)
+        {
+            var method = typeof(XmlDataManager).GetMethods()
+                .FirstOrDefault(predicate: x => x.Name == "ProcessAll" && x.IsGenericMethod);
+            if (method != null)
+            {
+                var genMethod = method.MakeGenericMethod(kvp.Key);
+                genMethod.Invoke(this, null);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        foreach (var kvp in _validatableTypes)
+        {
+            var method = typeof(XmlDataManager).GetMethods()
+                .FirstOrDefault(predicate: x => x.Name == "ValidateAll" && x.IsGenericMethod);
+            if (method != null)
+            {
+                var genMethod = method.MakeGenericMethod(kvp.Key);
+                genMethod.Invoke(this, null);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+    }
+
+    public void LoadAll<T>() where T : HybrasylEntity<T>, ILoadOnStart<T> => T.LoadAll(this);
+
+    public void ProcessAll<T>() where T : HybrasylEntity<T>, IPostProcessable<T> => T.ProcessAll(this);
+
+    public void ValidateAll<T>() where T : HybrasylEntity<T>, IAdditionalValidation<T> => T.ValidateAll(this);
+
+    public void FlagAsError<T>(T entity, XmlError error, string message) where T : HybrasylEntity<T> =>
+        GetStore<T>().FlagAsError(entity.Guid, error, message);
+
+    public void LoadAllAsync<T>() where T : HybrasylEntity<T>, ILoadOnStart<T>
+    {
+        throw new NotImplementedException();
+    }
+
+    public void UpdateStatus<T>(ILoadResult result) where T : HybrasylEntity<T> =>
+        GetStore<T>().LoadResult = result;
+
+    public void UpdateStatus<T>(IProcessResult result) where T : HybrasylEntity<T> =>
+        GetStore<T>().ProcessResult = result;
+
+    public void UpdateStatus<T>(IAdditionalValidationResult result) where T : HybrasylEntity<T> =>
+        GetStore<T>().ValidationResult = result;
+
+    public IAdditionalValidationResult GetAdditionalValidationStatus<T>() where T : HybrasylEntity<T> =>
+        GetStore<T>().ValidationResult;
+
+    public ILoadResult GetLoadStatus<T>() where T : HybrasylEntity<T> => GetStore<T>().LoadResult;
+    public IProcessResult GetProcessStatus<T>() where T : HybrasylEntity<T> => GetStore<T>().ProcessResult;
+
+    private static string Sanitize(dynamic key) => key.ToString().Normalize().ToLower();
 
 
     public HashSet<Castable> GetCastables(long Str = 0, long Int = 0, long Wis = 0,
@@ -126,59 +221,6 @@ public class XmlDataManager : IWorldDataManager
         return ret;
     }
 
-    public string RootPath { get; set; }
-
-    public void LoadData()
-    {
-        foreach (var kvp in _loadableTypes)
-        {
-            var method = typeof(XmlDataManager).GetMethods()
-                .FirstOrDefault(x => x.Name == "LoadAll" && x.IsGenericMethod);
-            if (method != null)
-            {
-                var genMethod = method.MakeGenericMethod(kvp.Key);
-                genMethod.Invoke(this, null);
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        foreach (var kvp in _processableTypes)
-        {
-            var method = typeof(XmlDataManager).GetMethods()
-                .FirstOrDefault(x => x.Name == "ProcessAll" && x.IsGenericMethod);
-            if (method != null)
-            {
-                var genMethod = method.MakeGenericMethod(kvp.Key);
-                genMethod.Invoke(this, null);
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        foreach (var kvp in _validatableTypes)
-        {
-            var method = typeof(XmlDataManager).GetMethods()
-                .FirstOrDefault(x => x.Name == "ValidateAll" && x.IsGenericMethod);
-            if (method != null)
-            {
-                var genMethod = method.MakeGenericMethod(kvp.Key);
-                genMethod.Invoke(this, null);
-            }
-            else
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-    }
-
-    public void LoadAll<T>() where T : HybrasylEntity<T>, ILoadOnStart<T> => T.LoadAll(this);
-
     private void AddToStore<T>(T entity) where T : HybrasylEntity<T>
     {
         var store = GetStore<T>();
@@ -187,35 +229,5 @@ public class XmlDataManager : IWorldDataManager
             AddWithIndex(entity, entity.PrimaryKey, entity.SecondaryKeys.ToArray());
         else
             Add(entity, entity.PrimaryKey);
-
     }
-
-    public void ProcessAll<T>() where T : HybrasylEntity<T>, IPostProcessable<T> => T.ProcessAll(this);
-
-    public void ValidateAll<T>() where T : HybrasylEntity<T>, IAdditionalValidation<T> => T.ValidateAll(this);
-
-    public void FlagAsError<T>(T entity, XmlError error, string message) where T : HybrasylEntity<T> =>
-        GetStore<T>().FlagAsError(entity.Guid, error, message);
-
-    public void LoadAllAsync<T>() where T : HybrasylEntity<T>, ILoadOnStart<T>
-    {
-        throw new NotImplementedException();
-    }
-
-    public void UpdateStatus<T>(ILoadResult result) where T : HybrasylEntity<T> =>
-        GetStore<T>().LoadResult = result;
-
-    public void UpdateStatus<T>(IProcessResult result) where T : HybrasylEntity<T> =>
-        GetStore<T>().ProcessResult = result;
-
-    public void UpdateStatus<T>(IAdditionalValidationResult result) where T : HybrasylEntity<T> =>
-        GetStore<T>().ValidationResult = result;
-
-    public IAdditionalValidationResult GetAdditionalValidationStatus<T>() where T : HybrasylEntity<T> =>
-        GetStore<T>().ValidationResult;
-
-    public ILoadResult GetLoadStatus<T>() where T : HybrasylEntity<T> => GetStore<T>().LoadResult;
-    public IProcessResult GetProcessStatus<T>() where T : HybrasylEntity<T> => GetStore<T>().ProcessResult;
-
 }
-

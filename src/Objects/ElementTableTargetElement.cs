@@ -27,17 +27,17 @@ using System.Collections.Generic;
 public partial class ElementTableTargetElement : HybrasylEntity<ElementTableTargetElement>
 {
     #region Private fields
-    private List<ElementType> _element;
+    private ElementType _element;
     private double _multiplier;
     #endregion
     
     public ElementTableTargetElement()
     {
-        _element = new List<ElementType>();
+        _element = ElementType.None;
     }
     
     [XmlAttribute]
-    public List<ElementType> Element
+    public ElementType Element
     {
         get
         {

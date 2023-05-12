@@ -16,8 +16,10 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using System.Collections.Generic;
+namespace Hybrasyl.Xml.Objects;
 
-namespace Hybrasyl.Xml.Manager;
-
-public record WorldStoreRecord<T>(T Entity, HashSet<string> Keys);
+public partial class CastableIntent
+{
+    public bool IsShapeless =>
+        Cross.Count == 0 && Line.Count == 0 && Square.Count == 0 && Tile.Count == 0 && Map == null;
+}

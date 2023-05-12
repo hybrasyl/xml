@@ -16,8 +16,16 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using System.Collections.Generic;
+using System;
+using System.Linq;
 
-namespace Hybrasyl.Xml.Manager;
+namespace Hybrasyl.Xml.Objects;
 
-public record WorldStoreRecord<T>(T Entity, HashSet<string> Keys);
+public partial class NewPlayer
+{
+    public StartMap GetStartMap()
+    {
+        StartMaps.OrderBy(keySelector: x => Guid.NewGuid()).FirstOrDefault();
+        return StartMaps.First();
+    }
+}

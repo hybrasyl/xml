@@ -41,6 +41,8 @@ public partial class ServerConfig : HybrasylEntity<ServerConfig>
     private List<ClientSetting> _clientSettings;
     private string _worldDataDir;
     private ServerConstants _constants;
+    private string _name;
+    private string _elementTable;
     #endregion
     
     public ServerConfig()
@@ -48,6 +50,8 @@ public partial class ServerConfig : HybrasylEntity<ServerConfig>
         _apiEndpoints = new ApiEndpoints();
         _network = new Network();
         _dataStore = new DataStore();
+        _name = "default";
+        _elementTable = "default";
     }
     
     [XmlArrayItemAttribute("Log", IsNullable=false)]
@@ -207,6 +211,34 @@ public partial class ServerConfig : HybrasylEntity<ServerConfig>
         set
         {
             _constants = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue("default")]
+    public string Name
+    {
+        get
+        {
+            return _name;
+        }
+        set
+        {
+            _name = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue("default")]
+    public string ElementTable
+    {
+        get
+        {
+            return _elementTable;
+        }
+        set
+        {
+            _elementTable = value;
         }
     }
 }

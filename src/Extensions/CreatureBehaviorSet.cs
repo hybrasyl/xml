@@ -1,6 +1,22 @@
-﻿using System;
+﻿// This file is part of Project Hybrasyl.
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the Affero General Public License as published by
+// the Free Software Foundation, version 3.
+// 
+// This program is distributed in the hope that it will be useful, but
+// without ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+// or FITNESS FOR A PARTICULAR PURPOSE. See the Affero General Public License
+// for more details.
+// 
+// You should have received a copy of the Affero General Public License along
+// with this program. If not, see <http://www.gnu.org/licenses/>.
+// 
+// (C) 2020-2023 ERISCO, LLC
+// 
+// For contributors and individual authors please refer to CONTRIBUTORS.MD.
+
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using Hybrasyl.Xml.Enums;
@@ -11,30 +27,32 @@ namespace Hybrasyl.Xml.Objects;
 
 public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>, ILoadOnStart<CreatureBehaviorSet>
 {
-    [XmlIgnore] 
+    [XmlIgnore]
     public List<string> LearnSkillCategories => string.IsNullOrEmpty(Castables?.SkillCategories)
         ? new List<string>()
         : Castables.SkillCategories.Trim().ToLower().Split(" ").ToList();
 
-    [XmlIgnore] 
+    [XmlIgnore]
     public List<string> LearnSpellCategories => string.IsNullOrEmpty(Castables?.SpellCategories)
         ? new List<string>()
         : Castables.SpellCategories.Trim().ToLower().Split(" ").ToList();
 
     public override string PrimaryKey => Name;
 
-    public new static void LoadAll(IWorldDataManager manager, string path) => HybrasylEntity<CreatureBehaviorSet>.LoadAll(manager, path);
+    public new static void LoadAll(IWorldDataManager manager, string path) =>
+        HybrasylEntity<CreatureBehaviorSet>.LoadAll(manager, path);
 
     public static void ProcessAll(IWorldDataManager manager)
     {
         var ret = new XmlProcessResult();
-        foreach (var import in manager.Find<CreatureBehaviorSet>(x => !string.IsNullOrWhiteSpace(x.Import)).ToList())
+        foreach (var import in manager.Find<CreatureBehaviorSet>(condition: x => !string.IsNullOrWhiteSpace(x.Import))
+                     .ToList())
         {
             if (!manager.TryGetValue(import.Import, out CreatureBehaviorSet creatureBehaviorSet))
             {
                 manager.FlagAsError(import, XmlError.ProcessingError,
                     $"{import.Filename}: Referenced import set {import.Import} not found");
-                ret.Errors.Add(import.Guid, $"{import.Filename}: Referenced import set {import.Import} not found" );
+                ret.Errors.Add(import.Guid, $"{import.Filename}: Referenced import set {import.Import} not found");
             }
 
             var newSet = import.Clone<CreatureBehaviorSet>(true);
@@ -46,7 +64,6 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
         }
 
         manager.UpdateStatus<CreatureBehaviorSet>(ret);
-
     }
 
     /// <summary>

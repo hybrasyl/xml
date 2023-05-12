@@ -16,8 +16,12 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using System.Collections.Generic;
+namespace Hybrasyl.Xml.Objects;
 
-namespace Hybrasyl.Xml.Manager;
+public partial class CastableHeal
+{
+    public bool IsSimple => string.IsNullOrEmpty(Formula);
 
-public record WorldStoreRecord<T>(T Entity, HashSet<string> Keys);
+    // temporary silliness due to xsd issues
+    public bool IsEmpty => IsSimple && Simple.Value == 0 && Simple.Min == 0 && Simple.Max == 0;
+}

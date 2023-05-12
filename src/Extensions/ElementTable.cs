@@ -16,8 +16,14 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using System.Collections.Generic;
+using Hybrasyl.Xml.Interfaces;
 
-namespace Hybrasyl.Xml.Manager;
+namespace Hybrasyl.Xml.Objects;
 
-public record WorldStoreRecord<T>(T Entity, HashSet<string> Keys);
+public partial class ElementTable : ILoadOnStart<ElementTable>
+{
+    public override string PrimaryKey => Name;
+
+    public new static void LoadAll(IWorldDataManager manager, string path = null) =>
+        HybrasylEntity<ElementTable>.LoadAll(manager, path);
+}

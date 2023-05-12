@@ -59,9 +59,9 @@
     <!-- Visual Effect type - where to display visual effects. Generally defaults to target -->
     <xs:simpleType name="VisualEffectType">
         <xs:restriction base="xs:token">
-            <xs:enumeration value="Targets"/>
-            <xs:enumeration value="AllTiles"/>
-            <xs:enumeration value="Caster"/>
+            <xs:enumeration value="Targets" />
+            <xs:enumeration value="AllTiles" />
+            <xs:enumeration value="Caster" />
         </xs:restriction>
     </xs:simpleType>
 
@@ -261,7 +261,7 @@
             <xs:element name="StatModifiers" minOccurs="0" maxOccurs="1" type="hyb:StatModifiers" />
             <xs:element name="Statuses" minOccurs="0" maxOccurs="1" type="hyb:Statuses" />
             <xs:element name="Reactors" minOccurs="0" maxOccurs="1" type="hyb:CastableReactorList" />
-            <xs:element name="Procs" minOccurs="0" maxOccurs="1" type="hyb:ProcList"/>
+            <xs:element name="Procs" minOccurs="0" maxOccurs="1" type="hyb:ProcList" />
         </xs:sequence>
         <xs:attribute name="ScriptOverride" type="xs:boolean" default="false" />
     </xs:complexType>
@@ -340,8 +340,8 @@
         <xs:attribute name="Cooldown" use="optional" default="0" type="xs:int" />
         <xs:attribute name="IsAssail" use="optional" default="false" type="xs:boolean" />
         <xs:attribute name="Reflectable" use="optional" default="true" type="xs:boolean" />
-        <xs:attribute name="BreakStealth" use="optional" default="true" type="xs:boolean"/>
-        <xs:attribute name="IncludeInMetafile" use="optional" default="true" type="xs:boolean"/>
+        <xs:attribute name="BreakStealth" use="optional" default="true" type="xs:boolean" />
+        <xs:attribute name="IncludeInMetafile" use="optional" default="true" type="xs:boolean" />
     </xs:complexType>
 
     <!-- Intent container element -->
@@ -354,31 +354,31 @@
     <xs:complexType name="CastableLineIntent">
         <xs:attribute name="Length" type="xs:unsignedByte" use="required" />
         <xs:attribute name="Direction" type="hyb:IntentDirection" use="required" />
-        <xs:attribute name="VisualEffect" type="hyb:VisualEffectType" default="Targets"/>
+        <xs:attribute name="VisualEffect" type="hyb:VisualEffectType" default="Targets" />
     </xs:complexType>
 
     <xs:complexType name="CastableCrossIntent">
         <xs:attribute name="Radius" type="xs:unsignedByte" use="required" />
-        <xs:attribute name="VisualEffect" type="hyb:VisualEffectType" default="Targets"/>
+        <xs:attribute name="VisualEffect" type="hyb:VisualEffectType" default="Targets" />
     </xs:complexType>
 
     <xs:complexType name="CastableSquareIntent">
         <xs:attribute name="Side" type="hyb:OddByte" use="required" />
-        <xs:attribute name="VisualEffect" type="hyb:VisualEffectType" default="Targets"/>
+        <xs:attribute name="VisualEffect" type="hyb:VisualEffectType" default="Targets" />
     </xs:complexType>
 
     <xs:complexType name="CastableTileIntent">
         <xs:attribute name="Direction" type="hyb:IntentDirection" use="optional" default="None" />
         <xs:attribute name="RelativeX" type="xs:byte" use="optional" default="0" />
         <xs:attribute name="RelativeY" type="xs:byte" use="optional" default="0" />
-        <xs:attribute name="VisualEffect" type="hyb:VisualEffectType" default="Targets"/>
+        <xs:attribute name="VisualEffect" type="hyb:VisualEffectType" default="Targets" />
     </xs:complexType>
 
     <xs:complexType name="CastableConeIntent">
-        <xs:attribute name="Radius" type="xs:unsignedByte" use="required"/>
-        <xs:attribute name="Direction" type="hyb:IntentDirection" use="optional" default="None"/>
-        <xs:attribute name="VisualEffect" type="hyb:VisualEffectType" default="Targets"/>
-	</xs:complexType>
+        <xs:attribute name="Radius" type="xs:unsignedByte" use="required" />
+        <xs:attribute name="Direction" type="hyb:IntentDirection" use="optional" default="None" />
+        <xs:attribute name="VisualEffect" type="hyb:VisualEffectType" default="Targets" />
+    </xs:complexType>
 
     <!-- Intent: What does the spell do, and whom does it affect? -->
     <xs:complexType name="CastableIntent">
@@ -388,7 +388,7 @@
             <xs:element name="Cross" minOccurs="0" maxOccurs="unbounded" type="hyb:CastableCrossIntent" />
             <xs:element name="Square" minOccurs="0" maxOccurs="unbounded" type="hyb:CastableSquareIntent" />
             <xs:element name="Tile" minOccurs="0" maxOccurs="unbounded" type="hyb:CastableTileIntent" />
-            <xs:element name="Cone" minOccurs="0" maxOccurs="unbounded" type="hyb:CastableConeIntent"/>
+            <xs:element name="Cone" minOccurs="0" maxOccurs="unbounded" type="hyb:CastableConeIntent" />
         </xs:sequence>
         <xs:attribute name="UseType" type="hyb:SpellUseType" default="NoTarget" use="optional" />
         <xs:attribute name="Flags" type="hyb:IntentFlagsList" use="optional" />

@@ -1,15 +1,30 @@
-﻿
+﻿// This file is part of Project Hybrasyl.
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the Affero General Public License as published by
+// the Free Software Foundation, version 3.
+// 
+// This program is distributed in the hope that it will be useful, but
+// without ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+// or FITNESS FOR A PARTICULAR PURPOSE. See the Affero General Public License
+// for more details.
+// 
+// You should have received a copy of the Affero General Public License along
+// with this program. If not, see <http://www.gnu.org/licenses/>.
+// 
+// (C) 2020-2023 ERISCO, LLC
+// 
+// For contributors and individual authors please refer to CONTRIBUTORS.MD.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hybrasyl.Xml.Interfaces;
-using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
 public partial class Castable : ILoadOnStart<Castable>, ICategorizable
 {
-    [Obsolete("This behavior is undesirable")]
     public int Id
     {
         get
@@ -20,11 +35,6 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
             }
         }
     }
-
-    public override string PrimaryKey => Id.ToString();
-    public override List<string> SecondaryKeys => new() { Name };
-    
-    public new static void LoadAll(IWorldDataManager manager, string path) => HybrasylEntity<Castable>.LoadAll(manager, path);
 
     // Helper functions to deal with xml vagaries
     public List<AddStatus> AddStatuses => Effects.Statuses?.Add ?? new List<AddStatus>();
@@ -44,12 +54,16 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
             };
         }
     }
+
     public DateTime LastCast { get; set; }
 
     public bool IsSkill => Book is Book.PrimarySkill or Book.SecondarySkill or Book.UtilitySkill;
     public bool IsSpell => Book is Book.PrimarySpell or Book.SecondarySpell or Book.UtilitySpell;
 
     public bool OnCooldown => Cooldown > 0 && (DateTime.Now - LastCast).TotalSeconds < Cooldown;
+
+    public override string PrimaryKey => Id.ToString();
+    public override List<string> SecondaryKeys => new() { Name };
 
     public List<string> CategoryList
     {
@@ -60,6 +74,9 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
                 : new List<string>();
         }
     }
+
+    public new static void LoadAll(IWorldDataManager manager, string path) =>
+        HybrasylEntity<Castable>.LoadAll(manager, path);
 
     public byte GetMaxLevelByClass(Class castableClass)
     {
@@ -83,6 +100,9 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
 
         return true;
     }
+
+    public bool IsCategory(string category) => CategoryList.Contains(category.Normalize().ToLower());
+
 }
 
 public class CastableComparer : IEqualityComparer<Castable>
@@ -92,7 +112,7 @@ public class CastableComparer : IEqualityComparer<Castable>
         if (c1 == null && c2 == null) return true;
         if (c1 == null || c2 == null) return false;
 
-        return String.Equals(c1.Name.Trim(), c2.Name.Trim(), StringComparison.CurrentCultureIgnoreCase) &&
+        return string.Equals(c1.Name.Trim(), c2.Name.Trim(), StringComparison.CurrentCultureIgnoreCase) &&
                c1.Book == c2.Book;
     }
 
@@ -102,27 +122,3 @@ public class CastableComparer : IEqualityComparer<Castable>
         return hCode.GetHashCode();
     }
 }
-
-public partial class CastableHeal
-{
-    public bool IsSimple => string.IsNullOrEmpty(Formula);
-
-    // temporary silliness due to xsd issues
-    public bool IsEmpty => IsSimple && Simple.Value == 0 && Simple.Min == 0 && Simple.Max == 0;
-}
-
-public partial class CastableDamage
-{
-    public bool IsSimple => string.IsNullOrEmpty(Formula);
-
-    // temporary silliness due to xsd issues
-    public bool IsEmpty => IsSimple && Simple.Value == 0 && Simple.Min == 0 && Simple.Max == 0;
-}
-
-public partial class CastableIntent
-{
-    public bool IsShapeless =>
-        Cross.Count == 0 && Line.Count == 0 && Square.Count == 0 && Tile.Count == 0 && Map == null;
-}
-
-

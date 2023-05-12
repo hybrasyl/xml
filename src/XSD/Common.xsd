@@ -82,13 +82,13 @@
     </xs:complexType>
 
     <xs:complexType name="ElementalResistance">
-        <xs:attribute name="Type" type="hyb:ElementType" use="required"/>
-        <xs:attribute name="Modifier" type="xs:float" use="required"/>
+        <xs:attribute name="Type" type="hyb:ElementType" use="required" />
+        <xs:attribute name="Modifier" type="xs:float" use="required" />
     </xs:complexType>
 
     <xs:complexType name="StatModifiers">
         <xs:sequence>
-            <xs:element name="Resistances" type="hyb:ResistanceList" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="Resistances" type="hyb:ResistanceList" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
         <xs:attribute name="BaseStr" type="xs:string" />
         <xs:attribute name="BaseInt" type="xs:string" />
@@ -101,7 +101,7 @@
         <xs:attribute name="CurrentMp" type="xs:string" />
         <xs:attribute name="CurrentGold" type="xs:string" />
         <xs:attribute name="CurrentXp" type="xs:string" />
-        <xs:attribute name="CurrentFaith" type="xs:string"/>
+        <xs:attribute name="CurrentFaith" type="xs:string" />
         <xs:attribute name="BaseHit" type="xs:string" />
         <xs:attribute name="BaseDmg" type="xs:string" />
         <xs:attribute name="BaseAc" type="xs:string" />
@@ -112,7 +112,7 @@
         <xs:attribute name="BaseInboundDamageToMp" type="xs:string" />
         <xs:attribute name="BaseOffensiveElement" type="hyb:ElementType" default="None" />
         <xs:attribute name="BaseDefensiveElement" type="hyb:ElementType" default="None" />
-        <xs:attribute name="BaseExtraFaith" type="xs:string"/>
+        <xs:attribute name="BaseExtraFaith" type="xs:string" />
         <xs:attribute name="OffensiveElementOverride" type="hyb:ElementType" default="None" />
         <xs:attribute name="DefensiveElementOverride" type="hyb:ElementType" default="None" />
         <xs:attribute name="BaseInboundDamageModifier" type="xs:string" />
@@ -157,7 +157,7 @@
         <xs:attribute name="BonusLifeSteal" type="xs:string" />
         <xs:attribute name="BonusManaSteal" type="xs:string" />
         <xs:attribute name="BonusInboundDamageToMp" type="xs:string" />
-        <xs:attribute name="BonusExtraFaith" type="xs:string"/>
+        <xs:attribute name="BonusExtraFaith" type="xs:string" />
     </xs:complexType>
 
     <!-- Damage flags type -->
@@ -411,7 +411,7 @@
     </xs:simpleType>
 
     <!-- Status effects -->
-    
+
     <xs:complexType name="AddStatus">
         <xs:simpleContent>
             <xs:extension base="hyb:String8">
@@ -502,9 +502,9 @@
             <xs:enumeration value="Undead" />
             <xs:enumeration value="RandomTemuair" />
             <xs:enumeration value="RandomExpanded" />
-            <xs:enumeration value="Necklace"/>
-            <xs:enumeration value="Belt"/>
-            <xs:enumeration value="Current"/>
+            <xs:enumeration value="Necklace" />
+            <xs:enumeration value="Belt" />
+            <xs:enumeration value="Current" />
         </xs:restriction>
     </xs:simpleType>
 
@@ -643,10 +643,10 @@
         <xs:attribute name="MaxLev" type="xs:unsignedByte" default="255" />
         <xs:attribute name="MinAb" type="xs:unsignedByte" default="0" />
         <xs:attribute name="MaxAb" type="xs:unsignedByte" default="255" />
-        <xs:attribute name="MobUse" type="xs:boolean" default="true"/>
-        <xs:attribute name="RequireCookie" type="xs:string"/>
-        <xs:attribute name="ProhibitCookie" type="xs:string"/>
-        <xs:attribute name="Message" type="xs:string"/>
+        <xs:attribute name="MobUse" type="xs:boolean" default="true" />
+        <xs:attribute name="RequireCookie" type="xs:string" />
+        <xs:attribute name="ProhibitCookie" type="xs:string" />
+        <xs:attribute name="Message" type="xs:string" />
     </xs:complexType>
 
     <!-- Variant property type (string, must be numeric or contain a percent sign -->
@@ -855,7 +855,7 @@
             <xs:element name="StatAlloc" minOccurs="0" maxOccurs="1" type="CreatureStatAlloc" />
             <xs:element name="Castables" minOccurs="0" maxOccurs="1" type="CreatureCastables" />
             <xs:element name="Behavior" minOccurs="0" maxOccurs="1" type="CreatureBehavior" />
-            <xs:element name="Immunities" minOccurs="0" maxOccurs="1" type="CreatureImmunities "/>
+            <xs:element name="Immunities" minOccurs="0" maxOccurs="1" type="CreatureImmunities " />
         </xs:sequence>
         <xs:attribute name="Name" type="xs:string" use="required" />
         <xs:attribute name="Import" type="xs:string" use="optional" />
@@ -864,7 +864,7 @@
     <xs:complexType name="CreatureImmunities">
         <xs:sequence>
             <xs:element name="Immunity" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
-		</xs:sequence>
+        </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="CreatureCastable">
@@ -962,11 +962,11 @@
             <xs:element name="Repair" type="hyb:NpcRoleRepair" maxOccurs="1" minOccurs="0" />
             <xs:element name="Bank" type="hyb:NpcRoleBank" maxOccurs="1" minOccurs="0" />
         </xs:sequence>
-        <xs:attribute name="TrainCheck" type="xs:string"/>
-        <xs:attribute name="VendCheck" type="xs:string"/>
-        <xs:attribute name="PostCheck" type="xs:string"/>
-        <xs:attribute name="RepairCheck" type="xs:string"/>
-        <xs:attribute name="BankCheck" type="xs:string"/>
+        <xs:attribute name="TrainCheck" type="xs:string" />
+        <xs:attribute name="VendCheck" type="xs:string" />
+        <xs:attribute name="PostCheck" type="xs:string" />
+        <xs:attribute name="RepairCheck" type="xs:string" />
+        <xs:attribute name="BankCheck" type="xs:string" />
     </xs:complexType>
 
     <xs:complexType name="LocalizedString">
@@ -1036,27 +1036,26 @@
     <!--- Procs -->
     <xs:simpleType name="ProcEventType">
         <xs:restriction base="xs:token">
-            <xs:enumeration value="OnUse"/>
-            <xs:enumeration value="OnCast"/>
-            <xs:enumeration value="OnHit"/>
-            <xs:enumeration value="OnDeath"/>
-            <xs:enumeration value="OnSpawn"/>
+            <xs:enumeration value="OnUse" />
+            <xs:enumeration value="OnCast" />
+            <xs:enumeration value="OnHit" />
+            <xs:enumeration value="OnDeath" />
+            <xs:enumeration value="OnSpawn" />
         </xs:restriction>
     </xs:simpleType>
-    
+
     <xs:complexType name="ProcList">
         <xs:sequence>
-            <xs:element name="Proc" minOccurs="1" maxOccurs="unbounded" type="hyb:Proc"/>
+            <xs:element name="Proc" minOccurs="1" maxOccurs="unbounded" type="hyb:Proc" />
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="Proc">
-        <xs:attribute name="Type" type="hyb:ProcEventType"/>
-        <xs:attribute name="Castable" type="xs:string"/>
-        <xs:attribute name="Script" type="xs:string"/>
-        <xs:attribute name="Chance" type="xs:float"/>
+        <xs:attribute name="Type" type="hyb:ProcEventType" />
+        <xs:attribute name="Castable" type="xs:string" />
+        <xs:attribute name="Script" type="xs:string" />
+        <xs:attribute name="Chance" type="xs:float" />
     </xs:complexType>
-
 
 
 </xs:schema>

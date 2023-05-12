@@ -42,6 +42,7 @@
         <xs:sequence>
             <xs:element name="Source" type="hyb:ElementTableSourceElement" minOccurs="9" maxOccurs="9" />
         </xs:sequence>
+        <xs:attribute name="Name" default="default" />
     </xs:complexType>
 
     <xs:element name="ElementTable" type="hyb:ElementTable" />

@@ -74,10 +74,10 @@
     </xs:complexType>
 
     <xs:complexType name="ItemDamage">
-        <xs:attribute name="LargeMin" use="optional" type="xs:float" default="0.0"/> 
-        <xs:attribute name="LargeMax" use="optional" type="xs:float" default="0.0"/> 
-        <xs:attribute name="SmallMin" use="required" type="xs:float"/> 
-        <xs:attribute name="SmallMax" use="required" type="xs:float"/> 
+        <xs:attribute name="LargeMin" use="optional" type="xs:float" default="0.0" />
+        <xs:attribute name="LargeMax" use="optional" type="xs:float" default="0.0" />
+        <xs:attribute name="SmallMin" use="required" type="xs:float" />
+        <xs:attribute name="SmallMax" use="required" type="xs:float" />
     </xs:complexType>
 
     <xs:complexType name="Physical">
@@ -223,7 +223,7 @@
             <xs:element name="Use" minOccurs="0" maxOccurs="1" type="hyb:Use" />
             <xs:element name="Restrictions" minOccurs="0" maxOccurs="1" type="hyb:ItemRestrictions" />
             <xs:element name="Motions" minOccurs="0" maxOccurs="1" type="hyb:ItemMotionList" />
-            <xs:element name="Procs" minOccurs="0" maxOccurs="1" type="hyb:ProcList"/>
+            <xs:element name="Procs" minOccurs="0" maxOccurs="1" type="hyb:ProcList" />
         </xs:sequence>
     </xs:complexType>
 
@@ -234,7 +234,7 @@
             <xs:element name="Comment" minOccurs="0" maxOccurs="1" type="hyb:String16" />
             <xs:element name="Properties" minOccurs="1" maxOccurs="1" type="hyb:ItemProperties" />
         </xs:sequence>
-        <xs:attribute name="IncludeInMetafile" use="optional" default="true" type="xs:boolean"/>
+        <xs:attribute name="IncludeInMetafile" use="optional" default="true" type="xs:boolean" />
     </xs:complexType>
 
     <xs:complexType name="Variant">

@@ -95,13 +95,13 @@
 
     <xs:simpleType name="LogType">
         <xs:restriction base="xs:token">
-            <xs:enumeration value="General"/>
-            <xs:enumeration value="Scripting"/>
-            <xs:enumeration value="GmActivity"/>
-            <xs:enumeration value="UserActivity"/>
-            <xs:enumeration value="Spawn"/>
-            <xs:enumeration value="Packet"/>
-            <xs:enumeration value="WorldData"/>
+            <xs:enumeration value="General" />
+            <xs:enumeration value="Scripting" />
+            <xs:enumeration value="GmActivity" />
+            <xs:enumeration value="UserActivity" />
+            <xs:enumeration value="Spawn" />
+            <xs:enumeration value="Packet" />
+            <xs:enumeration value="WorldData" />
         </xs:restriction>
     </xs:simpleType>
 
@@ -144,14 +144,14 @@
 
     <xs:complexType name="LogConfigList">
         <xs:sequence>
-            <xs:element name="Log" type="hyb:LogConfig" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element name="Log" type="hyb:LogConfig" minOccurs="1" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
 
     <xs:complexType name="LogConfig">
-        <xs:attribute name="Type" type="hyb:LogType" use="required"/>
-        <xs:attribute name="Destination" type="xs:string" use="required"/>
-        <xs:attribute name="Level" type="hyb:LogLevel" use="required"/>
+        <xs:attribute name="Type" type="hyb:LogType" use="required" />
+        <xs:attribute name="Destination" type="xs:string" use="required" />
+        <xs:attribute name="Level" type="hyb:LogLevel" use="required" />
     </xs:complexType>
 
     <xs:complexType name="MessagePluginTargets">
@@ -227,9 +227,10 @@
             <xs:element name="Motd" type="hyb:String16" minOccurs="0" maxOccurs="1" />
             <xs:element name="Plugins" type="hyb:ServerPlugins" minOccurs="0" maxOccurs="1" />
             <xs:element name="ClientSettings" type="hyb:ClientSettings" minOccurs="0" maxOccurs="1" />
-            <xs:element name="WorldDataDir" type="xs:string" minOccurs="0" maxOccurs="1" />
             <xs:element name="Constants" type="hyb:ServerConstants" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
+        <xs:attribute name="Name" default="default" />
+        <xs:attribute name="ElementTable" default="default" />
     </xs:complexType>
 
     <xs:complexType name="ServerConstants">
@@ -406,6 +407,7 @@
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
+
 
     <xs:element name="ServerConfig" type="hyb:ServerConfig" />
 </xs:schema>

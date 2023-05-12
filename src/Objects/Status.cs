@@ -29,7 +29,7 @@ public partial class Status : HybrasylEntity<Status>
 {
     #region Private fields
     private List<Category> _categories;
-    private CastRestrictionList _castRestrictions;
+    private List<CastRestriction> _castRestrictions;
     private StatusEffects _effects;
     private string _prohibitedMessage;
     private string _script;
@@ -58,7 +58,8 @@ public partial class Status : HybrasylEntity<Status>
         }
     }
     
-    public CastRestrictionList CastRestrictions
+    [XmlArrayItemAttribute(IsNullable=false)]
+    public List<CastRestriction> CastRestrictions
     {
         get
         {

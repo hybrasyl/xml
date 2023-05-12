@@ -29,11 +29,13 @@ public partial class ElementTable : HybrasylEntity<ElementTable>
 {
     #region Private fields
     private List<ElementTableSourceElement> _source;
+    private string _name;
     #endregion
     
     public ElementTable()
     {
         _source = new List<ElementTableSourceElement>();
+        _name = "default";
     }
     
     [XmlElement("Source")]
@@ -46,6 +48,20 @@ public partial class ElementTable : HybrasylEntity<ElementTable>
         set
         {
             _source = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue("default")]
+    public string Name
+    {
+        get
+        {
+            return _name;
+        }
+        set
+        {
+            _name = value;
         }
     }
 }
