@@ -39,11 +39,15 @@ public partial class Spawn : HybrasylEntity<Spawn>
     private string _import;
     private string _name;
     private SpawnFlags _flags;
+    private int _despawnAfter;
+    private bool _despawnLoot;
     #endregion
     
     public Spawn()
     {
         _flags = SpawnFlags.Active;
+        _despawnAfter = 0;
+        _despawnLoot = false;
     }
     
     public LootList Loot
@@ -194,6 +198,34 @@ public partial class Spawn : HybrasylEntity<Spawn>
         set
         {
             _flags = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(0)]
+    public int DespawnAfter
+    {
+        get
+        {
+            return _despawnAfter;
+        }
+        set
+        {
+            _despawnAfter = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(false)]
+    public bool DespawnLoot
+    {
+        get
+        {
+            return _despawnLoot;
+        }
+        set
+        {
+            _despawnLoot = value;
         }
     }
 }

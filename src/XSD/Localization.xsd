@@ -35,7 +35,7 @@
             <xs:element name="MonsterSpeak" type="hyb:LocalizedStrings" minOccurs="1" maxOccurs="1" />
             <xs:element name="NpcResponses" type="hyb:NpcResponses" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
-        <xs:attribute name="Locale" required="optional" type="xs:string"/>
+        <xs:attribute name="Locale" type="xs:string"/>
     </xs:complexType>
     <xs:element name="Localization" type="hyb:Localization" />
 

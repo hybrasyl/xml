@@ -24,8 +24,8 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-[XmlRootAttribute("Strings", Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02", IsNullable=false)]
-public partial class LocalizedStringGroup : HybrasylEntity<LocalizedStringGroup>
+[XmlRootAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02", IsNullable=false)]
+public partial class Localization : HybrasylEntity<Localization>
 {
     #region Private fields
     private List<LocalizedString> _common;
@@ -33,9 +33,10 @@ public partial class LocalizedStringGroup : HybrasylEntity<LocalizedStringGroup>
     private List<LocalizedString> _npcSpeak;
     private List<LocalizedString> _monsterSpeak;
     private List<NpcResponse> _npcResponses;
+    private string _locale;
     #endregion
     
-    public LocalizedStringGroup()
+    public Localization()
     {
         _monsterSpeak = new List<LocalizedString>();
         _npcSpeak = new List<LocalizedString>();
@@ -105,6 +106,19 @@ public partial class LocalizedStringGroup : HybrasylEntity<LocalizedStringGroup>
         set
         {
             _npcResponses = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public string Locale
+    {
+        get
+        {
+            return _locale;
+        }
+        set
+        {
+            _locale = value;
         }
     }
 }

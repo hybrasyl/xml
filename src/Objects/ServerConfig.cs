@@ -39,7 +39,6 @@ public partial class ServerConfig : HybrasylEntity<ServerConfig>
     private string _motd;
     private ServerPlugins _plugins;
     private List<ClientSetting> _clientSettings;
-    private string _worldDataDir;
     private ServerConstants _constants;
     private string _name;
     private string _elementTable;
@@ -187,18 +186,6 @@ public partial class ServerConfig : HybrasylEntity<ServerConfig>
         set
         {
             _clientSettings = value;
-        }
-    }
-    
-    public string WorldDataDir
-    {
-        get
-        {
-            return _worldDataDir;
-        }
-        set
-        {
-            _worldDataDir = value;
         }
     }
     
