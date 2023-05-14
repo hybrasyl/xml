@@ -28,14 +28,9 @@ public partial class EquipmentRestriction : HybrasylEntity<EquipmentRestriction>
 {
     #region Private fields
     private EquipmentSlot _slot;
-    private List<WeaponType> _type;
+    private WeaponType _type;
     private string _value;
     #endregion
-    
-    public EquipmentRestriction()
-    {
-        _type = new List<WeaponType>();
-    }
     
     [XmlAttribute]
     public EquipmentSlot Slot
@@ -51,7 +46,7 @@ public partial class EquipmentRestriction : HybrasylEntity<EquipmentRestriction>
     }
     
     [XmlAttribute]
-    public List<WeaponType> Type
+    public WeaponType Type
     {
         get
         {

@@ -64,4 +64,13 @@ public interface IWorldDataManager
 
     public IEnumerable<Castable> FindSpells(long str = 0, long @int = 0, long wis = 0, long con = 0, long dex = 0,
         string category = null);
+
+    public HashSet<Castable> FindCastables(long Str = 0, long Int = 0, long Wis = 0,
+        long Con = 0, long Dex = 0, string category = null,
+        CastableFilter filter = CastableFilter.SkillsAndSpells);
+
+    public IEnumerable<Item> FindItem(string name);
+
+    public IEnumerable<T> FindByCategory<T>(string category) where T : HybrasylEntity<T>, ICategorizable;
+
 }

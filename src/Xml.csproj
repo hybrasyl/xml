@@ -4,8 +4,8 @@
         <TargetFramework>net7.0</TargetFramework>
         <AssemblyName>Hybrasyl.Xml</AssemblyName>
         <RootNamespace>Hybrasyl.Xml</RootNamespace>
-        <PackageVersion>0.9.3-alpha1</PackageVersion>
-        <Version>0.9.3-alpha1</Version>
+        <PackageVersion>0.9.3-alpha8</PackageVersion>
+        <Version>0.9.3-alpha8</Version>
         <BuildDocFx Condition="'$(Configuration)'=='Debug'">false</BuildDocFx>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <Authors>ERISCO LLC</Authors>
@@ -31,7 +31,6 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.2" />
         <PackageReference Include="Pluralize.NET" Version="1.0.2" />
-        <PackageReference Include="xunit" Version="2.4.2" />
     </ItemGroup>
 
 </Project>

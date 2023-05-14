@@ -48,6 +48,7 @@ public interface IWorldDataStore<T> where T : HybrasylEntity<T>
     public bool TryGetValueByIndex(dynamic key, out T result);
     public bool ContainsKey(dynamic key);
     public bool ContainsIndex(dynamic index);
+    public bool ContainsCategory(string category);
     public bool Remove(dynamic key);
     public bool RemoveByIndex(dynamic index);
     public void Clear();
@@ -56,5 +57,6 @@ public interface IWorldDataStore<T> where T : HybrasylEntity<T>
     public IEnumerable<KeyValuePair<HashSet<StoreKey>, T>> GetEnumerator();
     public void AddCategory(T entity, params string[] categories);
     public void RemoveCategory(T entity, params string[] categories);
+    public IEnumerable<T> FindByCategory(string category);
     public void FlagAsError(Guid guid, XmlError type, string error);
 }

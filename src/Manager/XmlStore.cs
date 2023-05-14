@@ -151,7 +151,7 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
             }
     }
 
-    public IEnumerable<T> GetByCategory(string category)
+    public IEnumerable<T> FindByCategory(string category)
     {
         if (!_categories.TryGetValue(category, out var guids)) return new List<T>();
         var ret = guids.Select(selector: guid => _store[guid]).ToList();
@@ -235,4 +235,6 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
             foreach (var index in indexes) _reverseIndex[guid].Remove(GetStoreKey(index));
         }
     }
+
+    public bool ContainsCategory(string category) => _categories.ContainsKey(category);
 }

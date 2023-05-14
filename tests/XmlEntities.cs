@@ -31,4 +31,11 @@ public class XmlEntityTests
         Assert.IsType<ElementType>(check.Element);
     }
 
+    [Fact]
+    public void EquipmentRestrictionTypeIsNotList()
+    {
+        var check = new EquipmentRestriction();
+        Assert.IsType<WeaponType>(check.Type);
+    }
+
 }

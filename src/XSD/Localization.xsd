@@ -27,7 +27,7 @@
         </xs:documentation>
     </xs:annotation>
 
-    <xs:complexType name="LocalizedStringGroup">
+    <xs:complexType name="Localization">
         <xs:sequence>
             <xs:element name="Common" type="hyb:LocalizedStrings" minOccurs="1" maxOccurs="1" />
             <xs:element name="Merchant" type="hyb:LocalizedStrings" minOccurs="1" maxOccurs="1" />
@@ -35,7 +35,8 @@
             <xs:element name="MonsterSpeak" type="hyb:LocalizedStrings" minOccurs="1" maxOccurs="1" />
             <xs:element name="NpcResponses" type="hyb:NpcResponses" minOccurs="0" maxOccurs="1" />
         </xs:sequence>
+        <xs:attribute name="Locale" required="optional" type="xs:string"/>
     </xs:complexType>
-    <xs:element name="Strings" type="hyb:LocalizedStringGroup" />
+    <xs:element name="Localization" type="hyb:Localization" />
 
 </xs:schema>

@@ -18,8 +18,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Objects;
@@ -34,6 +37,8 @@ public class XmlDataManager : IWorldDataManager
     private readonly Dictionary<Type, MethodInfo> _loadableTypes = new();
     private readonly Dictionary<Type, MethodInfo> _processableTypes = new();
     private readonly Dictionary<Type, MethodInfo> _validatableTypes = new();
+    private static SHA256 _sha256 = SHA256.Create();
+
 
     public XmlDataManager(string rootPath)
     {
@@ -96,15 +101,40 @@ public class XmlDataManager : IWorldDataManager
     public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : HybrasylEntity<T> => GetStore<T>().Find(condition);
 
     public IEnumerable<Castable> FindSkills(long str = 0, long @int = 0, long wis = 0, long con = 0, long dex = 0,
-        string category = null) => GetCastables(str, @int, wis, con, dex, category, CastableFilter.SkillsOnly);
+        string category = null) => FindCastables(str, @int, wis, con, dex, category, CastableFilter.SkillsOnly);
 
     public IEnumerable<Castable> FindSpells(long str = 0, long @int = 0, long wis = 0, long con = 0, long dex = 0,
-        string category = null) =>  GetCastables(str, @int, wis, con, dex, category, CastableFilter.SkillsOnly);
+        string category = null) => FindCastables(str, @int, wis, con, dex, category, CastableFilter.SkillsOnly);
+
+    public IEnumerable<T> FindByCategory<T>(string category) where T : HybrasylEntity<T>, ICategorizable =>
+        GetStore<T>().FindByCategory(category);
+
+    public IEnumerable<Item> FindItem(string name)
+    {
+        // Check for an exact result first
+        var ret = new List<Item>();
+        if (TryGetValue(name, out Item target) || TryGetValueByIndex(name, out target))
+            ret.Add(target);
+        else
+            foreach (var gender in Enum.GetValues(typeof(Gender)))
+            {
+                var rawhash = $"{name.Normalize()}:{gender.ToString().Normalize()}";
+                var hash = _sha256.ComputeHash(Encoding.ASCII.GetBytes(rawhash));
+                if (TryGetValue(string.Concat(hash.Select(selector: b => b.ToString("x2"))).Substring(0, 8),
+                        out Item result))
+                    ret.Add(result);
+            }
+
+        return ret;
+    }
 
     public string RootPath { get; set; }
 
     public void LoadData()
     {
+        if (!Directory.Exists(RootPath))
+            throw new FileNotFoundException($"{RootPath} doesn't exist or is not readable");
+
         foreach (var kvp in _loadableTypes)
         {
             var method = typeof(XmlDataManager).GetMethods()
@@ -182,8 +212,7 @@ public class XmlDataManager : IWorldDataManager
 
     private static string Sanitize(dynamic key) => key.ToString().Normalize().ToLower();
 
-
-    public HashSet<Castable> GetCastables(long Str = 0, long Int = 0, long Wis = 0,
+    public HashSet<Castable> FindCastables(long Str = 0, long Int = 0, long Wis = 0,
         long Con = 0, long Dex = 0, string category = null,
         CastableFilter filter = CastableFilter.SkillsAndSpells)
     {
@@ -191,7 +220,7 @@ public class XmlDataManager : IWorldDataManager
         if (!string.IsNullOrEmpty(category))
         {
             var sanitized = Sanitize(category);
-            ret = GetStore<Castable>().GetByCategory(sanitized).ToHashSet(new CastableComparer());
+            ret = GetStore<Castable>().FindByCategory(sanitized).ToHashSet(new CastableComparer());
         }
         else
         {

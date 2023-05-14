@@ -22,6 +22,8 @@ namespace Hybrasyl.Xml.Objects;
 
 public partial class Npc : ILoadOnStart<Npc>
 {
+    public override string PrimaryKey => Name;
+
     public new static void LoadAll(IWorldDataManager manager, string path) =>
         HybrasylEntity<Npc>.LoadAll(manager, path);
 }

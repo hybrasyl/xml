@@ -415,15 +415,15 @@ public class XmlStoreTests
         Assert.Contains("category 2", c1.CategoryList);
         store.Add(c1, c1.Name);
         store.Add(c2, c2.Name);
-        var c1e = store.GetByCategory("category 1").ToList();
+        var c1e = store.FindByCategory("category 1").ToList();
         Assert.NotEmpty(c1e);
         Assert.Equal(c1e.First().Guid, c1.Guid);
         Assert.Equal(2, c1e.Count());
-        var c2e = store.GetByCategory("category 2").ToList();
+        var c2e = store.FindByCategory("category 2").ToList();
         Assert.NotEmpty(c2e);
         Assert.Equal(c2e.First().Guid, c1.Guid);
         Assert.Single(c2e);
-        var c3e = store.GetByCategory("category 3").ToList();
+        var c3e = store.FindByCategory("category 3").ToList();
         Assert.Empty(c3e);
         Assert.True(c1.IsCategory("Category 1"));
         Assert.False(c1.IsCategory("Category 3"));
