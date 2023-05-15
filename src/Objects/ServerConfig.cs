@@ -42,6 +42,7 @@ public partial class ServerConfig : HybrasylEntity<ServerConfig>
     private ServerConstants _constants;
     private string _name;
     private string _elementTable;
+    private string _locale;
     #endregion
     
     public ServerConfig()
@@ -51,6 +52,7 @@ public partial class ServerConfig : HybrasylEntity<ServerConfig>
         _dataStore = new DataStore();
         _name = "default";
         _elementTable = "default";
+        _locale = "en_us";
     }
     
     [XmlArrayItemAttribute("Log", IsNullable=false)]
@@ -226,6 +228,20 @@ public partial class ServerConfig : HybrasylEntity<ServerConfig>
         set
         {
             _elementTable = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue("en_us")]
+    public string Locale
+    {
+        get
+        {
+            return _locale;
+        }
+        set
+        {
+            _locale = value;
         }
     }
 }
