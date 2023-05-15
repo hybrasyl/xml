@@ -152,6 +152,13 @@ public class XmlManagerTests
         foreach (var kvp in serverConfigStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, serverConfigStatus.ErrorCount);
+
+        var localizationStatus = Manager.GetLoadStatus<Localization>();
+        Log.Information(
+            $"localization load status: total {localizationStatus.TotalProcessed} errors {localizationStatus.ErrorCount} success {localizationStatus.SuccessCount}");
+        foreach (var kvp in localizationStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
+
+        Assert.Equal(0, localizationStatus.ErrorCount);
     }
 
     [Fact]
@@ -195,6 +202,8 @@ public class XmlManagerTests
             $"Creatures: {Manager.Count<Creature>()} Variants: {Manager.Count<VariantGroup>()} Lootsets: {Manager.Count<LootSet>()} Nations: {Manager.Count<Nation>()}");
         Log.Information(
             $"Statuses: {Manager.Count<Status>()} World Maps: {Manager.Count<WorldMap>()} Spawngroups: {Manager.Count<SpawnGroup>()} Behavior Sets: {Manager.Count<CreatureBehaviorSet>()}");
+        Log.Information(
+            $"Element Tables: {Manager.Count<ElementTable>()} Server Configs: {Manager.Count<ServerConfig>()} Localization Files: {Manager.Count<Localization>()}");
         Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "castables"), "*.xml").Length,
             Manager.Count<Castable>());
         Assert.Equal(287, Manager.Count<Item>());
@@ -219,6 +228,9 @@ public class XmlManagerTests
             Manager.Count<ElementTable>());
         Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "serverconfigs"), "*.xml").Length,
             Manager.Count<ServerConfig>());
+        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "localizations"), "*.xml").Length,
+            Manager.Count<Localization>());
+
     }
 
     [Fact]
