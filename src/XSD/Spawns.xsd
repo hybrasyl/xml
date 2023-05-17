@@ -62,6 +62,8 @@
         <xs:attribute name="Flags" type="hyb:SpawnFlags" default="Active" />
         <xs:attribute name="DespawnAfter" type="xs:int" default="0"/>
         <xs:attribute name="DespawnLoot" type="xs:boolean" default="false"/>
+        <xs:attribute name="ActiveFrom" type="xs:string"/>
+        <xs:attribute name="ActiveTo" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="SpawnBase">

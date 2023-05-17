@@ -46,10 +46,8 @@ public class XmlDataManager : IWorldDataManager
         var loadOnStartType = typeof(ILoadOnStart<>);
         // find all classes that implement ILoadOnStart<T>
         var assembly = Assembly.GetAssembly(loadOnStartType);
-        var asdf = assembly.GetTypes();
 
-        var targetTypes = AppDomain.CurrentDomain.GetAssemblies()
-            .SelectMany(selector: a => a.GetTypes())
+        var targetTypes = assembly.GetTypes()
             .Where(predicate: t => t.GetInterfaces()
                 .Any(predicate: i => i.IsGenericType && i.GetGenericTypeDefinition() == loadOnStartType));
 

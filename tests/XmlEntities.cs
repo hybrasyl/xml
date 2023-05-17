@@ -37,5 +37,4 @@ public class XmlEntityTests
         var check = new EquipmentRestriction();
         Assert.IsType<WeaponType>(check.Type);
     }
-
 }
