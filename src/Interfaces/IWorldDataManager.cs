@@ -72,5 +72,4 @@ public interface IWorldDataManager
     public IEnumerable<Item> FindItem(string name);
 
     public IEnumerable<T> FindByCategory<T>(string category) where T : HybrasylEntity<T>, ICategorizable;
-
 }

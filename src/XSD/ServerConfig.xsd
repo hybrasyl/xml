@@ -231,7 +231,7 @@
         </xs:sequence>
         <xs:attribute name="Name" type="xs:string" default="default" />
         <xs:attribute name="ElementTable" type="xs:string" default="default" />
-        <xs:attribute name="Locale" default="en_us" type="xs:string"/>
+        <xs:attribute name="Locale" default="en_us" type="xs:string" />
     </xs:complexType>
 
     <xs:complexType name="ServerConstants">

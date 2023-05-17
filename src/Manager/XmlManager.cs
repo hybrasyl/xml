@@ -33,11 +33,11 @@ namespace Hybrasyl.Xml.Manager;
 public class XmlDataManager : IWorldDataManager
 {
     private static readonly Pluralizer Pluralizer = new();
+    private static readonly SHA256 _sha256 = SHA256.Create();
     private readonly Dictionary<Type, dynamic> _dataStore = new();
     private readonly Dictionary<Type, MethodInfo> _loadableTypes = new();
     private readonly Dictionary<Type, MethodInfo> _processableTypes = new();
     private readonly Dictionary<Type, MethodInfo> _validatableTypes = new();
-    private static SHA256 _sha256 = SHA256.Create();
 
 
     public XmlDataManager(string rootPath)
@@ -208,8 +208,6 @@ public class XmlDataManager : IWorldDataManager
     public ILoadResult GetLoadStatus<T>() where T : HybrasylEntity<T> => GetStore<T>().LoadResult;
     public IProcessResult GetProcessStatus<T>() where T : HybrasylEntity<T> => GetStore<T>().ProcessResult;
 
-    private static string Sanitize(dynamic key) => key.ToString().Normalize().ToLower();
-
     public HashSet<Castable> FindCastables(long Str = 0, long Int = 0, long Wis = 0,
         long Con = 0, long Dex = 0, string category = null,
         CastableFilter filter = CastableFilter.SkillsAndSpells)
@@ -247,6 +245,8 @@ public class XmlDataManager : IWorldDataManager
             ret = ret.Where(predicate: c => c.IsSpell).ToHashSet();
         return ret;
     }
+
+    private static string Sanitize(dynamic key) => key.ToString().Normalize().ToLower();
 
     private void AddToStore<T>(T entity) where T : HybrasylEntity<T>
     {
