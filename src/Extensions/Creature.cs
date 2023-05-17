@@ -27,6 +27,7 @@ namespace Hybrasyl.Xml.Objects;
 public partial class Creature : ILoadOnStart<Creature>, IPostProcessable<Creature>
 {
     [XmlIgnore] public Guid ParentGuid { get; set; }
+    public override string PrimaryKey => Name;
 
     public new static void LoadAll(IWorldDataManager manager, string path) =>
         HybrasylEntity<Creature>.LoadAll(manager, path);

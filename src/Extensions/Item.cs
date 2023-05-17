@@ -55,7 +55,7 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
     public int IdInt => int.Parse(Id, NumberStyles.HexNumber);
 
     [XmlIgnore] public override string PrimaryKey => Id;
-    [XmlIgnore] public override List<string> SecondaryKeys => new() { Name };
+    [XmlIgnore] public override List<string> SecondaryKeys => new() { Name, Name.ToLower() };
 
     [XmlIgnore]
     public List<string> CategoryList
