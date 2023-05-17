@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: deploy
     strategy:
       matrix:
         dotnet-version: ['7.0.x']
@@ -42,3 +43,7 @@ jobs:
         with:
           fail_ci_if_error: true
           verbose: true
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@0.3.2
