@@ -55,7 +55,9 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
     public int IdInt => int.Parse(Id, NumberStyles.HexNumber);
 
     [XmlIgnore] public override string PrimaryKey => Id;
-    [XmlIgnore] public override List<string> SecondaryKeys => new() { Name, Name.ToLower() };
+
+    [XmlIgnore]
+    public override List<string> SecondaryKeys => Name == null ? new List<string>() : new List<string> { Name, Name.ToLower() };
 
     [XmlIgnore]
     public List<string> CategoryList
@@ -109,7 +111,7 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
                     var variants = toApply.ResolveVariants(item);
                     foreach (var variant in variants)
                     {
-                        manager.Add(variant, variant.Name);
+                        manager.Add(variant);
                         ret.AdditionalCount++;
                     }
                 }

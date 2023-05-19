@@ -58,7 +58,7 @@ public class XmlStoreTests
         // Ensure count / values are correct
         Assert.Equal(1, store.Count);
         Assert.Single(store.Values);
-        Assert.Equal(1, store.Keys.Count);
+        Assert.Equal(4, store.Keys.Count);
         Assert.NotNull(store[Castable.Name]);
     }
 
@@ -71,8 +71,8 @@ public class XmlStoreTests
         var retrieve = store.Get(Castable.Name);
         Assert.NotNull(retrieve);
         Assert.Equal(store.Get(Castable.Name).Guid, Castable.Guid);
-        retrieve = store.GetByIndex(Castable.Name);
-        Assert.Null(retrieve);
+        retrieve = store.GetByIndex(Castable.Name.ToLower());
+        Assert.NotNull(retrieve);
         retrieve = store.GetByIndex("1234");
         Assert.NotNull(retrieve);
         Assert.Equal(store.Get(Castable.Name).Guid, Castable.Guid);

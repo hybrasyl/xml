@@ -123,8 +123,7 @@ public partial class HybrasylEntity<T> : IIndexable where T : HybrasylEntity<T>
                 if (entity is not HybrasylEntity<T> hybrasylEntity)
                     throw new InvalidOperationException("Unsupported type {typeof(T).Name}");
                 hybrasylEntity.LoadPath = xmlFile;
-                if (entity is IIndexable indexable)
-                    manager.AddWithIndex(entity, indexable.PrimaryKey, indexable.SecondaryKeys.ToArray());
+                manager.Add(entity);
 
                 ret.SuccessCount++;
             }

@@ -102,7 +102,7 @@ public class XmlDataManager : IWorldDataManager
         string category = null) => FindCastables(str, @int, wis, con, dex, category, CastableFilter.SkillsOnly);
 
     public IEnumerable<Castable> FindSpells(long str = 0, long @int = 0, long wis = 0, long con = 0, long dex = 0,
-        string category = null) => FindCastables(str, @int, wis, con, dex, category, CastableFilter.SkillsOnly);
+        string category = null) => FindCastables(str, @int, wis, con, dex, category, CastableFilter.SpellsOnly);
 
     public IEnumerable<T> FindByCategory<T>(string category) where T : HybrasylEntity<T>, ICategorizable =>
         GetStore<T>().FindByCategory(category);

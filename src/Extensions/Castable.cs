@@ -63,7 +63,7 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
     public bool OnCooldown => Cooldown > 0 && (DateTime.Now - LastCast).TotalSeconds < Cooldown;
 
     public override string PrimaryKey => Id.ToString();
-    public override List<string> SecondaryKeys => new() { Name };
+    public override List<string> SecondaryKeys => Name == null ? new List<string>() : new List<string> { Name, Name.ToLower() };
 
     public List<string> CategoryList
     {

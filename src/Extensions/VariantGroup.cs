@@ -42,7 +42,10 @@ public partial class VariantGroup : ILoadOnStart<VariantGroup>
                 newItem.Variant = variant.Guid;
                 ret.Add(newItem);
             }
-            catch (Exception ex) { }
+            catch (Exception ex)
+            {
+
+            }
 
         return ret;
     }

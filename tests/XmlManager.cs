@@ -291,6 +291,24 @@ public class XmlManagerTests
         Assert.NotNull(skills);
         Assert.NotEmpty(skills);
     }
+    [Fact]
+    public void FindSpellsWithCategory()
+    {
+        var skills = Manager.FindSpells(69, 36, 36, 36, 36, "ElementST");
+        Assert.NotNull(skills);
+        Assert.NotEmpty(skills);
+    }
+
+    [Fact]
+    public void Find()
+    {
+        var item = Manager.Find<Item>(x => x.Name == "Test Boots 2");
+        Assert.NotNull(item);
+        Assert.Single(item);
+        var item2 = Manager.Find<Item>(x => x.Name.Contains("Test Boots 2"));
+        Assert.NotNull(item2);
+        Assert.Equal(10, item2.Count());
+    }
 
     [Fact]
     public void AddToStore()
@@ -310,7 +328,16 @@ public class XmlManagerTests
     }
 
     [Fact]
-    public void GetByCategory() { }
+    public void GetByCategory()
+    {
 
+    }
 
+    [Fact]
+    public void VariantExists()
+    {
+        Assert.True(Manager.TryGetValueByIndex<Item>("Variant Test Boots 2", out var variant));
+        Assert.True(Manager.TryGetValueByIndex<Item>("Test Boots 2", out var baseItem));
+        Assert.True(Manager.TryGetValue<VariantGroup>("TestGroup", out var variantGroup));
+    }
 }

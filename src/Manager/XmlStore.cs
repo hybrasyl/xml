@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Objects;
@@ -78,9 +79,8 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
 
     public T GetByIndex(dynamic index) =>
         _index.TryGetValue(new StoreKey(index, false), out var guid) ? _store[guid] : null;
-
+    
     public void Add(T entity, dynamic name) => StoreItem(entity, name);
-
     public void AddWithIndex(T entity, dynamic name, params dynamic[] indexes) => StoreItem(entity, name, indexes);
 
     public bool TryGetValue(dynamic key, out T result)
@@ -184,10 +184,24 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
                 _reverseIndex[entity.Guid].Add(new StoreKey(entity.Filename, false));
             }
 
+            if (!string.IsNullOrWhiteSpace(entity.PrimaryKey) && entity.PrimaryKey != key.ToString())
+            {
+                var storeKey = new StoreKey(entity.PrimaryKey, true);
+                _index[storeKey] = entity.Guid;
+                _reverseIndex[entity.Guid].Add(storeKey);
+            }
+
             if (entity is ICategorizable categorizable)
                 AddCategoriesToIndex(entity.Guid, categorizable.CategoryList.ToArray());
 
             foreach (var index in indexes)
+            {
+                var storeKey = new StoreKey(index, false);
+                _index[storeKey] = entity.Guid;
+                _reverseIndex[entity.Guid].Add(storeKey);
+            }
+
+            foreach (var index in entity.SecondaryKeys)
             {
                 var storeKey = new StoreKey(index, false);
                 _index[storeKey] = entity.Guid;
@@ -217,11 +231,7 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
 
     public T GetByFilename(string filename) => GetByIndex(filename);
 
-    public void Add(T entity)
-    {
-        if (entity is IIndexable i)
-            AddWithIndex(entity, i.PrimaryKey, i.SecondaryKeys.ToArray());
-    }
+    public void Add(T entity) => AddWithIndex(entity, entity.PrimaryKey, entity.SecondaryKeys.ToArray());
 
     public bool TryGetValueByFilename(string filename, out T result)
     {
