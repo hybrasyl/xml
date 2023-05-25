@@ -21,6 +21,7 @@ using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
 using Serilog;
+using Serilog.Sinks.TestCorrelator;
 using Xunit.Abstractions;
 
 namespace Hybrasyl.XmlTests;
@@ -57,103 +58,103 @@ public class XmlManagerTests
     {
         Log.Information("-- Load Data: Loading Checks --");
 
-        var castableStatus = Manager.GetLoadStatus<Castable>();
+        var castableStatus = Manager.GetLoadResult<Castable>();
         Log.Information(
             $"castable load status: total {castableStatus.TotalProcessed} errors {castableStatus.ErrorCount} success {castableStatus.SuccessCount}");
         foreach (var kvp in castableStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, castableStatus.ErrorCount);
 
-        var itemStatus = Manager.GetLoadStatus<Item>();
+        var itemStatus = Manager.GetLoadResult<Item>();
         Log.Information(
             $"item load status: total {itemStatus.TotalProcessed} errors {itemStatus.ErrorCount} success {itemStatus.SuccessCount}");
         foreach (var kvp in itemStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, itemStatus.ErrorCount);
 
-        var npcStatus = Manager.GetLoadStatus<Npc>();
+        var npcStatus = Manager.GetLoadResult<Npc>();
         Log.Information(
             $"npc load status: total {npcStatus.TotalProcessed} errors {npcStatus.ErrorCount} success {npcStatus.SuccessCount}");
         foreach (var kvp in npcStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, npcStatus.ErrorCount);
 
-        var mapStatus = Manager.GetLoadStatus<Map>();
+        var mapStatus = Manager.GetLoadResult<Map>();
         Log.Information(
             $"map load status: total {mapStatus.TotalProcessed} errors {mapStatus.ErrorCount} success {mapStatus.SuccessCount}");
         foreach (var kvp in mapStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, mapStatus.ErrorCount);
 
-        var creatureStatus = Manager.GetLoadStatus<Creature>();
+        var creatureStatus = Manager.GetLoadResult<Creature>();
         Log.Information(
             $"creature load status: total {creatureStatus.TotalProcessed} errors {creatureStatus.ErrorCount} success {creatureStatus.SuccessCount}");
         foreach (var kvp in creatureStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, creatureStatus.ErrorCount);
 
-        var variantgroupStatus = Manager.GetLoadStatus<VariantGroup>();
+        var variantgroupStatus = Manager.GetLoadResult<VariantGroup>();
         Log.Information(
             $"variantgroup load status: total {variantgroupStatus.TotalProcessed} errors {variantgroupStatus.ErrorCount} success {variantgroupStatus.SuccessCount}");
         foreach (var kvp in variantgroupStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, variantgroupStatus.ErrorCount);
 
-        var lootsetStatus = Manager.GetLoadStatus<LootSet>();
+        var lootsetStatus = Manager.GetLoadResult<LootSet>();
         Log.Information(
             $"lootset load status: total {lootsetStatus.TotalProcessed} errors {lootsetStatus.ErrorCount} success {lootsetStatus.SuccessCount}");
         foreach (var kvp in lootsetStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, lootsetStatus.ErrorCount);
 
-        var nationStatus = Manager.GetLoadStatus<Nation>();
+        var nationStatus = Manager.GetLoadResult<Nation>();
         Log.Information(
             $"nation load status: total {nationStatus.TotalProcessed} errors {nationStatus.ErrorCount} success {nationStatus.SuccessCount}");
         foreach (var kvp in nationStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, nationStatus.ErrorCount);
 
-        var statusStatus = Manager.GetLoadStatus<Status>();
+        var statusStatus = Manager.GetLoadResult<Status>();
         Log.Information(
             $"status load status: total {statusStatus.TotalProcessed} errors {statusStatus.ErrorCount} success {statusStatus.SuccessCount}");
         foreach (var kvp in statusStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, statusStatus.ErrorCount);
 
-        var worldmapStatus = Manager.GetLoadStatus<WorldMap>();
+        var worldmapStatus = Manager.GetLoadResult<WorldMap>();
         Log.Information(
             $"worldmap load status: total {worldmapStatus.TotalProcessed} errors {worldmapStatus.ErrorCount} success {worldmapStatus.SuccessCount}");
         foreach (var kvp in worldmapStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, worldmapStatus.ErrorCount);
 
-        var spawngroupStatus = Manager.GetLoadStatus<SpawnGroup>();
+        var spawngroupStatus = Manager.GetLoadResult<SpawnGroup>();
         Log.Information(
             $"spawngroup load status: total {spawngroupStatus.TotalProcessed} errors {spawngroupStatus.ErrorCount} success {spawngroupStatus.SuccessCount}");
         foreach (var kvp in spawngroupStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, spawngroupStatus.ErrorCount);
 
-        var elementTableStatus = Manager.GetLoadStatus<ElementTable>();
+        var elementTableStatus = Manager.GetLoadResult<ElementTable>();
         Log.Information(
             $"elementtable load status: total {elementTableStatus.TotalProcessed} errors {elementTableStatus.ErrorCount} success {elementTableStatus.SuccessCount}");
         foreach (var kvp in elementTableStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, elementTableStatus.ErrorCount);
-        var creaturebehaviorsetStatus = Manager.GetLoadStatus<CreatureBehaviorSet>();
+        var creaturebehaviorsetStatus = Manager.GetLoadResult<CreatureBehaviorSet>();
         Log.Information(
             $"creaturebehaviorset load status: total {creaturebehaviorsetStatus.TotalProcessed} errors {creaturebehaviorsetStatus.ErrorCount} success {creaturebehaviorsetStatus.SuccessCount}");
         foreach (var kvp in creaturebehaviorsetStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, creaturebehaviorsetStatus.ErrorCount);
-        var serverConfigStatus = Manager.GetLoadStatus<ServerConfig>();
+        var serverConfigStatus = Manager.GetLoadResult<ServerConfig>();
         Log.Information(
             $"serverconfig load status: total {serverConfigStatus.TotalProcessed} errors {serverConfigStatus.ErrorCount} success {serverConfigStatus.SuccessCount}");
         foreach (var kvp in serverConfigStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, serverConfigStatus.ErrorCount);
 
-        var localizationStatus = Manager.GetLoadStatus<Localization>();
+        var localizationStatus = Manager.GetLoadResult<Localization>();
         Log.Information(
             $"localization load status: total {localizationStatus.TotalProcessed} errors {localizationStatus.ErrorCount} success {localizationStatus.SuccessCount}");
         foreach (var kvp in localizationStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
@@ -165,21 +166,21 @@ public class XmlManagerTests
     public void LoadDataContainsNoProcessingErrors()
     {
         Log.Information("-- Load Data: Processing Checks --");
-        var creatureStatus = Manager.GetProcessStatus<Creature>();
+        var creatureStatus = Manager.GetProcessResult<Creature>();
         Log.Information(
             $"creature process status: total {creatureStatus.TotalProcessed} additional {creatureStatus.AdditionalCount}");
         foreach (var kvp in creatureStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, creatureStatus.ErrorCount);
 
-        var itemStatus = Manager.GetProcessStatus<Item>();
+        var itemStatus = Manager.GetProcessResult<Item>();
         Log.Information(
             $"item process status: total {itemStatus.TotalProcessed} additional {itemStatus.AdditionalCount}");
         foreach (var kvp in itemStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, itemStatus.ErrorCount);
 
-        var creaturebehaviorsetStatus = Manager.GetProcessStatus<CreatureBehaviorSet>();
+        var creaturebehaviorsetStatus = Manager.GetProcessResult<CreatureBehaviorSet>();
         Log.Information(
             $"creaturebehaviorset process status: total {creaturebehaviorsetStatus.TotalProcessed} additional {creaturebehaviorsetStatus.AdditionalCount}");
         foreach (var kvp in creaturebehaviorsetStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
@@ -339,5 +340,17 @@ public class XmlManagerTests
         Assert.True(Manager.TryGetValueByIndex<Item>("Variant Test Boots 2", out var variant));
         Assert.True(Manager.TryGetValueByIndex<Item>("Test Boots 2", out var baseItem));
         Assert.True(Manager.TryGetValue<VariantGroup>("TestGroup", out var variantGroup));
+    }
+
+    [Fact]
+    public void LogErrors()
+    {
+        using var ctx = TestCorrelator.CreateContext();
+        Manager.LogStatus(Log.Logger);
+        var events = TestCorrelator.GetLogEventsFromCurrentContext();
+        // TODO: improve coverage
+        Assert.NotNull(events);
+        Assert.NotEmpty(events);
+
     }
 }

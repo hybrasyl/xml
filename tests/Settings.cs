@@ -32,6 +32,7 @@ public class Settings
             .MinimumLevel.Debug()
             .WriteTo.Console()
             .WriteTo.File("hybrasyl-xml-tests-.log", rollingInterval: RollingInterval.Day)
+            .WriteTo.TestCorrelator()
             .CreateLogger();
 
         var json = File.ReadAllText("xmltest-settings.json");

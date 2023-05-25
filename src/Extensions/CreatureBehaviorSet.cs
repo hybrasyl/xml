@@ -63,7 +63,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
             ret.TotalProcessed++;
         }
 
-        manager.UpdateStatus<CreatureBehaviorSet>(ret);
+        manager.UpdateResult<CreatureBehaviorSet>(ret);
     }
 
     /// <summary>

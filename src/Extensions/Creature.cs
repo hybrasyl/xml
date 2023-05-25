@@ -47,7 +47,7 @@ public partial class Creature : ILoadOnStart<Creature>, IPostProcessable<Creatur
             ret.TotalProcessed++;
         }
 
-        manager.UpdateStatus<Creature>(ret);
+        manager.UpdateResult<Creature>(ret);
     }
 
     public static Creature operator &(Creature c1, Creature c2)

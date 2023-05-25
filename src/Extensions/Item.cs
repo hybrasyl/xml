@@ -124,7 +124,7 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
             ret.TotalProcessed++;
         }
 
-        manager.UpdateStatus<Item>(ret);
+        manager.UpdateResult<Item>(ret);
     }
 
     public static List<string> GenerateIds(string name) =>

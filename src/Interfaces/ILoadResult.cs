@@ -38,7 +38,7 @@ public interface IProcessResult
     public int TotalProcessed { get; }
 }
 
-public interface IAdditionalValidationResult
+public interface IValidationResult
 {
     public Dictionary<Guid, string> Errors { get; set; }
     public int ErrorCount => Errors.Count;

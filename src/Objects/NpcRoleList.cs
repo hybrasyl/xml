@@ -32,12 +32,18 @@ public partial class NpcRoleList : HybrasylEntity<NpcRoleList>
     private NpcRolePost _post;
     private NpcRoleRepair _repair;
     private NpcRoleBank _bank;
+    private bool _disableForget;
     private string _trainCheck;
     private string _vendCheck;
     private string _postCheck;
     private string _repairCheck;
     private string _bankCheck;
     #endregion
+    
+    public NpcRoleList()
+    {
+        _disableForget = false;
+    }
     
     [XmlArrayItemAttribute("Castable", IsNullable=false)]
     public List<NpcRoleTrainCastable> Train
@@ -97,6 +103,20 @@ public partial class NpcRoleList : HybrasylEntity<NpcRoleList>
         set
         {
             _bank = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(false)]
+    public bool DisableForget
+    {
+        get
+        {
+            return _disableForget;
+        }
+        set
+        {
+            _disableForget = value;
         }
     }
     

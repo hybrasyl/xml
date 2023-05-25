@@ -31,7 +31,7 @@ public interface IWorldDataStore<T> where T : HybrasylEntity<T>
     public int ErrorCount => Errors.Count();
     public int ItemCount => Values.Count();
 
-    public IAdditionalValidationResult ValidationResult { get; }
+    public IValidationResult ValidationResult { get; }
     public ILoadResult LoadResult { get; }
     public IProcessResult ProcessResult { get; }
     public IEnumerable<T> Values { get; }

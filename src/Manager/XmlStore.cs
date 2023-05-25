@@ -41,7 +41,7 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
 
     public ILoadResult LoadResult { get; set; }
     public IProcessResult ProcessResult { get; set; }
-    public IAdditionalValidationResult ValidationResult { get; set; }
+    public IValidationResult ValidationResult { get; set; }
 
     public void FlagAsError(Guid guid, XmlError type, string error)
     {

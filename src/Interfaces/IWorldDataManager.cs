@@ -49,13 +49,13 @@ public interface IWorldDataManager
     public void ValidateAll<T>() where T : HybrasylEntity<T>, IAdditionalValidation<T>;
     public void FlagAsError<T>(T entity, XmlError error, string message) where T : HybrasylEntity<T>;
 
-    public void UpdateStatus<T>(IProcessResult result) where T : HybrasylEntity<T>;
-    public void UpdateStatus<T>(ILoadResult result) where T : HybrasylEntity<T>;
-    public void UpdateStatus<T>(IAdditionalValidationResult result) where T : HybrasylEntity<T>;
+    public void UpdateResult<T>(IProcessResult result) where T : HybrasylEntity<T>;
+    public void UpdateResult<T>(ILoadResult result) where T : HybrasylEntity<T>;
+    public void UpdateResult<T>(IValidationResult result) where T : HybrasylEntity<T>;
 
-    public ILoadResult GetLoadStatus<T>() where T : HybrasylEntity<T>;
-    public IProcessResult GetProcessStatus<T>() where T : HybrasylEntity<T>;
-    public IAdditionalValidationResult GetAdditionalValidationStatus<T>() where T : HybrasylEntity<T>;
+    public ILoadResult GetLoadResult<T>() where T : HybrasylEntity<T>;
+    public IProcessResult GetProcessResult<T>() where T : HybrasylEntity<T>;
+    public IValidationResult GetValidationResult<T>() where T : HybrasylEntity<T>;
 
     public void LoadData();
 

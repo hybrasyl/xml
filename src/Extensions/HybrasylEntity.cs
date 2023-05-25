@@ -135,6 +135,6 @@ public partial class HybrasylEntity<T> : IIndexable where T : HybrasylEntity<T>
             ret.TotalProcessed++;
         }
 
-        manager.UpdateStatus<T>(ret);
+        manager.UpdateResult<T>(ret);
     }
 }
