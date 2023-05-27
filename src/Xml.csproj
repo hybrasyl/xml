@@ -4,8 +4,8 @@
         <TargetFramework>net7.0</TargetFramework>
         <AssemblyName>Hybrasyl.Xml</AssemblyName>
         <RootNamespace>Hybrasyl.Xml</RootNamespace>
-        <PackageVersion>0.9.3.1</PackageVersion>
-        <Ver4sion>0.9.3.1</Ver4sion>
+        <PackageVersion>0.9.3.2</PackageVersion>
+        <Ver4sion>0.9.3.2</Ver4sion>
         <BuildDocFx Condition="'$(Configuration)'=='Debug'">false</BuildDocFx>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <Authors>ERISCO LLC</Authors>

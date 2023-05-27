@@ -181,7 +181,7 @@ public class XmlDataManager : IWorldDataManager
         }
     }
 
-    public void LogStatus(ILogger log)
+    public void LogResult(ILogger log)
     {
         foreach (var kvp in _loadableTypes)
         {

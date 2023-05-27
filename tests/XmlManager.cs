@@ -346,7 +346,7 @@ public class XmlManagerTests
     public void LogErrors()
     {
         using var ctx = TestCorrelator.CreateContext();
-        Manager.LogStatus(Log.Logger);
+        Manager.LogResult(Log.Logger);
         var events = TestCorrelator.GetLogEventsFromCurrentContext();
         // TODO: improve coverage
         Assert.NotNull(events);
