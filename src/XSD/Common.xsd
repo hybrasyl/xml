@@ -72,23 +72,34 @@
         </xs:simpleContent>
     </xs:complexType>
 
-    <!-- Stat effects (buffs or debuffs) container element -->
-    <!-- Can contain formulas or numbers -->
 
-    <xs:complexType name="ResistanceList">
+    <!-- Elemental modifiers - buff/debuffs to elemental incoming and outgoing damage -->
+    <!-- Modifier type -->
+    <xs:simpleType name="ElementalModifierType">
+        <xs:restriction base="xs:token">
+            <xs:enumeration value="Augment" />
+            <xs:enumeration value="Resistance" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="ElementalModifier">
+        <xs:attribute name="Element" type="hyb:ElementType" use="required" />
+        <xs:attribute name="Modifier" type="xs:float" use="required" />
+        <xs:attribute name="Type" type="hyb:ElementalModifierType"/>
+    </xs:complexType>
+
+    <xs:complexType name="ElementalModifiersList">
         <xs:sequence>
-            <xs:element name="Resistance" type="hyb:ElementalResistance" minOccurs="1" maxOccurs="unbounded" />
+            <xs:element name="ElementalModifier" type="hyb:ElementalModifier" minOccurs="1" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="ElementalResistance">
-        <xs:attribute name="Type" type="hyb:ElementType" use="required" />
-        <xs:attribute name="Modifier" type="xs:float" use="required" />
-    </xs:complexType>
+    <!-- Stat effects (buffs or debuffs) container element -->
+    <!-- Can contain formulas or numbers -->
 
     <xs:complexType name="StatModifiers">
         <xs:sequence>
-            <xs:element name="Resistances" type="hyb:ResistanceList" minOccurs="0" maxOccurs="1" />
+            <xs:element name="ElementalModifiers" type="hyb:ElementalModifiersList" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="BaseStr" type="xs:string" />
         <xs:attribute name="BaseInt" type="xs:string" />

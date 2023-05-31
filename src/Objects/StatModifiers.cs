@@ -27,7 +27,7 @@ using System.Collections.Generic;
 public partial class StatModifiers : HybrasylEntity<StatModifiers>
 {
     #region Private fields
-    private List<ElementalResistance> _resistances;
+    private List<ElementalModifier> _elementalModifiers;
     private string _baseStr;
     private string _baseInt;
     private string _baseWis;
@@ -106,16 +106,16 @@ public partial class StatModifiers : HybrasylEntity<StatModifiers>
         _defensiveElementOverride = ElementType.None;
     }
     
-    [XmlArrayItemAttribute("Resistance", IsNullable=false)]
-    public List<ElementalResistance> Resistances
+    [XmlArrayItemAttribute(IsNullable=false)]
+    public List<ElementalModifier> ElementalModifiers
     {
         get
         {
-            return _resistances;
+            return _elementalModifiers;
         }
         set
         {
-            _resistances = value;
+            _elementalModifiers = value;
         }
     }
     
