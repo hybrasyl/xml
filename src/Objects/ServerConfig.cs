@@ -43,6 +43,7 @@ public partial class ServerConfig : HybrasylEntity<ServerConfig>
     private string _name;
     private string _elementTable;
     private string _locale;
+    private string _environment;
     #endregion
     
     public ServerConfig()
@@ -53,6 +54,7 @@ public partial class ServerConfig : HybrasylEntity<ServerConfig>
         _name = "default";
         _elementTable = "default";
         _locale = "en_us";
+        _environment = "dev";
     }
     
     [XmlArrayItemAttribute("Log", IsNullable=false)]
@@ -242,6 +244,20 @@ public partial class ServerConfig : HybrasylEntity<ServerConfig>
         set
         {
             _locale = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue("dev")]
+    public string Environment
+    {
+        get
+        {
+            return _environment;
+        }
+        set
+        {
+            _environment = value;
         }
     }
 }
