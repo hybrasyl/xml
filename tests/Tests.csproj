@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\Xml.csproj" />
+    <ProjectReference Include="..\src\Hybrasyl.Xml.csproj" />
   </ItemGroup>
 
   <ItemGroup>
