@@ -25,13 +25,19 @@ namespace Hybrasyl.Xml.Objects;
 public partial class StatModifiers
 {
 
+    public List<ElementalModifier> Augments =>
+        ElementalModifiers.Where(x => x.Type == ElementalModifierType.Augment).ToList();
+
+    public List<ElementalModifier> Resistances =>
+        ElementalModifiers.Where(x => x.Type == ElementalModifierType.Resistance).ToList();
+
+
     public double GetElementalAugment(ElementType element)
     {
         if (ElementalModifiers == null) return 1.0;
         var augment = ElementalModifiers
             .FirstOrDefault(x => x.Type == ElementalModifierType.Augment && x.Element == element);
         return augment?.Modifier ?? 1.0;
-
     }
 
     public double GetElementalResistance(ElementType element)
