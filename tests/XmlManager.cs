@@ -207,7 +207,7 @@ public class XmlManagerTests
             $"Element Tables: {Manager.Count<ElementTable>()} Server Configs: {Manager.Count<ServerConfig>()} Localization Files: {Manager.Count<Localization>()}");
         Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "castables"), "*.xml").Length,
             Manager.Count<Castable>());
-        Assert.Equal(287, Manager.Count<Item>());
+        Assert.Equal(288, Manager.Count<Item>());
         Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "npcs"), "*.xml").Length, Manager.Count<Npc>());
         Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "maps"), "*.xml").Length, Manager.Count<Map>());
         Assert.Equal(17, Manager.Count<Creature>());
@@ -321,7 +321,7 @@ public class XmlManagerTests
     [Fact]
     public void FlagAsError()
     {
-        var c1 = Manager.GetStore<Castable>().GetByFilename("all_tst_plus-wis.xml");
+        var c1 = Manager.GetStore<Castable>().GetByFilename("all_psp_nis.xml");
         Assert.NotNull(c1);
         Manager.FlagAsError(c1, XmlError.ProcessingError, "idk man its all wangled");
         Assert.Equal(XmlError.ProcessingError, c1.Error);

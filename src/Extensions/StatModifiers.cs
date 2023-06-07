@@ -26,10 +26,14 @@ public partial class StatModifiers
 {
 
     public List<ElementalModifier> Augments =>
-        ElementalModifiers.Where(x => x.Type == ElementalModifierType.Augment).ToList();
+        ElementalModifiers != null
+            ? ElementalModifiers.Where(x => x.Type == ElementalModifierType.Augment).ToList()
+            : new List<ElementalModifier>();
 
     public List<ElementalModifier> Resistances =>
-        ElementalModifiers.Where(x => x.Type == ElementalModifierType.Resistance).ToList();
+        ElementalModifiers != null
+            ? ElementalModifiers.Where(x => x.Type == ElementalModifierType.Resistance).ToList()
+            : new List<ElementalModifier>();
 
 
     public double GetElementalAugment(ElementType element)

@@ -29,4 +29,12 @@ public class Entities
         Assert.NotNull(castable);
         Assert.NotEqual(castable.Guid, Guid.Empty);
     }
+
+    [Fact]
+    public void Resistances()
+    {
+        var modifier = new StatModifiers();
+        Assert.Empty(modifier.Augments);
+        Assert.Empty(modifier.Resistances);
+    }
 }
