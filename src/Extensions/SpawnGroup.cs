@@ -16,6 +16,7 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using System;
 using System.Xml.Serialization;
 using Hybrasyl.Xml.Interfaces;
 
@@ -27,6 +28,7 @@ public partial class SpawnGroup : ILoadOnStart<SpawnGroup>
 {
     public override string PrimaryKey => Name;
     public ushort MapId { get; set; }
+    public SpawnGroupStatus Status { get; set; }
 
     public new static void LoadAll(IWorldDataManager manager, string path) =>
         HybrasylEntity<SpawnGroup>.LoadAll(manager, path);
