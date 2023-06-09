@@ -28,7 +28,9 @@ public partial class SpawnGroup : ILoadOnStart<SpawnGroup>
 {
     public override string PrimaryKey => Name;
     public ushort MapId { get; set; }
-    public SpawnGroupStatus Status { get; set; }
+
+    [XmlIgnore]
+    public SpawnStatus Status { get; set; }
 
     public new static void LoadAll(IWorldDataManager manager, string path) =>
         HybrasylEntity<SpawnGroup>.LoadAll(manager, path);

@@ -18,14 +18,14 @@
 
 using System;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace Hybrasyl.Xml.Objects;
 
 public partial class Spawn
 {
-    public DateTime LastSpawn { get; set; } = default;
-    public bool Disabled { get; set; } = false;
-    public string ErrorMessage { get; set; } = string.Empty;
+    [XmlIgnore]
+    public SpawnStatus Status { get; set; }
 
     public ElementType OffensiveElement
     {
