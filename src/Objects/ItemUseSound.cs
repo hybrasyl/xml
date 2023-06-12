@@ -30,7 +30,13 @@ public partial class ItemUseSound : HybrasylEntity<ItemUseSound>
     private byte _id;
     #endregion
     
+    public ItemUseSound()
+    {
+        _id = ((byte)(1));
+    }
+    
     [XmlAttribute]
+    [DefaultValue(typeof(byte), "1")]
     public byte Id
     {
         get

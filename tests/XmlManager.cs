@@ -17,32 +17,29 @@
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
 using System.Diagnostics;
+using System.IO;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
 using Serilog;
 using Serilog.Sinks.TestCorrelator;
 using Xunit.Abstractions;
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 namespace Hybrasyl.XmlTests;
 
 [Collection("Xml")]
-public class XmlManagerTests
+public class XmlManagerTests : IClassFixture<XmlManagerFixture>
 {
     private readonly ITestOutputHelper output;
+    private readonly XmlManagerFixture fixture;
 
-    public XmlManagerTests(ITestOutputHelper output)
+
+    public XmlManagerTests(ITestOutputHelper output, XmlManagerFixture fixture)
     {
         this.output = output;
-        Manager = new XmlDataManager(Settings.XmlTests.JsonSettings.WorldDataDirectory);
-        Watch = new Stopwatch();
-        Watch.Start();
-        Manager.LoadData();
-        Watch.Stop();
+        this.fixture = fixture;
     }
-
-    protected XmlDataManager Manager { get; set; }
-    private Stopwatch Watch { get;  }
 
     private Castable CategoryCastable { get;  } = new()
     {
@@ -58,103 +55,103 @@ public class XmlManagerTests
     {
         Log.Information("-- Load Data: Loading Checks --");
 
-        var castableStatus = Manager.GetLoadResult<Castable>();
+        var castableStatus = fixture.SyncManager.GetLoadResult<Castable>();
         Log.Information(
             $"castable load status: total {castableStatus.TotalProcessed} errors {castableStatus.ErrorCount} success {castableStatus.SuccessCount}");
         foreach (var kvp in castableStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, castableStatus.ErrorCount);
 
-        var itemStatus = Manager.GetLoadResult<Item>();
+        var itemStatus = fixture.SyncManager.GetLoadResult<Item>();
         Log.Information(
             $"item load status: total {itemStatus.TotalProcessed} errors {itemStatus.ErrorCount} success {itemStatus.SuccessCount}");
         foreach (var kvp in itemStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, itemStatus.ErrorCount);
 
-        var npcStatus = Manager.GetLoadResult<Npc>();
+        var npcStatus = fixture.SyncManager.GetLoadResult<Npc>();
         Log.Information(
             $"npc load status: total {npcStatus.TotalProcessed} errors {npcStatus.ErrorCount} success {npcStatus.SuccessCount}");
         foreach (var kvp in npcStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, npcStatus.ErrorCount);
 
-        var mapStatus = Manager.GetLoadResult<Map>();
+        var mapStatus = fixture.SyncManager.GetLoadResult<Map>();
         Log.Information(
             $"map load status: total {mapStatus.TotalProcessed} errors {mapStatus.ErrorCount} success {mapStatus.SuccessCount}");
         foreach (var kvp in mapStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, mapStatus.ErrorCount);
 
-        var creatureStatus = Manager.GetLoadResult<Creature>();
+        var creatureStatus = fixture.SyncManager.GetLoadResult<Creature>();
         Log.Information(
             $"creature load status: total {creatureStatus.TotalProcessed} errors {creatureStatus.ErrorCount} success {creatureStatus.SuccessCount}");
         foreach (var kvp in creatureStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, creatureStatus.ErrorCount);
 
-        var variantgroupStatus = Manager.GetLoadResult<VariantGroup>();
+        var variantgroupStatus = fixture.SyncManager.GetLoadResult<VariantGroup>();
         Log.Information(
             $"variantgroup load status: total {variantgroupStatus.TotalProcessed} errors {variantgroupStatus.ErrorCount} success {variantgroupStatus.SuccessCount}");
         foreach (var kvp in variantgroupStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, variantgroupStatus.ErrorCount);
 
-        var lootsetStatus = Manager.GetLoadResult<LootSet>();
+        var lootsetStatus = fixture.SyncManager.GetLoadResult<LootSet>();
         Log.Information(
             $"lootset load status: total {lootsetStatus.TotalProcessed} errors {lootsetStatus.ErrorCount} success {lootsetStatus.SuccessCount}");
         foreach (var kvp in lootsetStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, lootsetStatus.ErrorCount);
 
-        var nationStatus = Manager.GetLoadResult<Nation>();
+        var nationStatus = fixture.SyncManager.GetLoadResult<Nation>();
         Log.Information(
             $"nation load status: total {nationStatus.TotalProcessed} errors {nationStatus.ErrorCount} success {nationStatus.SuccessCount}");
         foreach (var kvp in nationStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, nationStatus.ErrorCount);
 
-        var statusStatus = Manager.GetLoadResult<Status>();
+        var statusStatus = fixture.SyncManager.GetLoadResult<Status>();
         Log.Information(
             $"status load status: total {statusStatus.TotalProcessed} errors {statusStatus.ErrorCount} success {statusStatus.SuccessCount}");
         foreach (var kvp in statusStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, statusStatus.ErrorCount);
 
-        var worldmapStatus = Manager.GetLoadResult<WorldMap>();
+        var worldmapStatus = fixture.SyncManager.GetLoadResult<WorldMap>();
         Log.Information(
             $"worldmap load status: total {worldmapStatus.TotalProcessed} errors {worldmapStatus.ErrorCount} success {worldmapStatus.SuccessCount}");
         foreach (var kvp in worldmapStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, worldmapStatus.ErrorCount);
 
-        var spawngroupStatus = Manager.GetLoadResult<SpawnGroup>();
+        var spawngroupStatus = fixture.SyncManager.GetLoadResult<SpawnGroup>();
         Log.Information(
             $"spawngroup load status: total {spawngroupStatus.TotalProcessed} errors {spawngroupStatus.ErrorCount} success {spawngroupStatus.SuccessCount}");
         foreach (var kvp in spawngroupStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, spawngroupStatus.ErrorCount);
 
-        var elementTableStatus = Manager.GetLoadResult<ElementTable>();
+        var elementTableStatus = fixture.SyncManager.GetLoadResult<ElementTable>();
         Log.Information(
             $"elementtable load status: total {elementTableStatus.TotalProcessed} errors {elementTableStatus.ErrorCount} success {elementTableStatus.SuccessCount}");
         foreach (var kvp in elementTableStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, elementTableStatus.ErrorCount);
-        var creaturebehaviorsetStatus = Manager.GetLoadResult<CreatureBehaviorSet>();
+        var creaturebehaviorsetStatus = fixture.SyncManager.GetLoadResult<CreatureBehaviorSet>();
         Log.Information(
             $"creaturebehaviorset load status: total {creaturebehaviorsetStatus.TotalProcessed} errors {creaturebehaviorsetStatus.ErrorCount} success {creaturebehaviorsetStatus.SuccessCount}");
         foreach (var kvp in creaturebehaviorsetStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, creaturebehaviorsetStatus.ErrorCount);
-        var serverConfigStatus = Manager.GetLoadResult<ServerConfig>();
+        var serverConfigStatus = fixture.SyncManager.GetLoadResult<ServerConfig>();
         Log.Information(
             $"serverconfig load status: total {serverConfigStatus.TotalProcessed} errors {serverConfigStatus.ErrorCount} success {serverConfigStatus.SuccessCount}");
         foreach (var kvp in serverConfigStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, serverConfigStatus.ErrorCount);
 
-        var localizationStatus = Manager.GetLoadResult<Localization>();
+        var localizationStatus = fixture.SyncManager.GetLoadResult<Localization>();
         Log.Information(
             $"localization load status: total {localizationStatus.TotalProcessed} errors {localizationStatus.ErrorCount} success {localizationStatus.SuccessCount}");
         foreach (var kvp in localizationStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
@@ -165,102 +162,122 @@ public class XmlManagerTests
     [Fact]
     public void LoadDataContainsNoProcessingErrors()
     {
+        ContainsNoProcessingErrors(fixture.SyncManager);
+    }
+
+    [Fact]
+    public void LoadDataAsyncContainsNoProcessingErrors()
+    {
+        ContainsNoProcessingErrors(fixture.AsyncManager);
+    }
+
+    private void ContainsNoProcessingErrors(XmlDataManager manager)
+    {
         Log.Information("-- Load Data: Processing Checks --");
-        var creatureStatus = Manager.GetProcessResult<Creature>();
+        var creatureStatus = manager.GetProcessResult<Creature>();
         Log.Information(
             $"creature process status: total {creatureStatus.TotalProcessed} additional {creatureStatus.AdditionalCount}");
         foreach (var kvp in creatureStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, creatureStatus.ErrorCount);
 
-        var itemStatus = Manager.GetProcessResult<Item>();
+        var itemStatus = manager.GetProcessResult<Item>();
         Log.Information(
             $"item process status: total {itemStatus.TotalProcessed} additional {itemStatus.AdditionalCount}");
         foreach (var kvp in itemStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
         Assert.Equal(0, itemStatus.ErrorCount);
 
-        var creaturebehaviorsetStatus = Manager.GetProcessResult<CreatureBehaviorSet>();
+        var creaturebehaviorsetStatus = manager.GetProcessResult<CreatureBehaviorSet>();
         Log.Information(
             $"creaturebehaviorset process status: total {creaturebehaviorsetStatus.TotalProcessed} additional {creaturebehaviorsetStatus.AdditionalCount}");
         foreach (var kvp in creaturebehaviorsetStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
-        Assert.Equal(0, creaturebehaviorsetStatus.ErrorCount);
+        Assert.Equal(0, creaturebehaviorsetStatus.ErrorCount); Log.Information("-- Load Data: Processing Checks --");
     }
+
 
     [Fact]
     public void LoadDataContainsExpectedData()
     {
+        ContainsExpectedData(fixture.SyncManager);
+    }
+
+    [Fact]
+    public void LoadDataAsyncContainsExpectedData()
+    {
+        ContainsExpectedData(fixture.AsyncManager);
+    }
+
+    private void ContainsExpectedData(XmlDataManager manager)
+    {
         Log.Information("-- Load Data: Contains Expected Data --");
-        var ts = Watch.Elapsed;
-        var elapsedTime = $"{ts.Hours:00}:{ts.Minutes:00}:{ts.Seconds:00}.{ts.Milliseconds / 10:00}";
         Log.Information("LoadData Test\n-------------");
-        Log.Information($"Time to load: {elapsedTime}");
         Log.Information($"Directory used: {Settings.XmlTests.JsonSettings.WorldDataDirectory}");
         Log.Information(
-            $"Castables: {Manager.Count<Castable>()} Items: {Manager.Count<Item>()} NPCs: {Manager.Count<Npc>()} Maps: {Manager.Count<Map>()}");
+            $"Castables: {manager.Count<Castable>()} Items: {manager.Count<Item>()} NPCs: {manager.Count<Npc>()} Maps: {manager.Count<Map>()}");
         Log.Information(
-            $"Creatures: {Manager.Count<Creature>()} Variants: {Manager.Count<VariantGroup>()} Lootsets: {Manager.Count<LootSet>()} Nations: {Manager.Count<Nation>()}");
+            $"Creatures: {manager.Count<Creature>()} Variants: {manager.Count<VariantGroup>()} Lootsets: {manager.Count<LootSet>()} Nations: {manager.Count<Nation>()}");
         Log.Information(
-            $"Statuses: {Manager.Count<Status>()} World Maps: {Manager.Count<WorldMap>()} Spawngroups: {Manager.Count<SpawnGroup>()} Behavior Sets: {Manager.Count<CreatureBehaviorSet>()}");
+            $"Statuses: {manager.Count<Status>()} World Maps: {manager.Count<WorldMap>()} Spawngroups: {manager.Count<SpawnGroup>()} Behavior Sets: {manager.Count<CreatureBehaviorSet>()}");
         Log.Information(
-            $"Element Tables: {Manager.Count<ElementTable>()} Server Configs: {Manager.Count<ServerConfig>()} Localization Files: {Manager.Count<Localization>()}");
-        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "castables"), "*.xml").Length,
-            Manager.Count<Castable>());
-        Assert.Equal(288, Manager.Count<Item>());
-        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "npcs"), "*.xml").Length, Manager.Count<Npc>());
-        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "maps"), "*.xml").Length, Manager.Count<Map>());
-        Assert.Equal(17, Manager.Count<Creature>());
-        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "variantgroups"), "*.xml").Length,
-            Manager.Count<VariantGroup>());
-        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "lootsets"), "*.xml").Length,
-            Manager.Count<LootSet>());
-        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "nations"), "*.xml").Length,
-            Manager.Count<Nation>());
-        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "statuses"), "*.xml").Length,
-            Manager.Count<Status>());
-        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "worldmaps"), "*.xml").Length,
-            Manager.Count<WorldMap>());
-        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "spawngroups"), "*.xml").Length,
-            Manager.Count<SpawnGroup>());
-        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "creaturebehaviorsets"), "*.xml").Length,
-            Manager.Count<CreatureBehaviorSet>());
-        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "elementtables"), "*.xml").Length,
-            Manager.Count<ElementTable>());
-        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "serverconfigs"), "*.xml").Length,
-            Manager.Count<ServerConfig>());
-        Assert.Equal(Directory.GetFiles(Path.Join(Manager.RootPath, "localizations"), "*.xml").Length,
-            Manager.Count<Localization>());
+            $"Element Tables: {manager.Count<ElementTable>()} Server Configs: {manager.Count<ServerConfig>()} Localization Files: {manager.Count<Localization>()}");
+        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "castables"), "*.xml").Length,
+            manager.Count<Castable>());
+        Assert.Equal(288, manager.Count<Item>());
+        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "npcs"), "*.xml").Length, manager.Count<Npc>());
+        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "maps"), "*.xml").Length, manager.Count<Map>());
+        Assert.Equal(17, manager.Count<Creature>());
+        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "variantgroups"), "*.xml").Length,
+            manager.Count<VariantGroup>());
+        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "lootsets"), "*.xml").Length,
+            manager.Count<LootSet>());
+        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "nations"), "*.xml").Length,
+            manager.Count<Nation>());
+        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "statuses"), "*.xml").Length,
+            manager.Count<Status>());
+        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "worldmaps"), "*.xml").Length,
+            manager.Count<WorldMap>());
+        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "spawngroups"), "*.xml").Length,
+            manager.Count<SpawnGroup>());
+        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "creaturebehaviorsets"), "*.xml").Length,
+            manager.Count<CreatureBehaviorSet>());
+        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "elementtables"), "*.xml").Length,
+            manager.Count<ElementTable>());
+        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "serverconfigs"), "*.xml").Length,
+            manager.Count<ServerConfig>());
+        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "localizations"), "*.xml").Length,
+            manager.Count<Localization>());
 
     }
 
     [Fact]
     public void Get()
     {
-        Assert.NotNull(Manager.Get<Map>(500));
-        Assert.NotNull(Manager.Get<Nation>("Mileth"));
+        Assert.NotNull(fixture.SyncManager.Get<Map>(500));
+        Assert.NotNull(fixture.SyncManager.Get<Nation>("Mileth"));
     }
 
     [Fact]
     public void GetByIndex()
     {
-        Assert.NotNull(Manager.GetByIndex<Castable>("Assail"));
-        Assert.NotNull(Manager.GetByIndex<Map>("Mileth Inn"));
+        Assert.NotNull(fixture.SyncManager.GetByIndex<Castable>("Assail"));
+        Assert.NotNull(fixture.SyncManager.GetByIndex<Map>("Mileth Inn"));
     }
 
     [Fact]
     public void GetByGuid()
     {
-        var mInn = Manager.Get<Map>(500);
+        var mInn = fixture.SyncManager.Get<Map>(500);
         Assert.NotNull(mInn);
-        var mInnByGuid = Manager.GetByGuid<Map>(mInn.Guid);
+        var mInnByGuid = fixture.SyncManager.GetByGuid<Map>(mInn.Guid);
         Assert.NotNull(mInnByGuid);
     }
 
     [Fact]
     public void TryGetValueByIndex()
     {
-        var found = Manager.TryGetValueByIndex<Castable>("Assail", out var result);
+        var found = fixture.SyncManager.TryGetValueByIndex<Castable>("Assail", out var result);
         Assert.True(found);
         Assert.NotNull(result);
     }
@@ -268,19 +285,19 @@ public class XmlManagerTests
     [Fact]
     public void ContainsKey()
     {
-        Assert.True(Manager.ContainsKey<Map>(500));
+        Assert.True(fixture.SyncManager.ContainsKey<Map>(500));
     }
 
     [Fact]
     public void ContainsIndex()
     {
-        Assert.True(Manager.ContainsIndex<Castable>("Assail"));
+        Assert.True(fixture.SyncManager.ContainsIndex<Castable>("Assail"));
     }
 
     [Fact]
     public void FindSkills()
     {
-        var skills = Manager.FindSkills(25, 3, 3, 12, 12);
+        var skills = fixture.SyncManager.FindSkills(25, 3, 3, 12, 12);
         Assert.NotNull(skills);
         Assert.NotEmpty(skills);
     }
@@ -288,14 +305,14 @@ public class XmlManagerTests
     [Fact]
     public void FindSpells()
     {
-        var skills = Manager.FindSpells(25, 3, 3, 3, 3);
+        var skills = fixture.SyncManager.FindSpells(25, 3, 3, 3, 3);
         Assert.NotNull(skills);
         Assert.NotEmpty(skills);
     }
     [Fact]
     public void FindSpellsWithCategory()
     {
-        var skills = Manager.FindSpells(69, 36, 36, 36, 36, "ElementST");
+        var skills = fixture.SyncManager.FindSpells(69, 36, 36, 36, 36, "ElementST");
         Assert.NotNull(skills);
         Assert.NotEmpty(skills);
     }
@@ -303,10 +320,10 @@ public class XmlManagerTests
     [Fact]
     public void Find()
     {
-        var item = Manager.Find<Item>(x => x.Name == "Test Boots 2");
+        var item = fixture.SyncManager.Find<Item>(x => x.Name == "Test Boots 2");
         Assert.NotNull(item);
         Assert.Single(item);
-        var item2 = Manager.Find<Item>(x => x.Name.Contains("Test Boots 2"));
+        var item2 = fixture.SyncManager.Find<Item>(x => x.Name.Contains("Test Boots 2"));
         Assert.NotNull(item2);
         Assert.Equal(10, item2.Count());
     }
@@ -315,15 +332,16 @@ public class XmlManagerTests
     public void AddToStore()
     {
         var c1 = CategoryCastable;
-        Manager.Add(c1);
+        fixture.SyncManager.Add(c1);
+        fixture.SyncManager.Remove<Castable>(c1.PrimaryKey);
     }
 
     [Fact]
     public void FlagAsError()
     {
-        var c1 = Manager.GetStore<Castable>().GetByFilename("all_psp_nis.xml");
+        var c1 = fixture.SyncManager.GetStore<Castable>().GetByFilename("all_psp_nis.xml");
         Assert.NotNull(c1);
-        Manager.FlagAsError(c1, XmlError.ProcessingError, "idk man its all wangled");
+        fixture.SyncManager.FlagAsError(c1, XmlError.ProcessingError, "idk man its all wangled");
         Assert.Equal(XmlError.ProcessingError, c1.Error);
         Assert.Equal("idk man its all wangled", c1.LoadErrorMessage);
     }
@@ -337,20 +355,25 @@ public class XmlManagerTests
     [Fact]
     public void VariantExists()
     {
-        Assert.True(Manager.TryGetValueByIndex<Item>("Variant Test Boots 2", out var variant));
-        Assert.True(Manager.TryGetValueByIndex<Item>("Test Boots 2", out var baseItem));
-        Assert.True(Manager.TryGetValue<VariantGroup>("TestGroup", out var variantGroup));
+        Assert.True(fixture.SyncManager.TryGetValueByIndex<Item>("Variant Test Boots 2", out var variant));
+        Assert.True(fixture.SyncManager.TryGetValueByIndex<Item>("Test Boots 2", out var baseItem));
+        Assert.True(fixture.SyncManager.TryGetValue<VariantGroup>("TestGroup", out var variantGroup));
     }
 
     [Fact]
     public void LogErrors()
     {
         using var ctx = TestCorrelator.CreateContext();
-        Manager.LogResult(Log.Logger);
+        fixture.SyncManager.LogResult(Log.Logger);
         var events = TestCorrelator.GetLogEventsFromCurrentContext();
         // TODO: improve coverage
         Assert.NotNull(events);
         Assert.NotEmpty(events);
+    }
+
+    [Fact]
+    public void LoadDataAsync()
+    {
 
     }
 }

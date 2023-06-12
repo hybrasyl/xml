@@ -99,20 +99,25 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
         {
             foreach (var group in item.Properties.Variants.Group)
             {
+                item.Variants ??= new Dictionary<string, List<Item>>();
                 if (!manager.TryGetValue<VariantGroup>(group, out var toApply))
                 {
                     manager.FlagAsError(item, XmlError.ProcessingError, $"Variant group {group} does not exist");
                     ret.Errors[item.Guid] = $"Variant group {group} does not exist";
                     continue;
                 }
+                if (!item.Variants.ContainsKey(group))
+                    item.Variants[group] = new List<Item>();
 
                 try
                 {
                     var variants = toApply.ResolveVariants(item);
                     foreach (var variant in variants)
                     {
+                        item.Variants[group].Add(variant);
                         manager.Add(variant);
                         ret.AdditionalCount++;
+                      
                     }
                 }
                 catch (Exception ex)

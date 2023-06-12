@@ -194,7 +194,7 @@
     </xs:complexType>
 
     <xs:complexType name="ItemUseSound">
-        <xs:attribute name="Id" type="xs:unsignedByte" use="required" />
+        <xs:attribute name="Id" type="xs:unsignedByte" default="1"/>
     </xs:complexType>
 
     <xs:complexType name="Use">

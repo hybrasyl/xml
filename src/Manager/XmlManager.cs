@@ -21,9 +21,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Objects;
@@ -40,7 +40,6 @@ public class XmlDataManager : IWorldDataManager
     private readonly Dictionary<Type, MethodInfo> _loadableTypes = new();
     private readonly Dictionary<Type, MethodInfo> _processableTypes = new();
     private readonly Dictionary<Type, MethodInfo> _validatableTypes = new();
-
 
     public XmlDataManager(string rootPath)
     {
@@ -96,6 +95,7 @@ public class XmlDataManager : IWorldDataManager
     public bool ContainsKey<T>(dynamic name) where T : HybrasylEntity<T> => GetStore<T>().ContainsKey(name);
     public bool ContainsIndex<T>(dynamic index) where T : HybrasylEntity<T> => GetStore<T>().ContainsIndex(index);
     public int Count<T>() where T : HybrasylEntity<T> => GetStore<T>().Count;
+    public bool Remove<T>(T entity) where T : HybrasylEntity<T> => GetStore<T>().Remove(entity.PrimaryKey);
     public bool Remove<T>(dynamic name) where T : HybrasylEntity<T> => GetStore<T>().Remove(name);
     public bool RemoveByIndex<T>(dynamic index) where T : HybrasylEntity<T> => GetStore<T>().RemoveByIndex(index);
     public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : HybrasylEntity<T> => GetStore<T>().Find(condition);
@@ -129,6 +129,64 @@ public class XmlDataManager : IWorldDataManager
     }
 
     public string RootPath { get; set; }
+
+    public bool Ready { get; set; } 
+
+    public async void LoadDataAsync()
+    {
+        if (!Directory.Exists(RootPath))
+            throw new FileNotFoundException($"{RootPath} doesn't exist or is not readable");
+
+        List<Task> tasks = new List<Task>();
+
+        foreach (var kvp in _loadableTypes)
+        {
+            var method = typeof(XmlDataManager).GetMethods()
+                .FirstOrDefault(predicate: x => x.Name == "LoadAll" && x.IsGenericMethod);
+            if (method != null)
+            {
+                var genMethod = method.MakeGenericMethod(kvp.Key);
+                tasks.Add(Task.Run(() => genMethod.Invoke(this, null)));
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+        await Task.WhenAll(tasks);
+
+        foreach (var kvp in _processableTypes)
+        {
+            var method = typeof(XmlDataManager).GetMethods()
+                .FirstOrDefault(predicate: x => x.Name == "ProcessAll" && x.IsGenericMethod);
+            if (method != null)
+            {
+                var genMethod = method.MakeGenericMethod(kvp.Key);
+                genMethod.Invoke(this, null);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        foreach (var kvp in _validatableTypes)
+        {
+            var method = typeof(XmlDataManager).GetMethods()
+                .FirstOrDefault(predicate: x => x.Name == "ValidateAll" && x.IsGenericMethod);
+            if (method != null)
+            {
+                var genMethod = method.MakeGenericMethod(kvp.Key);
+                genMethod.Invoke(this, null);
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        Ready = true;
+    }
 
     public void LoadData()
     {
@@ -179,6 +237,7 @@ public class XmlDataManager : IWorldDataManager
                 throw new NotImplementedException();
             }
         }
+        Ready = true;
     }
 
     public void LogResult(ILogger log)
@@ -257,9 +316,9 @@ public class XmlDataManager : IWorldDataManager
     public void FlagAsError<T>(T entity, XmlError error, string message) where T : HybrasylEntity<T> =>
         GetStore<T>().FlagAsError(entity.Guid, error, message);
 
-    public void LoadAllAsync<T>() where T : HybrasylEntity<T>, ILoadOnStart<T>
+    public async void LoadAllAsync<T>() where T : HybrasylEntity<T>, ILoadOnStart<T>
     {
-        throw new NotImplementedException();
+        await Task.Run(() => T.LoadAll(this));
     }
 
     public void UpdateResult<T>(ILoadResult result) where T : HybrasylEntity<T> =>

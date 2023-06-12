@@ -42,6 +42,7 @@ public interface IWorldDataManager
     public bool ContainsIndex<T>(dynamic index) where T : HybrasylEntity<T>;
     public int Count<T>() where T : HybrasylEntity<T>;
     public bool Remove<T>(dynamic key) where T : HybrasylEntity<T>;
+    public bool Remove<T>(T entity) where T : HybrasylEntity<T>;
     public bool RemoveByIndex<T>(dynamic index) where T : HybrasylEntity<T>;
     public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : HybrasylEntity<T>;
     public void LoadAll<T>() where T : HybrasylEntity<T>, ILoadOnStart<T>;
@@ -59,6 +60,7 @@ public interface IWorldDataManager
     public IValidationResult GetValidationResult<T>() where T : HybrasylEntity<T>;
 
     public void LoadData();
+    public void LoadDataAsync();
 
     public IEnumerable<Castable> FindSkills(long str = 0, long @int = 0, long wis = 0, long con = 0, long dex = 0,
         string category = null);
