@@ -34,7 +34,6 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
     private readonly ITestOutputHelper output;
     private readonly XmlManagerFixture fixture;
 
-
     public XmlManagerTests(ITestOutputHelper output, XmlManagerFixture fixture)
     {
         this.output = output;

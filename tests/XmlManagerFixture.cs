@@ -26,7 +26,7 @@ namespace Hybrasyl.XmlTests;
             var task = Task.Run(AsyncManager.LoadDataAsync);
             while (true)
             {
-                if (AsyncManager.Ready)
+                if (AsyncManager.IsReady)
                     break;
                 Task.Delay(125).Wait();
             }

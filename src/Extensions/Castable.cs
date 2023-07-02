@@ -102,6 +102,7 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
     }
 
     public bool IsCategory(string category) => CategoryList.Contains(category.Normalize().ToLower());
+
 }
 
 public class CastableComparer : IEqualityComparer<Castable>

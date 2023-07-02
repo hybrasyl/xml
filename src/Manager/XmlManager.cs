@@ -130,7 +130,7 @@ public class XmlDataManager : IWorldDataManager
 
     public string RootPath { get; set; }
 
-    public bool Ready { get; set; } 
+    public bool IsReady { get; set; } 
 
     public async void LoadDataAsync()
     {
@@ -185,7 +185,7 @@ public class XmlDataManager : IWorldDataManager
             }
         }
 
-        Ready = true;
+        IsReady = true;
     }
 
     public void LoadData()
@@ -237,7 +237,7 @@ public class XmlDataManager : IWorldDataManager
                 throw new NotImplementedException();
             }
         }
-        Ready = true;
+        IsReady = true;
     }
 
     public void LogResult(ILogger log)

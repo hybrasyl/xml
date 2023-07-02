@@ -37,6 +37,7 @@ public partial class Localization : ILoadOnStart<Localization>
     public void Reindex()
     {
         _index.Clear();
+        _responseIndex.Clear();
         // TODO: clean up this xml structure
 
         foreach (var str in Common.Where(predicate: str =>

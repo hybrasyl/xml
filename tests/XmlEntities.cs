@@ -37,4 +37,16 @@ public class XmlEntityTests
         var check = new EquipmentRestriction();
         Assert.IsType<WeaponType>(check.Type);
     }
+
+    [Fact]
+    public void BehaviorSetCastingSetHealthPercentageNonNegative()
+    {
+        var check = new CreatureBehaviorSet();
+        check.Behavior = new CreatureBehavior();
+        check.Behavior.CastingSets = new List<CreatureCastingSet>
+        {
+            new()
+        };
+        Assert.True(check.Behavior.CastingSets.First().HealthPercentage >= 0);
+    }
 }

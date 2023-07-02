@@ -51,6 +51,7 @@ public interface IWorldDataManager
     public void ValidateAll<T>() where T : HybrasylEntity<T>, IAdditionalValidation<T>;
     public void FlagAsError<T>(T entity, XmlError error, string message) where T : HybrasylEntity<T>;
 
+    public bool IsReady { get; }
     public void UpdateResult<T>(IProcessResult result) where T : HybrasylEntity<T>;
     public void UpdateResult<T>(ILoadResult result) where T : HybrasylEntity<T>;
     public void UpdateResult<T>(IValidationResult result) where T : HybrasylEntity<T>;
