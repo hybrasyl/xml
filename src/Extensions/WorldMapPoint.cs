@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Hybrasyl.Xml.Interfaces;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -35,6 +36,7 @@ public partial class WorldMapPoint
     public byte DestinationY => Target.Y;
 
     public long Id => HashCode.Combine(Name, X, Y, Parent);
+    public override string PrimaryKey => Id.ToString();
 
     public byte[] GetBytes()
     {

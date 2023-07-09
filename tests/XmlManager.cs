@@ -223,7 +223,7 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
             $"Element Tables: {manager.Count<ElementTable>()} Server Configs: {manager.Count<ServerConfig>()} Localization Files: {manager.Count<Localization>()}");
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "castables"), "*.xml").Length,
             manager.Count<Castable>());
-        Assert.Equal(288, manager.Count<Item>());
+        Assert.Equal(156, manager.Count<Item>());
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "npcs"), "*.xml").Length, manager.Count<Npc>());
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "maps"), "*.xml").Length, manager.Count<Map>());
         Assert.Equal(17, manager.Count<Creature>());
@@ -319,12 +319,12 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
     [Fact]
     public void Find()
     {
-        var item = fixture.SyncManager.Find<Item>(x => x.Name == "Test Boots 2");
+        var item = fixture.SyncManager.Find<Item>(x => x.Name == "Hide Boots");
         Assert.NotNull(item);
         Assert.Single(item);
-        var item2 = fixture.SyncManager.Find<Item>(x => x.Name.Contains("Test Boots 2"));
+        var item2 = fixture.SyncManager.Find<Item>(x => x.Name.Contains("Rotten"));
         Assert.NotNull(item2);
-        Assert.Equal(10, item2.Count());
+        Assert.Equal(6, item2.Count());
     }
 
     [Fact]
@@ -354,9 +354,9 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
     [Fact]
     public void VariantExists()
     {
-        Assert.True(fixture.SyncManager.TryGetValueByIndex<Item>("Variant Test Boots 2", out var variant));
-        Assert.True(fixture.SyncManager.TryGetValueByIndex<Item>("Test Boots 2", out var baseItem));
-        Assert.True(fixture.SyncManager.TryGetValue<VariantGroup>("TestGroup", out var variantGroup));
+        Assert.True(fixture.SyncManager.TryGetValueByIndex<Item>("Variant All Belt", out var variant));
+        Assert.True(fixture.SyncManager.TryGetValueByIndex<Item>("Abundance Variant All Belt", out var baseItem));
+        Assert.True(fixture.SyncManager.TryGetValue<VariantGroup>("enchant1", out var variantGroup));
     }
 
     [Fact]
