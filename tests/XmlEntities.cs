@@ -49,4 +49,22 @@ public class XmlEntityTests
         };
         Assert.True(check.Behavior.CastingSets.First().HealthPercentage >= 0);
     }
+
+    [Fact]
+    public void BehaviorSetImportStatAlloc()
+    {
+        var original = new CreatureBehaviorSet();
+        var import = new CreatureBehaviorSet();
+        original.StatAlloc = null;
+        import.StatAlloc = "Str Str Int Con Dex";
+        var merged = original & import;
+        Assert.Equal(import.StatAlloc, merged.StatAlloc);
+
+        original = new CreatureBehaviorSet();
+        import = new CreatureBehaviorSet();
+        import.StatAlloc = null;
+        original.StatAlloc = "Str Str Int Con Dex";
+        merged = import & original;
+        Assert.Equal(original.StatAlloc, merged.StatAlloc);
+    }
 }

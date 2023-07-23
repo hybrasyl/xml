@@ -56,7 +56,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
             }
 
             var newSet = import.Clone<CreatureBehaviorSet>(true);
-            var resolved = import & newSet;
+            var resolved = newSet & creatureBehaviorSet;
             resolved.Name = import.Name;
             manager.Add(resolved, resolved.Name);
             ret.AdditionalCount++;
