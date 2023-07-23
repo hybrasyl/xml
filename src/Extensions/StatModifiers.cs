@@ -67,11 +67,11 @@ public partial class StatModifiers
             defaultDesc += FormatBonusNum(BonusDex, "Dex");
             defaultDesc += FormatBonusPct(BonusCrit, "Crit");
             defaultDesc += FormatBonusPct(BonusMagicCrit, "Magic Crit");
-            defaultDesc += FormatBonusPct(BonusDmg, "Dmg", 8);
-            defaultDesc += FormatBonusPct(BonusHit, "Hit", 8);
+            defaultDesc += FormatBonusPct(BonusDmg, "Dmg");
+            defaultDesc += FormatBonusPct(BonusHit, "Hit");
             defaultDesc += FormatBonusNum(BonusAc, "Ac");
             defaultDesc += FormatBonusPct(BonusMr, "Mr");
-            defaultDesc += FormatBonusPct(BonusRegen, "Regen", 8);
+            defaultDesc += FormatBonusPct(BonusRegen, "Regen");
             defaultDesc += FormatBonusPct(BonusReflectMagical, "Reflect Magic");
             defaultDesc += FormatBonusPct(BonusReflectPhysical, "Reflect Phys");
             defaultDesc += FormatBonusPct(BonusExtraGold, "Gold");
@@ -90,14 +90,15 @@ public partial class StatModifiers
         if (string.IsNullOrEmpty(bonus)) return string.Empty;
         if (!double.TryParse(bonus, out var num)) return $"??? {name} \n";
         num /= scale;
-        return num == 0 ? string.Empty : $"{(num > 0 ? "+" + num + "%" : num + "%")} {name} \n";
+        num = num * 100;
+        return num == 0 ? string.Empty : $"{(num > 0 ? "+" + num + "%" : num + "%")} {name}\n";
     }
 
     public static string FormatBonusNum(string bonus, string name)
     {
         if (string.IsNullOrEmpty(bonus)) return string.Empty;
         if (!long.TryParse(bonus, out var num)) return $"??? {name} \n";
-        return num == 0 ? string.Empty : $"{(num > 0 ? "+" + num : num)} {name} \n";
+        return num == 0 ? string.Empty : $"{(num > 0 ? "+" + num : num)} {name}\n";
     }
 
     public static string Combine(string sm1, string sm2)

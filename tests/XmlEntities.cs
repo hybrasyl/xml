@@ -67,4 +67,13 @@ public class XmlEntityTests
         merged = import & original;
         Assert.Equal(original.StatAlloc, merged.StatAlloc);
     }
+
+    [Fact]
+    public void ItemMetafileDescription()
+    {
+        var item = new Item();
+        item.Name = "Test";
+        item.Properties.StatModifiers = new StatModifiers() { BonusDmg = "0.005", BonusHit = "0.004", BonusInt = "2" };
+        Assert.Equal("+2 Int\n+0.5% Dmg\n+0.4% Hit\n",item.Properties.StatModifiers.BonusString);
+    }
 }
