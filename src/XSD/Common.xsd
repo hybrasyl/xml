@@ -428,7 +428,7 @@
             <xs:extension base="hyb:String8">
                 <xs:attribute name="Duration" use="optional" default="0" type="xs:int" />
                 <xs:attribute name="Intensity" use="optional" default="1.0" type="xs:float" />
-                <xs:attribute name="Speed" default="1.0" type="xs:float" />
+                <xs:attribute name="Tick" default="0" type="xs:int" />
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
