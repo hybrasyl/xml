@@ -1,10 +1,20 @@
 ﻿using Hybrasyl.Xml.Objects;
+using Xunit.Abstractions;
 
 namespace Hybrasyl.XmlTests;
 
 [Collection("Xml")]
-public class XmlEntityTests
+public class XmlEntityTests : IClassFixture<XmlManagerFixture>
 {
+    private readonly ITestOutputHelper output;
+    private readonly XmlManagerFixture fixture;
+
+    public XmlEntityTests(ITestOutputHelper output, XmlManagerFixture fixture)
+    {
+        this.output = output;
+        this.fixture = fixture;
+    }
+
     // xsd2code has a few oddities / bugs that result in the wrong type being used or 
     // a type being a list when it is a singular object. These tests ensure nothing gets
     // committed and pushed out to Nuget with those errors.
@@ -75,5 +85,14 @@ public class XmlEntityTests
         item.Name = "Test";
         item.Properties.StatModifiers = new StatModifiers() { BonusDmg = "0.005", BonusHit = "0.004", BonusInt = "2" };
         Assert.Equal("+2 Int\n+0.5% Dmg\n+0.4% Hit\n",item.Properties.StatModifiers.BonusString);
+    }
+
+    [Fact]
+    public void CreatureHostilitySettings()
+    {
+        var creature = fixture.SyncManager.Get<Creature>("Mouse");
+        Assert.NotNull(creature);
+        Assert.NotNull(creature.Hostility);
+        Assert.NotNull(creature.Hostility.Players);
     }
 }

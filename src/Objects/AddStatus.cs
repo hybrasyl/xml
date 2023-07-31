@@ -29,7 +29,7 @@ public partial class AddStatus : HybrasylEntity<AddStatus>
     #region Private fields
     private int _duration;
     private float _intensity;
-    private float _speed;
+    private float _tick;
     private string _value;
     #endregion
     
@@ -37,7 +37,7 @@ public partial class AddStatus : HybrasylEntity<AddStatus>
     {
         _duration = 0;
         _intensity = ((float)(1F));
-        _speed = ((float)(1F));
+        _tick = ((float)(1F));
     }
     
     [XmlAttribute]
@@ -70,15 +70,15 @@ public partial class AddStatus : HybrasylEntity<AddStatus>
     
     [XmlAttribute]
     [DefaultValue(typeof(float), "1")]
-    public float Speed
+    public float Tick
     {
         get
         {
-            return _speed;
+            return _tick;
         }
         set
         {
-            _speed = value;
+            _tick = value;
         }
     }
     
