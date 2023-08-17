@@ -45,7 +45,7 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
     public void EquipmentRestrictionTypeIsNotList()
     {
         var check = new EquipmentRestriction();
-        Assert.IsType<WeaponType>(check.Type);
+        Assert.IsType<WeaponType>(check.WeaponType);
     }
 
     [Fact]
@@ -95,4 +95,13 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         Assert.NotNull(creature.Hostility);
         Assert.NotNull(creature.Hostility.Players);
     }
+
+    [Fact]
+    public void VariantBeltElementalTest()
+    {
+        var belt = fixture.SyncManager.Find<Item>(x => x.Name.Contains("Light Variant Single Belt")).FirstOrDefault();
+        Assert.NotNull(belt);
+        Assert.True(belt.Properties.StatModifiers.BaseDefensiveElement == ElementType.Light );
+    }
+
 }

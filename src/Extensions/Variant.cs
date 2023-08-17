@@ -22,6 +22,8 @@ namespace Hybrasyl.Xml.Objects;
 
 public partial class Variant
 {
+    public override string PrimaryKey => Name;
+
     public Item ResolveVariant(Item originalItem)
     {
         var variantItem = originalItem.Clone<Item>(true);

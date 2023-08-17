@@ -22,13 +22,12 @@ using System.Collections.Generic;
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.9032.0")]
 [Serializable]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public enum IntentFlags
+public enum RestrictionType
 {
-    Hostile,
-    Friendly,
-    Pvp,
-    Group,
-    Self,
+    Equipped,
+    NotEquipped,
+    InInventory,
+    NotInInventory,
 }
 }
 #pragma warning restore

@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hybrasyl.Xml.Interfaces;
 
 namespace Hybrasyl.Xml.Objects;
@@ -25,9 +26,14 @@ namespace Hybrasyl.Xml.Objects;
 public partial class VariantGroup : ILoadOnStart<VariantGroup>
 {
     public override string PrimaryKey => Name;
-
-    public new static void LoadAll(IWorldDataManager manager, string path) =>
+    
+    public new static void LoadAll(IWorldDataManager manager, string path)
+    {
         HybrasylEntity<VariantGroup>.LoadAll(manager, path);
+        foreach (var group in manager.Values<VariantGroup>())
+            foreach (var variant in group.Variant)
+                manager.Add(variant, $"{group.Name}-{variant.Name}");
+    }
 
     public Variant RandomVariant() => Variant.PickRandom();
 
@@ -49,4 +55,5 @@ public partial class VariantGroup : ILoadOnStart<VariantGroup>
 
         return ret;
     }
+
 }

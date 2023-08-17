@@ -19,7 +19,7 @@ using System.Text;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
-[System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.9037.0")]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.9032.0")]
 [Serializable]
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
@@ -28,7 +28,7 @@ public partial class ElementalModifier : HybrasylEntity<ElementalModifier>
 {
     #region Private fields
     private ElementType _element;
-    private float _modifier;
+    private double _modifier;
     private ElementalModifierType _type;
     #endregion
     
@@ -46,7 +46,7 @@ public partial class ElementalModifier : HybrasylEntity<ElementalModifier>
     }
     
     [XmlAttribute]
-    public float Modifier
+    public double Modifier
     {
         get
         {

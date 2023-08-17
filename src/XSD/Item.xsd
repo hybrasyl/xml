@@ -165,9 +165,17 @@
         <xs:attribute name="WeaponType" type="hyb:WeaponType" />
     </xs:complexType>
 
-    <xs:complexType name="Variants">
+	<xs:complexType name="NamedVariant">
+        <xs:simpleContent>
+            <xs:extension base="hyb:String8">
+				<xs:attribute name="Group" type="hyb:String8" use="required"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<xs:complexType name="Variants">
         <xs:sequence>
-            <xs:element name="Name" minOccurs="0" maxOccurs="unbounded" type="hyb:String8" />
+            <xs:element name="Name" minOccurs="0" maxOccurs="unbounded" type="hyb:NamedVariant" />
             <xs:element name="Group" minOccurs="0" maxOccurs="unbounded" type="hyb:String8" />
         </xs:sequence>
     </xs:complexType>

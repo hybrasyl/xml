@@ -38,6 +38,10 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
     [XmlIgnore] public Guid Variant { get; set; }
 
     [XmlIgnore]
+    public bool HasVariants => Properties.Variants != null &&
+                               (Properties.Variants.Group?.Count > 0 || Properties.Variants.Name?.Count > 0);
+
+    [XmlIgnore]
     [Obsolete("Use ParentGuid instead")]
     public Item ParentItem { get; set; }
 
@@ -94,7 +98,7 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
     {
         var ret = new XmlProcessResult();
         foreach (var item in manager
-                     .Find<Item>(condition: x => x.Properties.Variants != null && x.Properties.Variants.Group.Count > 0)
+                     .Find<Item>(condition: x => x.HasVariants)
                      .ToList())
         {
             foreach (var group in item.Properties.Variants.Group)
@@ -119,6 +123,41 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
                         ret.AdditionalCount++;
                       
                     }
+                }
+                catch (Exception ex)
+                {
+                    ret.Errors[item.Guid] = $"{item.Name}: failed to apply variant {toApply.Name}: {ex}";
+                }
+            }
+
+            foreach (var name in item.Properties.Variants.Name)
+            {
+                item.Variants ??= new Dictionary<string, List<Item>>();
+                if (!manager.TryGetValue<VariantGroup>(name.Group, out var group))
+                {
+                    manager.FlagAsError(item, XmlError.ProcessingError, $"Variant group {name.Group} does not exist");
+                    ret.Errors[item.Guid] = $"Variant group {name.Group} does not exist";
+                    continue;
+                }
+
+                if (!item.Variants.ContainsKey(name.Group))
+                    item.Variants[name.Group] = new List<Item>();
+
+                var toApply = group.Variant.FirstOrDefault(x => x.Name == name.Value);
+
+                if (toApply == null)
+                {
+                    manager.FlagAsError(item, XmlError.ProcessingError, $"Variant group {name.Group}: variant {name.Value} does not exist");
+                    ret.Errors[item.Guid] = "Variant group {name.Group}: variant {name.Value} does not exist";
+                    continue;
+                }
+                
+                try
+                {
+                    var variant = toApply.ResolveVariant(item);
+                    item.Variants[name.Group].Add(variant);
+                    manager.Add(variant);
+                    ret.AdditionalCount++;
                 }
                 catch (Exception ex)
                 {

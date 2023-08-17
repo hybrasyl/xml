@@ -23,46 +23,24 @@ using System.Collections.Generic;
 [Serializable]
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
-[XmlTypeAttribute(AnonymousType=true, Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class NpcInventoryItem : HybrasylEntity<NpcInventoryItem>
+[XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
+public partial class NamedVariant : HybrasylEntity<NamedVariant>
 {
     #region Private fields
-    private uint _quantity;
-    private uint _refresh;
+    private string _group;
     private string _value;
     #endregion
     
-    public NpcInventoryItem()
-    {
-        _quantity = ((uint)(0));
-        _refresh = ((uint)(0));
-    }
-    
     [XmlAttribute]
-    [DefaultValue(typeof(uint), "0")]
-    public uint Quantity
+    public string Group
     {
         get
         {
-            return _quantity;
+            return _group;
         }
         set
         {
-            _quantity = value;
-        }
-    }
-    
-    [XmlAttribute]
-    [DefaultValue(typeof(uint), "0")]
-    public uint Refresh
-    {
-        get
-        {
-            return _refresh;
-        }
-        set
-        {
-            _refresh = value;
+            _group = value;
         }
     }
     

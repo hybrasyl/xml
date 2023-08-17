@@ -19,7 +19,7 @@ using System.Text;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
-[System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.4161.0")]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.9032.0")]
 [Serializable]
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
@@ -27,10 +27,26 @@ using System.Collections.Generic;
 public partial class EquipmentRestriction : HybrasylEntity<EquipmentRestriction>
 {
     #region Private fields
+    private WeaponType _weaponType;
     private EquipmentSlot _slot;
-    private WeaponType _type;
+    private RestrictionType _restrictionType;
+    private string _message;
     private string _value;
     #endregion
+    
+   
+    [XmlAttribute]
+    public WeaponType WeaponType
+    {
+        get
+        {
+            return _weaponType;
+        }
+        set
+        {
+            _weaponType = value;
+        }
+    }
     
     [XmlAttribute]
     public EquipmentSlot Slot
@@ -46,15 +62,28 @@ public partial class EquipmentRestriction : HybrasylEntity<EquipmentRestriction>
     }
     
     [XmlAttribute]
-    public WeaponType Type
+    public RestrictionType RestrictionType
     {
         get
         {
-            return _type;
+            return _restrictionType;
         }
         set
         {
-            _type = value;
+            _restrictionType = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public string Message
+    {
+        get
+        {
+            return _message;
+        }
+        set
+        {
+            _message = value;
         }
     }
     

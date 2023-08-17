@@ -19,7 +19,7 @@ using System.Text;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
-[System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.9037.0")]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.9032.0")]
 [Serializable]
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
@@ -27,13 +27,12 @@ using System.Collections.Generic;
 public partial class Variants : HybrasylEntity<Variants>
 {
     #region Private fields
-    private List<string> _name;
+    private List<NamedVariant> _name;
     private List<string> _group;
     #endregion
     
     [XmlElement("Name")]
-    [StringLengthAttribute(255, MinimumLength=1)]
-    public List<string> Name
+    public List<NamedVariant> Name
     {
         get
         {

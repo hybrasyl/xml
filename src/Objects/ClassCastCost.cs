@@ -20,7 +20,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
 [XmlInclude(typeof(CastCost))]
-[System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.9037.0")]
+[System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.9032.0")]
 [Serializable]
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]

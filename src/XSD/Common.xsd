@@ -84,7 +84,7 @@
 
     <xs:complexType name="ElementalModifier">
         <xs:attribute name="Element" type="hyb:ElementType" use="required" />
-        <xs:attribute name="Modifier" type="xs:float" use="required" />
+        <xs:attribute name="Modifier" type="xs:double" use="required" />
         <xs:attribute name="Type" type="hyb:ElementalModifierType"/>
     </xs:complexType>
 
