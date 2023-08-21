@@ -4,8 +4,8 @@
         <TargetFramework>net7.0</TargetFramework>
         <AssemblyName>Hybrasyl.Xml</AssemblyName>
         <RootNamespace>Hybrasyl.Xml</RootNamespace>
-        <PackageVersion>0.9.3.15</PackageVersion>
-        <Version>0.9.3.15</Version>
+        <PackageVersion>0.9.3.17</PackageVersion>
+        <Version>0.9.3.17</Version>
         <BuildDocFx Condition="'$(Configuration)'=='Debug'">false</BuildDocFx>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <Authors>ERISCO LLC</Authors>
@@ -15,6 +15,7 @@
         <Tags>Hybrasyl</Tags>
         <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
         <Icon>hybrasyl-512x512.png</Icon>
+        <PackageIcon>hybrasyl-512x512.png</PackageIcon>
         <Copyright>Copyright (C) ERISCO LLC</Copyright>
         <Title>Hybrasyl XML Entities</Title>
         <Description>Hybrasyl's data model &amp; XML entities, used to deserialize and work with Hybrasyl game data.</Description>

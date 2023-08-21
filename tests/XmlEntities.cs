@@ -104,4 +104,13 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         Assert.True(belt.Properties.StatModifiers.BaseDefensiveElement == ElementType.Light );
     }
 
+    [Fact]
+    public void EquipmentRestrictionWeaponTypeDefaultNone()
+    {
+        var restriction = new EquipmentRestriction();
+        Assert.Equal(WeaponType.None, restriction.WeaponType);
+        var castable = fixture.SyncManager.GetByIndex<Castable>("TestRequireWeapon");
+        Assert.Equal(WeaponType.None, castable.Restrictions.First().WeaponType);
+    }
+
 }
