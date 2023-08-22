@@ -21,7 +21,9 @@
         <Description>Hybrasyl's data model &amp; XML entities, used to deserialize and work with Hybrasyl game data.</Description>
         <IsPackable>true</IsPackable>
     </PropertyGroup>
-
+    <ItemGroup>
+        <None Include="hybrasyl-512x512.png" Pack="true" PackagePath=""/>
+    </ItemGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='XML|AnyCPU'" />
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Entities|AnyCPU'" />
