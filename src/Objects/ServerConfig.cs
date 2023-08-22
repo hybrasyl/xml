@@ -48,6 +48,7 @@ public partial class ServerConfig : HybrasylEntity<ServerConfig>
     
     public ServerConfig()
     {
+        _constants = new ServerConstants();
         _apiEndpoints = new ApiEndpoints();
         _network = new Network();
         _dataStore = new DataStore();

@@ -227,7 +227,7 @@
             <xs:element name="Motd" type="hyb:String16" minOccurs="0" maxOccurs="1" />
             <xs:element name="Plugins" type="hyb:ServerPlugins" minOccurs="0" maxOccurs="1" />
             <xs:element name="ClientSettings" type="hyb:ClientSettings" minOccurs="0" maxOccurs="1" />
-            <xs:element name="Constants" type="hyb:ServerConstants" minOccurs="0" maxOccurs="1" />
+            <xs:element name="Constants" type="hyb:ServerConstants" minOccurs="1" maxOccurs="1" />
         </xs:sequence>
         <xs:attribute name="Name" type="xs:string" default="default" />
         <xs:attribute name="ElementTable" type="xs:string" default="default" />

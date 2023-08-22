@@ -83,4 +83,40 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
 
     public string GetSettingLabel(byte number) => SettingsNumberIndex[number].Value;
     public byte GetSettingNumber(string key) => SettingsKeyIndex[key.ToLower()].Number;
+
+    private Dictionary<byte, string> ClassNames { get; set; } = new();
+    private Dictionary<string, byte> ClassIds { get; set; } = new();
+
+    private void GenerateIndex()
+    {
+        ClassNames.Clear();
+        ClassNames[0] = Constants.ClassName0;
+        ClassNames[1] = Constants.ClassName1;
+        ClassNames[2] = Constants.ClassName2;
+        ClassNames[3] = Constants.ClassName3;
+        ClassNames[4] = Constants.ClassName4;
+        ClassNames[5] = Constants.ClassName5;
+        ClassIds[Constants.ClassName0] = 0;
+        ClassIds[Constants.ClassName1] = 1;
+        ClassIds[Constants.ClassName2] = 2;
+        ClassIds[Constants.ClassName3] = 3;
+        ClassIds[Constants.ClassName4] = 4;
+        ClassIds[Constants.ClassName5] = 5;
+    }
+
+    public byte GetClassId(string name)
+    {
+        if (!ClassNames.Any())
+            GenerateIndex();
+        return ClassIds[name];
+
+    }
+
+    public string GetClassName(byte id)
+    {
+        if (!ClassIds.Any())
+            GenerateIndex();
+        return ClassNames[id];
+    }
+
 }

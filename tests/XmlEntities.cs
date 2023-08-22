@@ -113,4 +113,12 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         Assert.Equal(WeaponType.None, castable.Restrictions.First().WeaponType);
     }
 
+    [Fact]
+    public void ServerClassNames()
+    {
+        var config = fixture.SyncManager.Values<ServerConfig>().First();
+        Assert.NotNull(config);
+        Assert.Equal(config.Constants.ClassName0, config.GetClassName(0));
+        Assert.Equal(0,config.GetClassId(config.Constants.ClassName0));
+    }
 }
