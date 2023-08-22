@@ -32,7 +32,7 @@ public partial class ApiEndpoints : HybrasylEntity<ApiEndpoints>
     private TargetUrl _encryptionEndpoint;
     private TargetUrl _validationEndpoint;
     private MetricsEndpoint _metricsEndpoint;
-    private TargetUrl _sentry;
+    private TargetUrl _telemetryEndpoint;
     #endregion
     
     public ApiEndpoints()
@@ -101,15 +101,15 @@ public partial class ApiEndpoints : HybrasylEntity<ApiEndpoints>
         }
     }
     
-    public TargetUrl Sentry
+    public TargetUrl TelemetryEndpoint
     {
         get
         {
-            return _sentry;
+            return _telemetryEndpoint;
         }
         set
         {
-            _sentry = value;
+            _telemetryEndpoint = value;
         }
     }
 }

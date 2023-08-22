@@ -35,7 +35,7 @@ public partial class Spawn : HybrasylEntity<Spawn>
     private SpawnBase _base;
     private CreatureHostilitySettings _hostility;
     private List<CreatureCookie> _setCookies;
-    private List<string> _immunities;
+    private List<CreatureImmunity> _immunities;
     private string _import;
     private string _name;
     private SpawnFlags _flags;
@@ -151,7 +151,7 @@ public partial class Spawn : HybrasylEntity<Spawn>
     }
     
     [XmlArrayItemAttribute("Immunity", IsNullable=false)]
-    public List<string> Immunities
+    public List<CreatureImmunity> Immunities
     {
         get
         {

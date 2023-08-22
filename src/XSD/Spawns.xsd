@@ -37,6 +37,7 @@
         <xs:attribute name="BaseLevel" type="xs:string" use="optional" />
         <xs:attribute name="Disabled" type="xs:boolean" default="false" />
         <xs:attribute name="Name" type="xs:string" use="optional" />
+		<xs:attribute name="DespawnAfter" type="xs:int" use="optional" default="0"/>
     </xs:complexType>
 
     <xs:complexType name="Spawns">

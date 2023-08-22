@@ -21,47 +21,14 @@ using System.Collections.Generic;
 
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.9032.0")]
 [Serializable]
-[DebuggerStepThrough]
-[DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class Statuses : HybrasylEntity<Statuses>
+public enum CreatureImmunityType
 {
-    #region Private fields
-    private List<AddStatus> _add;
-    private List<RemoveStatus> _remove;
-    #endregion
-    
-    public Statuses()
-    {
-        _remove = new List<RemoveStatus>();
-        _add = new List<AddStatus>();
-    }
-    
-    [XmlElement("Add")]
-    public List<AddStatus> Add
-    {
-        get
-        {
-            return _add;
-        }
-        set
-        {
-            _add = value;
-        }
-    }
-    
-    [XmlElement("Remove")]
-    public List<RemoveStatus> Remove
-    {
-        get
-        {
-            return _remove;
-        }
-        set
-        {
-            _remove = value;
-        }
-    }
+    Element,
+    Castable,
+    Status,
+    StatusCategory,
+    CastableCategory,
 }
 }
 #pragma warning restore

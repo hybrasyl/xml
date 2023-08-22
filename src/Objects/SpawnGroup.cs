@@ -32,11 +32,13 @@ public partial class SpawnGroup : HybrasylEntity<SpawnGroup>
     private string _baseLevel;
     private bool _disabled;
     private string _name;
+    private int _despawnAfter;
     #endregion
     
     public SpawnGroup()
     {
         _disabled = false;
+        _despawnAfter = 0;
     }
     
     [XmlArrayItemAttribute(IsNullable=false)]
@@ -101,6 +103,20 @@ public partial class SpawnGroup : HybrasylEntity<SpawnGroup>
         set
         {
             _name = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(0)]
+    public int DespawnAfter
+    {
+        get
+        {
+            return _despawnAfter;
+        }
+        set
+        {
+            _despawnAfter = value;
         }
     }
 }

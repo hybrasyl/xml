@@ -429,14 +429,25 @@
                 <xs:attribute name="Duration" use="optional" default="0" type="xs:int" />
                 <xs:attribute name="Intensity" use="optional" default="1.0" type="xs:float" />
                 <xs:attribute name="Tick" default="0" type="xs:int" />
+				<xs:attribute name="RemoveChance" use="optional" type="xs:string"/>
+				<xs:attribute name="PersistDeath" use="optional" type="xs:boolean" default="false"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>
 
+	<xs:complexType name="RemoveStatus">
+		<xs:simpleContent>
+			<xs:extension base="hyb:String8">
+				<xs:attribute name="IsCategory" use="optional" default="false" type="xs:boolean"/>
+				<xs:attribute name="Quantity" use="optional" default="1" type="xs:int"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	
     <xs:complexType name="Statuses">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
             <xs:element name="Add" type="hyb:AddStatus" />
-            <xs:element name="Remove" type="hyb:String8" />
+            <xs:element name="Remove" type="hyb:RemoveStatus" />
         </xs:sequence>
     </xs:complexType>
 
@@ -867,6 +878,7 @@
             <xs:element name="Castables" minOccurs="0" maxOccurs="1" type="CreatureCastables" />
             <xs:element name="Behavior" minOccurs="0" maxOccurs="1" type="CreatureBehavior" />
             <xs:element name="Immunities" minOccurs="0" maxOccurs="1" type="CreatureImmunities " />
+			<xs:element name="StatModifiers" minOccurs="0" maxOccurs="1" type="hyb:StatModifiers"/>
         </xs:sequence>
         <xs:attribute name="Name" type="xs:string" use="required" />
         <xs:attribute name="Import" type="xs:string" use="optional" />
@@ -874,10 +886,32 @@
 
     <xs:complexType name="CreatureImmunities">
         <xs:sequence>
-            <xs:element name="Immunity" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+            <xs:element name="Immunity" type="hyb:CreatureImmunity" minOccurs="1" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
 
+    <!-- Targeting priority for behaviorsets -->
+    <xs:simpleType name="CreatureImmunityType">
+        <xs:restriction base="xs:token">
+            <xs:enumeration value="Element" />
+            <xs:enumeration value="Castable" />
+            <xs:enumeration value="Status" />
+            <xs:enumeration value="StatusCategory" />
+            <xs:enumeration value="CastableCategory" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="CreatureImmunity">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute name="Type" type="hyb:CreatureImmunityType" use="required"/>
+				<xs:attribute name="MessageType" type="hyb:MessageType" use="optional" default="Say"/>
+				<xs:attribute name="Message" type="hyb:String8" use="optional"/>
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+		
+		
     <xs:complexType name="CreatureCastable">
         <xs:simpleContent>
             <xs:extension base="xs:string">

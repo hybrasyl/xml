@@ -31,7 +31,8 @@ public partial class CreatureBehaviorSet : HybrasylEntity<CreatureBehaviorSet>
     private string _statAlloc;
     private CreatureCastables _castables;
     private CreatureBehavior _behavior;
-    private List<string> _immunities;
+    private List<CreatureImmunity> _immunities;
+    private StatModifiers _statModifiers;
     private string _name;
     private string _import;
     #endregion
@@ -73,7 +74,7 @@ public partial class CreatureBehaviorSet : HybrasylEntity<CreatureBehaviorSet>
     }
     
     [XmlArrayItemAttribute("Immunity", IsNullable=false)]
-    public List<string> Immunities
+    public List<CreatureImmunity> Immunities
     {
         get
         {
@@ -82,6 +83,18 @@ public partial class CreatureBehaviorSet : HybrasylEntity<CreatureBehaviorSet>
         set
         {
             _immunities = value;
+        }
+    }
+    
+    public StatModifiers StatModifiers
+    {
+        get
+        {
+            return _statModifiers;
+        }
+        set
+        {
+            _statModifiers = value;
         }
     }
     

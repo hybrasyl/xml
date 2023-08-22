@@ -24,91 +24,45 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class AddStatus : HybrasylEntity<AddStatus>
+public partial class RemoveStatus : HybrasylEntity<RemoveStatus>
 {
     #region Private fields
-    private int _duration;
-    private float _intensity;
-    private int _tick;
-    private string _removeChance;
-    private bool _persistDeath;
+    private bool _isCategory;
+    private int _quantity;
     private string _value;
     #endregion
     
-    public AddStatus()
+    public RemoveStatus()
     {
-        _duration = 0;
-        _intensity = ((float)(1F));
-        _tick = 0;
-        _persistDeath = false;
-    }
-    
-    [XmlAttribute]
-    [DefaultValue(0)]
-    public int Duration
-    {
-        get
-        {
-            return _duration;
-        }
-        set
-        {
-            _duration = value;
-        }
-    }
-    
-    [XmlAttribute]
-    [DefaultValue(typeof(float), "1")]
-    public float Intensity
-    {
-        get
-        {
-            return _intensity;
-        }
-        set
-        {
-            _intensity = value;
-        }
-    }
-    
-    [XmlAttribute]
-    [DefaultValue(0)]
-    public int Tick
-    {
-        get
-        {
-            return _tick;
-        }
-        set
-        {
-            _tick = value;
-        }
-    }
-    
-    [XmlAttribute]
-    public string RemoveChance
-    {
-        get
-        {
-            return _removeChance;
-        }
-        set
-        {
-            _removeChance = value;
-        }
+        _isCategory = false;
+        _quantity = 1;
     }
     
     [XmlAttribute]
     [DefaultValue(false)]
-    public bool PersistDeath
+    public bool IsCategory
     {
         get
         {
-            return _persistDeath;
+            return _isCategory;
         }
         set
         {
-            _persistDeath = value;
+            _isCategory = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(1)]
+    public int Quantity
+    {
+        get
+        {
+            return _quantity;
+        }
+        set
+        {
+            _quantity = value;
         }
     }
     

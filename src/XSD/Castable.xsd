@@ -354,6 +354,7 @@
         <xs:attribute name="Reflectable" use="optional" default="true" type="xs:boolean" />
         <xs:attribute name="BreakStealth" use="optional" default="true" type="xs:boolean" />
         <xs:attribute name="IncludeInMetafile" use="optional" default="true" type="xs:boolean" />
+		<xs:attribute name="PvpOnly" use="optional" default="false" type="xs:boolean"/>
     </xs:complexType>
 
     <!-- Intent container element -->

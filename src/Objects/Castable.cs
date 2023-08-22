@@ -49,6 +49,7 @@ public partial class Castable : HybrasylEntity<Castable>
     private bool _reflectable;
     private bool _breakStealth;
     private bool _includeInMetafile;
+    private bool _pvpOnly;
     #endregion
     
     public Castable()
@@ -70,6 +71,7 @@ public partial class Castable : HybrasylEntity<Castable>
         _reflectable = true;
         _breakStealth = true;
         _includeInMetafile = true;
+        _pvpOnly = false;
     }
     
     [XmlArrayItemAttribute(IsNullable=false)]
@@ -343,6 +345,20 @@ public partial class Castable : HybrasylEntity<Castable>
         set
         {
             _includeInMetafile = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(false)]
+    public bool PvpOnly
+    {
+        get
+        {
+            return _pvpOnly;
+        }
+        set
+        {
+            _pvpOnly = value;
         }
     }
 }

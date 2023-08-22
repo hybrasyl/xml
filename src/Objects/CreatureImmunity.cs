@@ -24,91 +24,57 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class AddStatus : HybrasylEntity<AddStatus>
+public partial class CreatureImmunity : HybrasylEntity<CreatureImmunity>
 {
     #region Private fields
-    private int _duration;
-    private float _intensity;
-    private int _tick;
-    private string _removeChance;
-    private bool _persistDeath;
+    private CreatureImmunityType _type;
+    private MessageType _messageType;
+    private string _message;
     private string _value;
     #endregion
     
-    public AddStatus()
+    public CreatureImmunity()
     {
-        _duration = 0;
-        _intensity = ((float)(1F));
-        _tick = 0;
-        _persistDeath = false;
+        _messageType = MessageType.Say;
     }
     
     [XmlAttribute]
-    [DefaultValue(0)]
-    public int Duration
+    public CreatureImmunityType Type
     {
         get
         {
-            return _duration;
+            return _type;
         }
         set
         {
-            _duration = value;
+            _type = value;
         }
     }
     
     [XmlAttribute]
-    [DefaultValue(typeof(float), "1")]
-    public float Intensity
+    [DefaultValue(MessageType.Say)]
+    public MessageType MessageType
     {
         get
         {
-            return _intensity;
+            return _messageType;
         }
         set
         {
-            _intensity = value;
+            _messageType = value;
         }
     }
     
     [XmlAttribute]
-    [DefaultValue(0)]
-    public int Tick
+    public string Message
     {
         get
         {
-            return _tick;
+            return _message;
         }
         set
         {
-            _tick = value;
-        }
-    }
-    
-    [XmlAttribute]
-    public string RemoveChance
-    {
-        get
-        {
-            return _removeChance;
-        }
-        set
-        {
-            _removeChance = value;
-        }
-    }
-    
-    [XmlAttribute]
-    [DefaultValue(false)]
-    public bool PersistDeath
-    {
-        get
-        {
-            return _persistDeath;
-        }
-        set
-        {
-            _persistDeath = value;
+            _message = value;
         }
     }
     
