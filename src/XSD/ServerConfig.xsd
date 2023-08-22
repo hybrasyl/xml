@@ -248,7 +248,7 @@
             <xs:element name="PlayerPickupDistance" type="xs:int" default="2" />
             <xs:element name="PlayerExchangeDistance" type="xs:int" default="2" />
             <xs:element name="PlayerMaxCastDistance" type="xs:int" default="12" />
-            <xs:element name="PlayerMaxGold" type="xs:uint" default="1000000000" />
+            <xs:element name="PlayerMaxGold" type="xs:unsignedInt" default="1000000000" />
             <xs:element name="ItemVariantIdStart" type="xs:int" default="100000" />
             <xs:element name="LogDefaultLevels" type="xs:int" default="1" />
             <xs:element name="PlayerGroupSharingDistance" type="xs:int" default="20" />
@@ -273,7 +273,7 @@
             <xs:element name="MailMessageCooldown" type="xs:int" default="60" />
             <xs:element name="PlayerMinStat" type="xs:int" default="1" />
             <xs:element name="PlayerMaxStat" type="xs:int" default="255" />
-            <xs:element name="PlayerMinBaseHpMp" type="xs:int" default="1" />
+            <xs:element name="PlayerMinBaseHpMp" type="xs:unsignedInt" default="1" />
             <xs:element name="PlayerMaxBaseHpMp" type="xs:unsignedInt" default="4294967295" />
             <xs:element name="PlayerMinDmg" type="xs:float" default="-16.0" />
             <xs:element name="PlayerMaxDmg" type="xs:float" default="16.0" />

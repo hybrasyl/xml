@@ -34,7 +34,8 @@ public partial class ServerConstants : HybrasylEntity<ServerConstants>
     private int _playerMaxDropDistance;
     private int _playerPickupDistance;
     private int _playerExchangeDistance;
-    private int _playerMaximumGold;
+    private int _playerMaxCastDistance;
+    private uint _playerMaxGold;
     private int _itemVariantIdStart;
     private int _logDefaultLevels;
     private int _playerGroupSharingDistance;
@@ -59,7 +60,7 @@ public partial class ServerConstants : HybrasylEntity<ServerConstants>
     private int _mailMessageCooldown;
     private int _playerMinStat;
     private int _playerMaxStat;
-    private int _playerMinBaseHpMp;
+    private uint _playerMinBaseHpMp;
     private uint _playerMaxBaseHpMp;
     private float _playerMinDmg;
     private float _playerMaxDmg;
@@ -69,6 +70,8 @@ public partial class ServerConstants : HybrasylEntity<ServerConstants>
     private float _playerMaxMr;
     private float _playerMinAc;
     private float _playerMaxAc;
+    private float _playerMinRegen;
+    private float _playerMaxRegen;
     private string _className0;
     private string _className1;
     private string _className2;
@@ -90,7 +93,8 @@ public partial class ServerConstants : HybrasylEntity<ServerConstants>
         _playerMaxDropDistance = 2;
         _playerPickupDistance = 2;
         _playerExchangeDistance = 2;
-        _playerMaximumGold = 1000000000;
+        _playerMaxCastDistance = 12;
+        _playerMaxGold = ((uint)(1000000000));
         _itemVariantIdStart = 100000;
         _logDefaultLevels = 1;
         _playerGroupSharingDistance = 20;
@@ -115,16 +119,18 @@ public partial class ServerConstants : HybrasylEntity<ServerConstants>
         _mailMessageCooldown = 60;
         _playerMinStat = 1;
         _playerMaxStat = 255;
-        _playerMinBaseHpMp = 1;
+        _playerMinBaseHpMp = ((uint)(1));
         _playerMaxBaseHpMp = ((uint)(4294967295));
         _playerMinDmg = ((float)(-16F));
-        _playerMaxDmg = ((float)(-16F));
+        _playerMaxDmg = ((float)(16F));
         _playerMinHit = ((float)(-16F));
-        _playerMaxHit = ((float)(-16F));
+        _playerMaxHit = ((float)(16F));
         _playerMinMr = ((float)(-16F));
-        _playerMaxMr = ((float)(-16F));
+        _playerMaxMr = ((float)(16F));
         _playerMinAc = ((float)(-90F));
         _playerMaxAc = ((float)(100F));
+        _playerMinRegen = ((float)(-16F));
+        _playerMaxRegen = ((float)(16F));
         _className0 = "Peasant";
         _className1 = "Warrior";
         _className2 = "Rogue";
@@ -221,15 +227,27 @@ public partial class ServerConstants : HybrasylEntity<ServerConstants>
         }
     }
     
-    public int PlayerMaximumGold
+    public int PlayerMaxCastDistance
     {
         get
         {
-            return _playerMaximumGold;
+            return _playerMaxCastDistance;
         }
         set
         {
-            _playerMaximumGold = value;
+            _playerMaxCastDistance = value;
+        }
+    }
+    
+    public uint PlayerMaxGold
+    {
+        get
+        {
+            return _playerMaxGold;
+        }
+        set
+        {
+            _playerMaxGold = value;
         }
     }
     
@@ -521,7 +539,7 @@ public partial class ServerConstants : HybrasylEntity<ServerConstants>
         }
     }
     
-    public int PlayerMinBaseHpMp
+    public uint PlayerMinBaseHpMp
     {
         get
         {
@@ -638,6 +656,30 @@ public partial class ServerConstants : HybrasylEntity<ServerConstants>
         set
         {
             _playerMaxAc = value;
+        }
+    }
+    
+    public float PlayerMinRegen
+    {
+        get
+        {
+            return _playerMinRegen;
+        }
+        set
+        {
+            _playerMinRegen = value;
+        }
+    }
+    
+    public float PlayerMaxRegen
+    {
+        get
+        {
+            return _playerMaxRegen;
+        }
+        set
+        {
+            _playerMaxRegen = value;
         }
     }
     
