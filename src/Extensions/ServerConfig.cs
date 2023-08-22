@@ -108,15 +108,14 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
     {
         if (!ClassNames.Any())
             GenerateIndex();
-        return ClassIds[name];
-
+        return ClassIds.TryGetValue(name, out var id) ? id : (byte) 254;
     }
 
     public string GetClassName(byte id)
     {
         if (!ClassIds.Any())
             GenerateIndex();
-        return ClassNames[id];
+        return ClassNames.TryGetValue(id, out var name) ? name : "Unknown";
     }
 
 }

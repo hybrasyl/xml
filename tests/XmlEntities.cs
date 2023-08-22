@@ -120,5 +120,8 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         Assert.NotNull(config);
         Assert.Equal(config.Constants.ClassName0, config.GetClassName(0));
         Assert.Equal(0,config.GetClassId(config.Constants.ClassName0));
+        Assert.Equal(254, config.GetClassId("Derp"));
+        Assert.Equal("Unknown", config.GetClassName(133));
     }
+
 }
