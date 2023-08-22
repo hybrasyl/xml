@@ -282,6 +282,16 @@
             <xs:element name="PlayerMaxMr" type="xs:float" default="-16.0" />
             <xs:element name="PlayerMinAc" type="xs:float" default="-90" />
             <xs:element name="PlayerMaxAc" type="xs:float" default="100" />
+			<xs:element name="ClassName0" type="xs:string" default="Peasant"/>
+            <xs:element name="ClassName1" type="xs:string" default="Warrior"/>
+            <xs:element name="ClassName2" type="xs:string" default="Rogue"/>
+            <xs:element name="ClassName3" type="xs:string" default="Wizard"/>
+            <xs:element name="ClassName4" type="xs:string" default="Priest"/>
+            <xs:element name="ClassName5" type="xs:string" default="Monk"/>
+		    <xs:element name="LevelCircle1" type="xs:int" default="11"/>
+            <xs:element name="LevelCircle2" type="xs:int" default="41"/>
+            <xs:element name="LevelCircle3" type="xs:int" default="71"/>
+            <xs:element name="LevelCircle4" type="xs:int" default="99"/>	
         </xs:sequence>
     </xs:complexType>
 

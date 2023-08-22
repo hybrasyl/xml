@@ -69,6 +69,16 @@ public partial class ServerConstants : HybrasylEntity<ServerConstants>
     private float _playerMaxMr;
     private float _playerMinAc;
     private float _playerMaxAc;
+    private string _className0;
+    private string _className1;
+    private string _className2;
+    private string _className3;
+    private string _className4;
+    private string _className5;
+    private int _levelCircle1;
+    private int _levelCircle2;
+    private int _levelCircle3;
+    private int _levelCircle4;
     #endregion
     
     public ServerConstants()
@@ -115,6 +125,16 @@ public partial class ServerConstants : HybrasylEntity<ServerConstants>
         _playerMaxMr = ((float)(-16F));
         _playerMinAc = ((float)(-90F));
         _playerMaxAc = ((float)(100F));
+        _className0 = "Peasant";
+        _className1 = "Warrior";
+        _className2 = "Rogue";
+        _className3 = "Wizard";
+        _className4 = "Priest";
+        _className5 = "Monk";
+        _levelCircle1 = 11;
+        _levelCircle2 = 41;
+        _levelCircle3 = 71;
+        _levelCircle4 = 99;
     }
     
     public float MerchantBuybackPercentage
@@ -618,6 +638,126 @@ public partial class ServerConstants : HybrasylEntity<ServerConstants>
         set
         {
             _playerMaxAc = value;
+        }
+    }
+    
+    public string ClassName0
+    {
+        get
+        {
+            return _className0;
+        }
+        set
+        {
+            _className0 = value;
+        }
+    }
+    
+    public string ClassName1
+    {
+        get
+        {
+            return _className1;
+        }
+        set
+        {
+            _className1 = value;
+        }
+    }
+    
+    public string ClassName2
+    {
+        get
+        {
+            return _className2;
+        }
+        set
+        {
+            _className2 = value;
+        }
+    }
+    
+    public string ClassName3
+    {
+        get
+        {
+            return _className3;
+        }
+        set
+        {
+            _className3 = value;
+        }
+    }
+    
+    public string ClassName4
+    {
+        get
+        {
+            return _className4;
+        }
+        set
+        {
+            _className4 = value;
+        }
+    }
+    
+    public string ClassName5
+    {
+        get
+        {
+            return _className5;
+        }
+        set
+        {
+            _className5 = value;
+        }
+    }
+    
+    public int LevelCircle1
+    {
+        get
+        {
+            return _levelCircle1;
+        }
+        set
+        {
+            _levelCircle1 = value;
+        }
+    }
+    
+    public int LevelCircle2
+    {
+        get
+        {
+            return _levelCircle2;
+        }
+        set
+        {
+            _levelCircle2 = value;
+        }
+    }
+    
+    public int LevelCircle3
+    {
+        get
+        {
+            return _levelCircle3;
+        }
+        set
+        {
+            _levelCircle3 = value;
+        }
+    }
+    
+    public int LevelCircle4
+    {
+        get
+        {
+            return _levelCircle4;
+        }
+        set
+        {
+            _levelCircle4 = value;
         }
     }
 }
