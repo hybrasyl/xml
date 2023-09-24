@@ -31,6 +31,7 @@
             <xs:element name="Table" minOccurs="1" maxOccurs="unbounded" type="hyb:LootTable" />
         </xs:sequence>
         <xs:attribute name="Name" type="hyb:String8" />
+		<xs:attribute name="InInventory" type="xs:boolean" use="optional" default="false"/>
     </xs:complexType>
 
     <xs:element name="LootSet" type="hyb:LootSet" />

@@ -30,11 +30,13 @@ public partial class LootSet : HybrasylEntity<LootSet>
     #region Private fields
     private List<LootTable> _table;
     private string _name;
+    private bool _inInventory;
     #endregion
     
     public LootSet()
     {
         _table = new List<LootTable>();
+        _inInventory = false;
     }
     
     [XmlElement("Table")]
@@ -60,6 +62,20 @@ public partial class LootSet : HybrasylEntity<LootSet>
         set
         {
             _name = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(false)]
+    public bool InInventory
+    {
+        get
+        {
+            return _inInventory;
+        }
+        set
+        {
+            _inInventory = value;
         }
     }
 }

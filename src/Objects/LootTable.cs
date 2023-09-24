@@ -32,12 +32,14 @@ public partial class LootTable : HybrasylEntity<LootTable>
     private LootTableXp _xp;
     private int _rolls;
     private double _chance;
+    private bool _inInventory;
     #endregion
     
     public LootTable()
     {
         _rolls = 0;
         _chance = 0D;
+        _inInventory = false;
     }
     
     [XmlElement("Items")]
@@ -102,6 +104,20 @@ public partial class LootTable : HybrasylEntity<LootTable>
         set
         {
             _chance = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(false)]
+    public bool InInventory
+    {
+        get
+        {
+            return _inInventory;
+        }
+        set
+        {
+            _inInventory = value;
         }
     }
 }

@@ -264,6 +264,7 @@
                 <xs:attribute name="Max" type="xs:int" default="0" use="optional" />
                 <xs:attribute name="Unique" type="xs:boolean" default="false" use="optional" />
                 <xs:attribute name="Always" type="xs:boolean" default="false" use="optional" />
+                <xs:attribute name="InInventory" type="xs:boolean" use="optional" default="false"/>
                 <xs:attribute name="Variants" use="optional">
                     <xs:simpleType>
                         <xs:list itemType="hyb:String8" />
@@ -301,6 +302,8 @@
         <!-- Default is to always drop. -->
         <xs:attribute name="Rolls" type="xs:int" default="0" />
         <xs:attribute name="Chance" type="xs:double" default="0.0" />
+        <xs:attribute name="InInventory" use="optional" type="xs:boolean" default="false"/>
+
     </xs:complexType>
 
     <!-- Various reusable types used by items & friends -->

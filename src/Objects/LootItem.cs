@@ -30,6 +30,7 @@ public partial class LootItem : HybrasylEntity<LootItem>
     private int _max;
     private bool _unique;
     private bool _always;
+    private bool _inInventory;
     private List<string> _variants;
     private string _value;
     #endregion
@@ -40,6 +41,7 @@ public partial class LootItem : HybrasylEntity<LootItem>
         _max = 0;
         _unique = false;
         _always = false;
+        _inInventory = false;
     }
     
     [XmlAttribute]
@@ -81,6 +83,20 @@ public partial class LootItem : HybrasylEntity<LootItem>
         set
         {
             _always = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(false)]
+    public bool InInventory
+    {
+        get
+        {
+            return _inInventory;
+        }
+        set
+        {
+            _inInventory = value;
         }
     }
     
