@@ -90,12 +90,12 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
     private void GenerateIndex()
     {
         ClassNames.Clear();
-        ClassNames[0] = Constants.ClassName0.ToLower();
-        ClassNames[1] = Constants.ClassName1.ToLower();
-        ClassNames[2] = Constants.ClassName2.ToLower();
-        ClassNames[3] = Constants.ClassName3.ToLower();
-        ClassNames[4] = Constants.ClassName4.ToLower();
-        ClassNames[5] = Constants.ClassName5.ToLower();
+        ClassNames[0] = Constants.ClassName0;
+        ClassNames[1] = Constants.ClassName1;
+        ClassNames[2] = Constants.ClassName2;
+        ClassNames[3] = Constants.ClassName3;
+        ClassNames[4] = Constants.ClassName4;
+        ClassNames[5] = Constants.ClassName5;
         ClassIds[Constants.ClassName0] = 0;
         ClassIds[Constants.ClassName1] = 1;
         ClassIds[Constants.ClassName2] = 2;
