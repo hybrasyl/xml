@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 using Hybrasyl.Xml.Enums;
+using Hybrasyl.Xml.Extensions;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;
 
@@ -123,4 +124,61 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
         return newCbs;
     }
+
+    // Helper functions to determine immunities
+
+    public bool ImmuneToElement(ElementType type, out CreatureImmunity immunity)
+    {
+        immunity = Immunities?.FirstOrDefault(x => x.Type == CreatureImmunityType.Element && x.Value == type.ToString());
+        return immunity != null;
+    }
+
+    public bool ImmuneToElement(string type, out CreatureImmunity immunity)
+    {
+        immunity = Immunities?.FirstOrDefault(x => x.Type == CreatureImmunityType.Element && x.Value == type);
+        return immunity != null;
+    }
+
+    public bool ImmuneToCastableCategory(string category, out CreatureImmunity immunity)
+    {
+        immunity = Immunities?.FirstOrDefault(x =>
+            x.Type == CreatureImmunityType.CastableCategory && x.Value == category);
+        return immunity != null;
+    }
+
+    public bool ImmuneToStatusCategory(string category, out CreatureImmunity immunity)
+    {
+        immunity = Immunities?.FirstOrDefault(x =>
+            x.Type == CreatureImmunityType.StatusCategory && x.Value == category);
+        return immunity != null;
+    }
+
+
+    public bool ImmuneToStatus(string status, out CreatureImmunity immunity)
+    {
+        immunity = Immunities?.FirstOrDefault(x => x.Type == CreatureImmunityType.Status && x.Value == status);
+        return immunity != null;
+    }
+
+    public bool ImmuneToStatus(Status status, out CreatureImmunity immunity)
+    {
+        immunity = Immunities?.FirstOrDefault(x => x.Type == CreatureImmunityType.Status && x.Value == status.Name);
+        return immunity != null;
+    }
+
+    public bool ImmuneToCastable(string castable, out CreatureImmunity immunity)
+    {
+        immunity = Immunities?.FirstOrDefault(x => x.Type == CreatureImmunityType.Castable && x.Value == castable);
+        return immunity != null;
+    }
+
+    public bool ImmuneToCastable(Castable castable, out CreatureImmunity immunity)
+    {
+        immunity = Immunities?.FirstOrDefault(x =>
+            x.Type == CreatureImmunityType.Castable && x.Value == castable.Name);
+        return immunity != null;
+    }
+
+
+
 }
