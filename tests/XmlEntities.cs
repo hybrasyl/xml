@@ -22,7 +22,7 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
     public void CreatureAssailSoundIsByte()
     {
         // Occasionally xsd2code will make this an sbyte, for unknown reasons,
-        // so we test for that hre
+        // so we test for that here
         var f = new Creature();
         Assert.IsType<byte>(f.AssailSound);
     }

@@ -24,4 +24,5 @@ public partial class CastableDamage
 
     // temporary silliness due to xsd issues
     public bool IsEmpty => IsSimple && Simple.Value == 0 && Simple.Min == 0 && Simple.Max == 0;
+    
 }

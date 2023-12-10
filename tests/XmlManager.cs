@@ -375,4 +375,5 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
     {
 
     }
+
 }
