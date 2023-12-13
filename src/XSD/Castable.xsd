@@ -245,6 +245,10 @@
         <!-- This can be a formula -->
         <xs:attribute name="Uses" default="1" type="xs:string" />
         <xs:attribute name="Blocking" default="false" type="xs:boolean" />
+		<xs:attribute name="DisplayOwner" default="false" type="xs:boolean"/>
+        <xs:attribute name="DisplayGroup" default="false" type="xs:boolean"/>
+        <xs:attribute name="DisplayStatus" type="xs:token" use="optional"/>
+        <xs:attribute name="DisplayCookie" type="xs:token" use="optional"/>
     </xs:complexType>
 
     <!-- Effects type -->

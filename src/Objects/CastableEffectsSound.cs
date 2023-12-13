@@ -32,11 +32,11 @@ public partial class CastableEffectsSound : HybrasylEntity<CastableEffectsSound>
     
     public CastableEffectsSound()
     {
-        _id = ((byte)(255));
+        _id = ((byte)(1));
     }
     
     [XmlAttribute]
-    [DefaultValue(typeof(byte), "255")]
+    [DefaultValue(typeof(byte), "1")]
     public byte Id
     {
         get

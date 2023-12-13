@@ -34,6 +34,10 @@ public partial class CastableReactor : HybrasylEntity<CastableReactor>
     private int _expiration;
     private string _uses;
     private bool _blocking;
+    private bool _displayOwner;
+    private bool _displayGroup;
+    private string _displayStatus;
+    private string _displayCookie;
     #endregion
     
     public CastableReactor()
@@ -45,6 +49,8 @@ public partial class CastableReactor : HybrasylEntity<CastableReactor>
         _expiration = 0;
         _uses = "1";
         _blocking = false;
+        _displayOwner = false;
+        _displayGroup = false;
     }
     
     [XmlAttribute]
@@ -142,6 +148,60 @@ public partial class CastableReactor : HybrasylEntity<CastableReactor>
         set
         {
             _blocking = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(false)]
+    public bool DisplayOwner
+    {
+        get
+        {
+            return _displayOwner;
+        }
+        set
+        {
+            _displayOwner = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(false)]
+    public bool DisplayGroup
+    {
+        get
+        {
+            return _displayGroup;
+        }
+        set
+        {
+            _displayGroup = value;
+        }
+    }
+    
+    [XmlAttribute(DataType="token")]
+    public string DisplayStatus
+    {
+        get
+        {
+            return _displayStatus;
+        }
+        set
+        {
+            _displayStatus = value;
+        }
+    }
+    
+    [XmlAttribute(DataType="token")]
+    public string DisplayCookie
+    {
+        get
+        {
+            return _displayCookie;
+        }
+        set
+        {
+            _displayCookie = value;
         }
     }
 }
