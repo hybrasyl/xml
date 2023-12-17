@@ -34,6 +34,7 @@
             <xs:element name="Formula" type="xs:string" />
         </xs:sequence>
         <xs:attribute name="Type" type="hyb:DamageType" />
+		<xs:attribute name="Element" type="hyb:ElementType"/>
     </xs:complexType>
 
     <!-- Heal effects type -->
