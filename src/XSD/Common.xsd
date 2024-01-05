@@ -477,6 +477,8 @@
                             <xs:enumeration value="ProhibitWhisper" />
                             <xs:enumeration value="ProhibitShout" />
                             <xs:enumeration value="Disoriented" />
+							<xs:enumeration value="Disarm"/>
+							<xs:enumeration value="Fear"/>						
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:list>

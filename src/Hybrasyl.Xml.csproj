@@ -4,13 +4,13 @@
         <TargetFrameworks>net7.0;net8.0</TargetFrameworks>
         <AssemblyName>Hybrasyl.Xml</AssemblyName>
         <RootNamespace>Hybrasyl.Xml</RootNamespace>
-        <PackageVersion>0.9.3.29</PackageVersion>
-        <Version>0.9.3.29</Version>
+        <PackageVersion>0.9.3.31</PackageVersion>
+        <Version>0.9.3.31</Version>
         <BuildDocFx Condition="'$(Configuration)'=='Debug'">false</BuildDocFx>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <Authors>ERISCO LLC</Authors>
         <Authors>ERISCO LLC</Authors>
-        <ProjectUrl>https://www.hybrasyl.com</ProjectUrl>
+        <ProjectUrl>https://www.hybrasyl.com</ProjectUrl>   
         <RepositoryUrl>https://github.com/hybrasyl/xml</RepositoryUrl>
         <Tags>Hybrasyl</Tags>
         <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
