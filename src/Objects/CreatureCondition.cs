@@ -42,6 +42,8 @@ public enum CreatureCondition
     ProhibitWhisper = 16384,
     ProhibitShout = 32768,
     Disoriented = 65536,
+    Disarm = 131072,
+    Fear = 262144,
 }
 }
 #pragma warning restore
