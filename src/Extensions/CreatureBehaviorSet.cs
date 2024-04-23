@@ -123,6 +123,8 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
                 newCbs.Castables.SpellCategories += $" {cbs2.Castables.SpellCategories}";
         }
 
+        cbs1.Immunities = cbs1.Immunities == null ? cbs2.Immunities : cbs1.Immunities.Union(cbs2.Immunities).ToList();
+
         return newCbs;
     }
 
