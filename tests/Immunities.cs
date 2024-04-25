@@ -55,6 +55,25 @@ public class ImmunitiesTests(ITestOutputHelper output, XmlManagerFixture fixture
         Assert.NotNull(statusImmune);
         Assert.True(statusImmune.ImmuneToStatusCategory("Str", out _));
     }
+
+    [Fact]
+    public void ElementalImmunity()
+    {
+        var elementalImmune = Fixture.SyncManager.Get<CreatureBehaviorSet>("ElementImmune");
+        Assert.NotNull(elementalImmune);
+        Assert.True(elementalImmune.ImmuneToElement("Fire", out _));
+        Assert.True(elementalImmune.ImmuneToElement(ElementType.Fire, out _));
+    }
+
+    [Fact]
+    public void ImmunityImports()
+    {
+        var importImmune = Fixture.SyncManager.Get<CreatureBehaviorSet>("ImmunityImport");
+        var importedImmune = Fixture.SyncManager.Get<CreatureBehaviorSet>(importImmune.Import);
+        Assert.NotNull(importImmune);
+        Assert.NotNull(importedImmune);
+        Assert.Equal(importImmune.Immunities.Count, importedImmune.Immunities.Count + importImmune.Immunities.Count);
+    }
 }
 
 

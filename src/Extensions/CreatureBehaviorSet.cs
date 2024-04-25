@@ -84,7 +84,8 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
             Name = cbs1.Name,
             StatAlloc = string.IsNullOrEmpty(cbs1.StatAlloc) ? cbs2.StatAlloc : cbs1.StatAlloc,
             Behavior = new CreatureBehavior(),
-            Castables = new CreatureCastables()
+            Castables = new CreatureCastables(),
+            Import = cbs1.Import
         };
 
         newCbs.Behavior.CastingSets = new List<CreatureCastingSet>();
@@ -123,7 +124,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
                 newCbs.Castables.SpellCategories += $" {cbs2.Castables.SpellCategories}";
         }
 
-        cbs1.Immunities = cbs1.Immunities == null ? cbs2.Immunities : cbs1.Immunities.Union(cbs2.Immunities).ToList();
+        newCbs.Immunities = cbs1.Immunities == null ? cbs2.Immunities : cbs1.Immunities.Union(cbs2.Immunities).ToList();
 
         return newCbs;
     }
