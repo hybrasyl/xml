@@ -169,6 +169,7 @@
         <xs:attribute name="BonusManaSteal" type="xs:string" />
         <xs:attribute name="BonusInboundDamageToMp" type="xs:string" />
         <xs:attribute name="BonusExtraFaith" type="xs:string" />
+		<xs:attribute name="Shield" type="xs:string"/>
     </xs:complexType>
 
     <!-- Damage flags type -->

@@ -96,6 +96,7 @@ public partial class StatModifiers : HybrasylEntity<StatModifiers>
     private string _bonusManaSteal;
     private string _bonusInboundDamageToMp;
     private string _bonusExtraFaith;
+    private string _shield;
     #endregion
     
     public StatModifiers()
@@ -1004,6 +1005,19 @@ public partial class StatModifiers : HybrasylEntity<StatModifiers>
         set
         {
             _bonusExtraFaith = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public string Shield
+    {
+        get
+        {
+            return _shield;
+        }
+        set
+        {
+            _shield = value;
         }
     }
 }

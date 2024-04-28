@@ -81,6 +81,7 @@ public partial class StatModifiers
             defaultDesc += FormatBonusPct(BonusExtraItemFind, "Items");
             defaultDesc += FormatBonusPct(BonusLifeSteal, "Life Steal");
             defaultDesc += FormatBonusPct(BonusManaSteal, "Mana Steal");
+            defaultDesc += FormatBonusNum(Shield, "Shield");
             return defaultDesc;
         }
     }
@@ -175,6 +176,7 @@ public partial class StatModifiers
         sm1.BonusManaSteal = Combine(sm1.BonusManaSteal, sm2.BonusManaSteal);
         sm1.BaseInboundDamageToMp = Combine(sm1.BaseInboundDamageToMp, sm2.BaseInboundDamageToMp);
         sm1.BonusInboundDamageToMp = Combine(sm1.BonusInboundDamageToMp, sm2.BonusInboundDamageToMp);
+        sm1.Shield = Combine(sm1.Shield, sm2.Shield);
         return sm1;
     }
 }
