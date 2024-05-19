@@ -21,46 +21,30 @@ using System.Collections.Generic;
 
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.9032.0")]
 [Serializable]
-[DebuggerStepThrough]
-[DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class ElementTableTargetElement : HybrasylEntity<ElementTableTargetElement>
+public enum ItemTag
 {
-    #region Private fields
-    private List<ElementType> _element;
-    private double _multiplier;
-    #endregion
-    
-    public ElementTableTargetElement()
-    {
-        _element = new List<ElementType>();
-    }
-    
-    [XmlAttribute]
-    public List<ElementType> Element
-    {
-        get
-        {
-            return _element;
-        }
-        set
-        {
-            _element = value;
-        }
-    }
-    
-    [XmlAttribute]
-    public double Multiplier
-    {
-        get
-        {
-            return _multiplier;
-        }
-        set
-        {
-            _multiplier = value;
-        }
-    }
+    Junk,
+    Common,
+    Reagent,
+    Magic,
+    Rare,
+    Masterwork,
+    Legendary,
+    Artifact,
+    Religious,
+    Social,
+    Academic,
+    Quest,
+    Political,
+    Currency,
+    Peasantware,
+    Armor,
+    Weapon,
+    Contraption,
+    Food,
+    Tool,
+    Adornment,
 }
 }
 #pragma warning restore

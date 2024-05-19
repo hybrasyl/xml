@@ -1,12 +1,30 @@
-﻿using Hybrasyl.Xml.Objects;
+﻿// This file is part of Project Hybrasyl.
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the Affero General Public License as published by
+// the Free Software Foundation, version 3.
+// 
+// This program is distributed in the hope that it will be useful, but
+// without ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+// or FITNESS FOR A PARTICULAR PURPOSE. See the Affero General Public License
+// for more details.
+// 
+// You should have received a copy of the Affero General Public License along
+// with this program. If not, see <http://www.gnu.org/licenses/>.
+// 
+// (C) 2020-2023 ERISCO, LLC
+// 
+// For contributors and individual authors please refer to CONTRIBUTORS.MD.
+
+using Hybrasyl.Xml.Objects;
 
 namespace Hybrasyl.XmlTests;
 
 [Collection("Xml")]
 public class ImmunitiesTests(ITestOutputHelper output, XmlManagerFixture fixture) : IClassFixture<XmlManagerFixture>
 {
-    private readonly ITestOutputHelper Output = output;
     private readonly XmlManagerFixture Fixture = fixture;
+    private readonly ITestOutputHelper Output = output;
 
     [Fact]
     public void CastableImmunity()
@@ -34,7 +52,6 @@ public class ImmunitiesTests(ITestOutputHelper output, XmlManagerFixture fixture
         Assert.True(castableImmune.ImmuneToCastableCategories(new List<string> { "debuff", "DEBUFF" }, out _));
         Assert.True(castableImmune.ImmuneToCastableCategories(new List<string> { "bazbar", "DEBUFF" }, out _));
         Assert.False(castableImmune.ImmuneToCastableCategories(new List<string> { "bazbar", "quux" }, out _));
-
     }
 
     [Fact]
@@ -59,7 +76,6 @@ public class ImmunitiesTests(ITestOutputHelper output, XmlManagerFixture fixture
         Assert.True(statusImmune.ImmuneToStatusCategories(new List<string> { "str", "STR" }, out _));
         Assert.True(statusImmune.ImmuneToStatusCategories(new List<string> { "iNt", "STR" }, out _));
         Assert.False(statusImmune.ImmuneToStatusCategories(new List<string> { "int", "wis" }, out _));
-
     }
 
     [Fact]
@@ -81,5 +97,3 @@ public class ImmunitiesTests(ITestOutputHelper output, XmlManagerFixture fixture
         Assert.Equal(importImmune.Immunities.Count, importedImmune.Immunities.Count + importImmune.Immunities.Count);
     }
 }
-
-

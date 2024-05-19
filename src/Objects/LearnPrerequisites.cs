@@ -24,83 +24,83 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class EquipmentRestriction : HybrasylEntity<EquipmentRestriction>
+public partial class LearnPrerequisites : HybrasylEntity<LearnPrerequisites>
 {
     #region Private fields
-    private List<WeaponType> _weaponType;
-    private EquipmentSlot _slot;
-    private RestrictionType _restrictionType;
-    private string _message;
-    private string _value;
+    private List<LearnPrerequisite> _prerequisite;
+    private string _forbidCookie;
+    private string _requireCookie;
+    private string _forbidMessage;
+    private string _requireMessage;
     #endregion
     
-    public EquipmentRestriction()
+    public LearnPrerequisites()
     {
-        _weaponType = new List<WeaponType>();
+        _prerequisite = new List<LearnPrerequisite>();
     }
     
-    [XmlAttribute]
-    public List<WeaponType> WeaponType
+    [XmlElement("Prerequisite")]
+    public List<LearnPrerequisite> Prerequisite
     {
         get
         {
-            return _weaponType;
+            return _prerequisite;
         }
         set
         {
-            _weaponType = value;
-        }
-    }
-    
-    [XmlAttribute]
-    public EquipmentSlot Slot
-    {
-        get
-        {
-            return _slot;
-        }
-        set
-        {
-            _slot = value;
+            _prerequisite = value;
         }
     }
     
     [XmlAttribute]
-    public RestrictionType RestrictionType
+    public string ForbidCookie
     {
         get
         {
-            return _restrictionType;
+            return _forbidCookie;
         }
         set
         {
-            _restrictionType = value;
+            _forbidCookie = value;
         }
     }
     
     [XmlAttribute]
-    public string Message
+    public string RequireCookie
     {
         get
         {
-            return _message;
+            return _requireCookie;
         }
         set
         {
-            _message = value;
+            _requireCookie = value;
         }
     }
     
-    [XmlTextAttribute]
-    public string Value
+    [XmlAttribute]
+    public string ForbidMessage
     {
         get
         {
-            return _value;
+            return _forbidMessage;
         }
         set
         {
-            _value = value;
+            _forbidMessage = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public string RequireMessage
+    {
+        get
+        {
+            return _requireMessage;
+        }
+        set
+        {
+            _requireMessage = value;
         }
     }
 }

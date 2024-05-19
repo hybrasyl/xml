@@ -1,42 +1,42 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFrameworks>net7.0;net8.0</TargetFrameworks>
-        <AssemblyName>Hybrasyl.Xml</AssemblyName>
-        <RootNamespace>Hybrasyl.Xml</RootNamespace>
-        <PackageVersion>0.9.3.35</PackageVersion>
-        <Version>0.9.3.35</Version>
-        <BuildDocFx Condition="'$(Configuration)'=='Debug'">false</BuildDocFx>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <Authors>ERISCO LLC</Authors>
-        <Authors>ERISCO LLC</Authors>
-        <ProjectUrl>https://www.hybrasyl.com</ProjectUrl>   
-        <RepositoryUrl>https://github.com/hybrasyl/xml</RepositoryUrl>
-        <Tags>Hybrasyl</Tags>
-        <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
-        <Icon>hybrasyl-512x512.png</Icon>
-        <PackageIcon>hybrasyl-512x512.png</PackageIcon>
-        <Copyright>Copyright (C) ERISCO LLC</Copyright>
-        <Title>Hybrasyl XML Entities</Title>
-        <Description>Hybrasyl's data model &amp; XML entities, used to deserialize and work with Hybrasyl game data.</Description>
-        <IsPackable>true</IsPackable>
-    </PropertyGroup>
-    <ItemGroup>
-        <None Include="hybrasyl-512x512.png" Pack="true" PackagePath="" />
-    </ItemGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='XML|AnyCPU'" />
+  <PropertyGroup>
+    <TargetFrameworks>net7.0;net8.0</TargetFrameworks>
+    <AssemblyName>Hybrasyl.Xml</AssemblyName>
+    <RootNamespace>Hybrasyl.Xml</RootNamespace>
+    <PackageVersion>0.9.3.35</PackageVersion>
+    <Version>0.9.3.35</Version>
+    <BuildDocFx Condition="'$(Configuration)'=='Debug'">false</BuildDocFx>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Authors>ERISCO LLC</Authors>
+    <Authors>ERISCO LLC</Authors>
+    <ProjectUrl>https://www.hybrasyl.com</ProjectUrl>
+    <RepositoryUrl>https://github.com/hybrasyl/xml</RepositoryUrl>
+    <Tags>Hybrasyl</Tags>
+    <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
+    <Icon>hybrasyl-512x512.png</Icon>
+    <PackageIcon>hybrasyl-512x512.png</PackageIcon>
+    <Copyright>Copyright (C) ERISCO LLC</Copyright>
+    <Title>Hybrasyl XML Entities</Title>
+    <Description>Hybrasyl's data model &amp; XML entities, used to deserialize and work with Hybrasyl game data.</Description>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="hybrasyl-512x512.png" Pack="true" PackagePath="" />
+  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='XML|AnyCPU'" />
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Entities|AnyCPU'" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Entities|AnyCPU'" />
 
-    <ItemGroup>
-        <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="" />
-    </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.2" />
-        <PackageReference Include="Pluralize.NET" Version="1.0.2" />
-        <PackageReference Include="Serilog" Version="3.1.1" />
-        <PackageReference Include="Serilog.Sinks.TestCorrelator" Version="3.2.0" />
-    </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.2" />
+    <PackageReference Include="Pluralize.NET" Version="1.0.2" />
+    <PackageReference Include="Serilog" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.TestCorrelator" Version="3.2.0" />
+  </ItemGroup>
 
 </Project>

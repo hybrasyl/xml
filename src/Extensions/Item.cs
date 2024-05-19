@@ -16,9 +16,6 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using Hybrasyl.Xml.Enums;
-using Hybrasyl.Xml.Interfaces;
-using Hybrasyl.Xml.Manager;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -26,6 +23,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Serialization;
+using Hybrasyl.Xml.Enums;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -61,7 +61,8 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
     [XmlIgnore] public override string PrimaryKey => Id;
 
     [XmlIgnore]
-    public override List<string> SecondaryKeys => Name == null ? new List<string>() : new List<string> { Name, Name.ToLower() };
+    public override List<string> SecondaryKeys =>
+        Name == null ? new List<string>() : new List<string> { Name, Name.ToLower() };
 
     [XmlIgnore]
     public List<string> CategoryList
@@ -110,6 +111,7 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
                     ret.Errors[item.Guid] = $"Variant group {group} does not exist";
                     continue;
                 }
+
                 if (!item.Variants.ContainsKey(group))
                     item.Variants[group] = new List<Item>();
 
@@ -121,7 +123,6 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
                         item.Variants[group].Add(variant);
                         manager.Add(variant);
                         ret.AdditionalCount++;
-
                     }
                 }
                 catch (Exception ex)
@@ -143,11 +144,12 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
                 if (!item.Variants.ContainsKey(name.Group))
                     item.Variants[name.Group] = new List<Item>();
 
-                var toApply = group.Variant.FirstOrDefault(x => x.Name == name.Value);
+                var toApply = group.Variant.FirstOrDefault(predicate: x => x.Name == name.Value);
 
                 if (toApply == null)
                 {
-                    manager.FlagAsError(item, XmlError.ProcessingError, $"Variant group {name.Group}: variant {name.Value} does not exist");
+                    manager.FlagAsError(item, XmlError.ProcessingError,
+                        $"Variant group {name.Group}: variant {name.Value} does not exist");
                     ret.Errors[item.Guid] = "Variant group {name.Group}: variant {name.Value} does not exist";
                     continue;
                 }

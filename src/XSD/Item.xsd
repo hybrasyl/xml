@@ -147,7 +147,7 @@
       <xs:element name="Stackable" type="hyb:Stackable" minOccurs="0" maxOccurs="1" />
       <xs:element name="StatModifiers" type="hyb:StatModifiers" minOccurs="0" maxOccurs="1" />
     </xs:sequence>
-    <xs:attribute name="Tags" type="hyb:ItemTags"/>
+    <xs:attribute name="Tags" type="hyb:ItemTagList" />
   </xs:complexType>
 
   <xs:complexType name="ItemMotion">
@@ -234,7 +234,7 @@
       <xs:element name="Motions" minOccurs="0" maxOccurs="1" type="hyb:ItemMotionList" />
       <xs:element name="Procs" minOccurs="0" maxOccurs="1" type="hyb:ProcList" />
     </xs:sequence>
-    <xs:attribute name="Tags" type="hyb:ItemTags"/> 
+    <xs:attribute name="Tags" type="hyb:ItemTagList" />
   </xs:complexType>
 
   <xs:complexType name="Item">

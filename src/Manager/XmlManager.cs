@@ -16,6 +16,14 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Objects;
@@ -44,14 +52,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 */
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hybrasyl.Xml.Manager;
 
@@ -114,42 +114,12 @@ public class XmlDataManager : IWorldDataManager
     public bool TryGetValueByIndex<T>(dynamic index, out T result) where T : HybrasylEntity<T> =>
         GetStore<T>().TryGetValueByIndex(index, out result);
 
-    public IEnumerable<T> Values<T>() where T : HybrasylEntity<T> => GetStore<T>().Values;
     public bool ContainsKey<T>(dynamic name) where T : HybrasylEntity<T> => GetStore<T>().ContainsKey(name);
     public bool ContainsIndex<T>(dynamic index) where T : HybrasylEntity<T> => GetStore<T>().ContainsIndex(index);
     public int Count<T>() where T : HybrasylEntity<T> => GetStore<T>().Count;
     public bool Remove<T>(T entity) where T : HybrasylEntity<T> => GetStore<T>().Remove(entity.PrimaryKey);
     public bool Remove<T>(dynamic name) where T : HybrasylEntity<T> => GetStore<T>().Remove(name);
     public bool RemoveByIndex<T>(dynamic index) where T : HybrasylEntity<T> => GetStore<T>().RemoveByIndex(index);
-    public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : HybrasylEntity<T> => GetStore<T>().Find(condition);
-
-    public IEnumerable<Castable> FindSkills(long str = 0, long @int = 0, long wis = 0, long con = 0, long dex = 0,
-        string category = null) => FindCastables(str, @int, wis, con, dex, category, CastableFilter.SkillsOnly);
-
-    public IEnumerable<Castable> FindSpells(long str = 0, long @int = 0, long wis = 0, long con = 0, long dex = 0,
-        string category = null) => FindCastables(str, @int, wis, con, dex, category, CastableFilter.SpellsOnly);
-
-    public IEnumerable<T> FindByCategory<T>(string category) where T : HybrasylEntity<T>, ICategorizable =>
-        GetStore<T>().FindByCategory(category);
-
-    public IEnumerable<Item> FindItem(string name)
-    {
-        // Check for an exact result first
-        var ret = new List<Item>();
-        if (TryGetValue(name, out Item target) || TryGetValueByIndex(name, out target))
-            ret.Add(target);
-        else
-            foreach (var gender in Enum.GetValues(typeof(Gender)))
-            {
-                var rawhash = $"{name.Normalize()}:{gender.ToString().Normalize()}";
-                var hash = _sha256.ComputeHash(Encoding.ASCII.GetBytes(rawhash));
-                if (TryGetValue(string.Concat(hash.Select(selector: b => b.ToString("x2"))).Substring(0, 8),
-                        out Item result))
-                    ret.Add(result);
-            }
-
-        return ret;
-    }
 
     public string RootPath { get; set; }
 
@@ -160,7 +130,7 @@ public class XmlDataManager : IWorldDataManager
         if (!Directory.Exists(RootPath))
             throw new FileNotFoundException($"{RootPath} doesn't exist or is not readable");
 
-        List<Task> tasks = new List<Task>();
+        var tasks = new List<Task>();
 
         foreach (var kvp in _loadableTypes)
         {
@@ -169,13 +139,14 @@ public class XmlDataManager : IWorldDataManager
             if (method != null)
             {
                 var genMethod = method.MakeGenericMethod(kvp.Key);
-                tasks.Add(Task.Run(() => genMethod.Invoke(this, null)));
+                tasks.Add(Task.Run(function: () => genMethod.Invoke(this, null)));
             }
             else
             {
                 throw new NotImplementedException();
             }
         }
+
         await Task.WhenAll(tasks);
 
         foreach (var kvp in _processableTypes)
@@ -260,6 +231,7 @@ public class XmlDataManager : IWorldDataManager
                 throw new NotImplementedException();
             }
         }
+
         IsReady = true;
     }
 
@@ -316,19 +288,6 @@ public class XmlDataManager : IWorldDataManager
         }
     }
 
-    private string GetFilenameByGuidDynamic(Guid guid, Type target)
-    {
-        var method = typeof(XmlDataManager).GetMethods()
-            .FirstOrDefault(predicate: x => x.Name == "GetByGuid" && x.IsGenericMethod);
-        if (method == null) return "err";
-        var genMethod = method.MakeGenericMethod(target);
-        var o = genMethod.Invoke(this, new object[] { guid });
-        var oAsType = Convert.ChangeType(o, target);
-        if (oAsType == null) return string.Empty;
-        var property = target.GetProperties().FirstOrDefault(predicate: x => x.Name == "Filename");
-        return property?.GetValue(oAsType)?.ToString() ?? "err";
-    }
-
 
     public void LoadAll<T>() where T : HybrasylEntity<T>, ILoadOnStart<T> => T.LoadAll(this);
 
@@ -341,7 +300,7 @@ public class XmlDataManager : IWorldDataManager
 
     public async void LoadAllAsync<T>() where T : HybrasylEntity<T>, ILoadOnStart<T>
     {
-        await Task.Run(() => T.LoadAll(this));
+        await Task.Run(action: () => T.LoadAll(this));
     }
 
     public void UpdateResult<T>(ILoadResult result) where T : HybrasylEntity<T> =>
@@ -358,6 +317,50 @@ public class XmlDataManager : IWorldDataManager
 
     public ILoadResult GetLoadResult<T>() where T : HybrasylEntity<T> => GetStore<T>().LoadResult;
     public IProcessResult GetProcessResult<T>() where T : HybrasylEntity<T> => GetStore<T>().ProcessResult;
+
+    public IEnumerable<T> Values<T>() where T : HybrasylEntity<T> => GetStore<T>().Values;
+    public IEnumerable<T> Find<T>(Func<T, bool> condition) where T : HybrasylEntity<T> => GetStore<T>().Find(condition);
+
+    public IEnumerable<Castable> FindSkills(long str = 0, long @int = 0, long wis = 0, long con = 0, long dex = 0,
+        string category = null) => FindCastables(str, @int, wis, con, dex, category, CastableFilter.SkillsOnly);
+
+    public IEnumerable<Castable> FindSpells(long str = 0, long @int = 0, long wis = 0, long con = 0, long dex = 0,
+        string category = null) => FindCastables(str, @int, wis, con, dex, category, CastableFilter.SpellsOnly);
+
+    public IEnumerable<T> FindByCategory<T>(string category) where T : HybrasylEntity<T>, ICategorizable =>
+        GetStore<T>().FindByCategory(category);
+
+    public IEnumerable<Item> FindItem(string name)
+    {
+        // Check for an exact result first
+        var ret = new List<Item>();
+        if (TryGetValue(name, out Item target) || TryGetValueByIndex(name, out target))
+            ret.Add(target);
+        else
+            foreach (var gender in Enum.GetValues(typeof(Gender)))
+            {
+                var rawhash = $"{name.Normalize()}:{gender.ToString().Normalize()}";
+                var hash = _sha256.ComputeHash(Encoding.ASCII.GetBytes(rawhash));
+                if (TryGetValue(string.Concat(hash.Select(selector: b => b.ToString("x2"))).Substring(0, 8),
+                        out Item result))
+                    ret.Add(result);
+            }
+
+        return ret;
+    }
+
+    private string GetFilenameByGuidDynamic(Guid guid, Type target)
+    {
+        var method = typeof(XmlDataManager).GetMethods()
+            .FirstOrDefault(predicate: x => x.Name == "GetByGuid" && x.IsGenericMethod);
+        if (method == null) return "err";
+        var genMethod = method.MakeGenericMethod(target);
+        var o = genMethod.Invoke(this, new object[] { guid });
+        var oAsType = Convert.ChangeType(o, target);
+        if (oAsType == null) return string.Empty;
+        var property = target.GetProperties().FirstOrDefault(predicate: x => x.Name == "Filename");
+        return property?.GetValue(oAsType)?.ToString() ?? "err";
+    }
 
 
     public HashSet<Castable> FindCastables(long Str = 0, long Int = 0, long Wis = 0,

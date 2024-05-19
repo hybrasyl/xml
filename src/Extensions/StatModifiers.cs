@@ -24,33 +24,15 @@ namespace Hybrasyl.Xml.Objects;
 
 public partial class StatModifiers
 {
-
     public List<ElementalModifier> Augments =>
         ElementalModifiers != null
-            ? ElementalModifiers.Where(x => x.Type == ElementalModifierType.Augment).ToList()
+            ? ElementalModifiers.Where(predicate: x => x.Type == ElementalModifierType.Augment).ToList()
             : new List<ElementalModifier>();
 
     public List<ElementalModifier> Resistances =>
         ElementalModifiers != null
-            ? ElementalModifiers.Where(x => x.Type == ElementalModifierType.Resistance).ToList()
+            ? ElementalModifiers.Where(predicate: x => x.Type == ElementalModifierType.Resistance).ToList()
             : new List<ElementalModifier>();
-
-
-    public double GetElementalAugment(ElementType element)
-    {
-        if (ElementalModifiers == null) return 1.0;
-        var augment = ElementalModifiers
-            .FirstOrDefault(x => x.Type == ElementalModifierType.Augment && x.Element == element);
-        return augment?.Modifier ?? 1.0;
-    }
-
-    public double GetElementalResistance(ElementType element)
-    {
-        if (ElementalModifiers == null) return 1.0;
-        var augment = ElementalModifiers
-            .FirstOrDefault(x => x.Type == ElementalModifierType.Resistance && x.Element == element);
-        return augment?.Modifier ?? 1.0;
-    }
 
     public string BonusString
     {
@@ -84,6 +66,23 @@ public partial class StatModifiers
             defaultDesc += FormatBonusNum(Shield, "Shield");
             return defaultDesc;
         }
+    }
+
+
+    public double GetElementalAugment(ElementType element)
+    {
+        if (ElementalModifiers == null) return 1.0;
+        var augment = ElementalModifiers
+            .FirstOrDefault(predicate: x => x.Type == ElementalModifierType.Augment && x.Element == element);
+        return augment?.Modifier ?? 1.0;
+    }
+
+    public double GetElementalResistance(ElementType element)
+    {
+        if (ElementalModifiers == null) return 1.0;
+        var augment = ElementalModifiers
+            .FirstOrDefault(predicate: x => x.Type == ElementalModifierType.Resistance && x.Element == element);
+        return augment?.Modifier ?? 1.0;
     }
 
     public static string FormatBonusPct(string bonus, string name, float scale = 1)

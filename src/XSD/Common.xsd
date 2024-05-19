@@ -502,39 +502,35 @@
   </xs:simpleType>
 
   <!-- Item metadata -->
-  <xs:simpleType name="ItemTags">
-    <xs:restriction>
-      <xs:simpleType>
-        <xs:list>
-          <xs:simpleType>
-
-            <xs:restriction base="xs:token">
-              <xs:enumeration value="Junk" />
-              <xs:enumeration value="Common" />
-              <xs:enumeration value="Reagent" />
-              <xs:enumeration value="Magic" />
-              <xs:enumeration value="Rare" />
-              <xs:enumeration value="Masterwork" />
-              <xs:enumeration value="Legendary" />
-              <xs:enumeration value="Artifact" />
-              <xs:enumeration value="Religious" />
-              <xs:enumeration value="Social" />
-              <xs:enumeration value="Academic" />
-              <xs:enumeration value="Quest" />
-              <xs:enumeration value="Political" />
-              <xs:enumeration value="Currency" />
-              <xs:enumeration value="Peasantware" />
-              <xs:enumeration value="Armor" />
-              <xs:enumeration value="Weapon" />
-              <xs:enumeration value="Contraption" />
-              <xs:enumeration value="Food" />
-              <xs:enumeration value="Tool" />
-              <xs:enumeration value="Adornment" />
-            </xs:restriction>
-          </xs:simpleType>
-        </xs:list>
-      </xs:simpleType>
+  <xs:simpleType name="ItemTag">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Junk" />
+      <xs:enumeration value="Common" />
+      <xs:enumeration value="Reagent" />
+      <xs:enumeration value="Magic" />
+      <xs:enumeration value="Rare" />
+      <xs:enumeration value="Masterwork" />
+      <xs:enumeration value="Legendary" />
+      <xs:enumeration value="Artifact" />
+      <xs:enumeration value="Religious" />
+      <xs:enumeration value="Social" />
+      <xs:enumeration value="Academic" />
+      <xs:enumeration value="Quest" />
+      <xs:enumeration value="Political" />
+      <xs:enumeration value="Currency" />
+      <xs:enumeration value="Peasantware" />
+      <xs:enumeration value="Armor" />
+      <xs:enumeration value="Weapon" />
+      <xs:enumeration value="Contraption" />
+      <xs:enumeration value="Food" />
+      <xs:enumeration value="Tool" />
+      <xs:enumeration value="Adornment" />
     </xs:restriction>
+  </xs:simpleType>
+
+  <!-- A list of item tags -->
+  <xs:simpleType name="ItemTagList">
+    <xs:list itemType="ItemTag" />
   </xs:simpleType>
 
   <!-- A list of classes -->
@@ -1132,12 +1128,6 @@
     </xs:restriction>
   </xs:simpleType>
 
-  <xs:complexType name="ProcList">
-    <xs:sequence>
-      <xs:element name="Proc" minOccurs="1" maxOccurs="unbounded" type="hyb:Proc" />
-    </xs:sequence>
-  </xs:complexType>
-
   <xs:complexType name="Proc">
     <xs:attribute name="Type" type="hyb:ProcEventType" />
     <xs:attribute name="Castable" type="xs:string" />
@@ -1145,5 +1135,10 @@
     <xs:attribute name="Chance" type="xs:float" />
   </xs:complexType>
 
+  <xs:complexType name="ProcList">
+    <xs:sequence>
+      <xs:element name="Proc" minOccurs="1" maxOccurs="unbounded" type="hyb:Proc" />
+    </xs:sequence>
+  </xs:complexType>
 
 </xs:schema>

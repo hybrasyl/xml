@@ -37,5 +37,4 @@ public class Entities
         Assert.Empty(modifier.Augments);
         Assert.Empty(modifier.Resistances);
     }
-
 }

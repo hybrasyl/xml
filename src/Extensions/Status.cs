@@ -16,10 +16,10 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using Hybrasyl.Xml.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hybrasyl.Xml.Interfaces;
 
 namespace Hybrasyl.Xml.Objects;
 

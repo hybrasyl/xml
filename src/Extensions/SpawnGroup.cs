@@ -16,7 +16,6 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-
 /* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
 Before:
 using System;
@@ -25,8 +24,9 @@ After:
 using Hybrasyl.Xml.Interfaces;
 using System;
 */
-using Hybrasyl.Xml.Interfaces;
+
 using System.Xml.Serialization;
+using Hybrasyl.Xml.Interfaces;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -37,8 +37,7 @@ public partial class SpawnGroup : ILoadOnStart<SpawnGroup>
     public override string PrimaryKey => Name;
     public ushort MapId { get; set; }
 
-    [XmlIgnore]
-    public SpawnStatus Status { get; set; }
+    [XmlIgnore] public SpawnStatus Status { get; set; }
 
     public new static void LoadAll(IWorldDataManager manager, string path) =>
         HybrasylEntity<SpawnGroup>.LoadAll(manager, path);

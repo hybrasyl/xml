@@ -33,12 +33,12 @@ public partial class ClassRequirement : HybrasylEntity<ClassRequirement>
     private List<ItemSpecification> _items;
     private uint _gold;
     private ClassRequirementPhysical _physical;
-    private List<LearnPrerequisite> _prerequisites;
+    private LearnPrerequisites _prerequisites;
     #endregion
     
     public ClassRequirement()
     {
-        _prerequisites = new List<LearnPrerequisite>();
+        _prerequisites = new LearnPrerequisites();
     }
     
     public ClassRequirementLevel Level
@@ -102,8 +102,7 @@ public partial class ClassRequirement : HybrasylEntity<ClassRequirement>
         }
     }
     
-    [XmlArrayItemAttribute("Prerequisite", IsNullable=false)]
-    public List<LearnPrerequisite> Prerequisites
+    public LearnPrerequisites Prerequisites
     {
         get
         {

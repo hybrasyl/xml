@@ -16,7 +16,6 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-
 /* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
 Before:
 using System;
@@ -24,17 +23,18 @@ After:
 using Hybrasyl.Xml.Interfaces;
 using System;
 */
-using Hybrasyl.Xml.Interfaces;
 
-/* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
-Before:
-using System.Linq;
-using Hybrasyl.Xml.Interfaces;
-After:
-using System.Linq;
-*/
 using System;
 using System.Collections.Generic;
+using Hybrasyl.Xml.Interfaces;
+
+/* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
+Before:
+using System.Linq;
+using Hybrasyl.Xml.Interfaces;
+After:
+using System.Linq;
+*/
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -46,8 +46,8 @@ public partial class VariantGroup : ILoadOnStart<VariantGroup>
     {
         HybrasylEntity<VariantGroup>.LoadAll(manager, path);
         foreach (var group in manager.Values<VariantGroup>())
-            foreach (var variant in group.Variant)
-                manager.Add(variant, $"{group.Name}-{variant.Name}");
+        foreach (var variant in group.Variant)
+            manager.Add(variant, $"{group.Name}-{variant.Name}");
     }
 
     public Variant RandomVariant() => Variant.PickRandom();
@@ -63,12 +63,8 @@ public partial class VariantGroup : ILoadOnStart<VariantGroup>
                 newItem.Variant = variant.Guid;
                 ret.Add(newItem);
             }
-            catch (Exception ex)
-            {
-
-            }
+            catch (Exception ex) { }
 
         return ret;
     }
-
 }

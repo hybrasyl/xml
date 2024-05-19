@@ -42,10 +42,12 @@ public partial class ItemProperties : HybrasylEntity<ItemProperties>
     private ItemRestrictions _restrictions;
     private List<ItemMotion> _motions;
     private List<Proc> _procs;
+    private List<ItemTag> _tags;
     #endregion
     
     public ItemProperties()
     {
+        _tags = new List<ItemTag>();
         _physical = new Physical();
         _stackable = new Stackable();
         _appearance = new Appearance();
@@ -232,6 +234,19 @@ public partial class ItemProperties : HybrasylEntity<ItemProperties>
         set
         {
             _procs = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public List<ItemTag> Tags
+    {
+        get
+        {
+            return _tags;
+        }
+        set
+        {
+            _tags = value;
         }
     }
 }

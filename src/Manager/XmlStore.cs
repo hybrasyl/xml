@@ -16,7 +16,6 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-
 /* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
 Before:
 using System;
@@ -35,12 +34,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 */
-using Hybrasyl.Xml.Enums;
-using Hybrasyl.Xml.Interfaces;
-using Hybrasyl.Xml.Objects;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hybrasyl.Xml.Enums;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Objects;
 
 namespace Hybrasyl.Xml.Manager;
 

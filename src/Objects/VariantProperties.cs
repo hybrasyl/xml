@@ -35,7 +35,13 @@ public partial class VariantProperties : HybrasylEntity<VariantProperties>
     private string _script;
     private Stackable _stackable;
     private StatModifiers _statModifiers;
+    private List<ItemTag> _tags;
     #endregion
+    
+    public VariantProperties()
+    {
+        _tags = new List<ItemTag>();
+    }
     
     public Appearance Appearance
     {
@@ -131,6 +137,19 @@ public partial class VariantProperties : HybrasylEntity<VariantProperties>
         set
         {
             _statModifiers = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public List<ItemTag> Tags
+    {
+        get
+        {
+            return _tags;
+        }
+        set
+        {
+            _tags = value;
         }
     }
 }

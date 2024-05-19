@@ -16,14 +16,13 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using Hybrasyl.Xml.Enums;
-using Hybrasyl.Xml.Extensions;
-using Hybrasyl.Xml.Interfaces;
-using Hybrasyl.Xml.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Hybrasyl.Xml.Enums;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -133,7 +132,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
     public bool ImmuneToElement(ElementType type, out CreatureImmunity immunity)
     {
-        immunity = Immunities?.FirstOrDefault(x =>
+        immunity = Immunities?.FirstOrDefault(predicate: x =>
             x.Type == CreatureImmunityType.Element &&
             string.Equals(x.Value, type.ToString(), StringComparison.CurrentCultureIgnoreCase));
         return immunity != null;
@@ -141,7 +140,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
     public bool ImmuneToElement(string type, out CreatureImmunity immunity)
     {
-        immunity = Immunities?.FirstOrDefault(x =>
+        immunity = Immunities?.FirstOrDefault(predicate: x =>
             x.Type == CreatureImmunityType.Element &&
             string.Equals(x.Value, type, StringComparison.CurrentCultureIgnoreCase));
         return immunity != null;
@@ -149,7 +148,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
     public bool ImmuneToCastableCategory(string category, out CreatureImmunity immunity)
     {
-        immunity = Immunities?.FirstOrDefault(x =>
+        immunity = Immunities?.FirstOrDefault(predicate: x =>
             x.Type == CreatureImmunityType.CastableCategory &&
             string.Equals(x.Value, category, StringComparison.CurrentCultureIgnoreCase));
         return immunity != null;
@@ -157,16 +156,15 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
     public bool ImmuneToCastableCategories(IEnumerable<string> categories, out CreatureImmunity immunity)
     {
-        immunity = Immunities?.FirstOrDefault(x =>
+        immunity = Immunities?.FirstOrDefault(predicate: x =>
             x.Type == CreatureImmunityType.CastableCategory &&
             categories.Contains(x.Value, StringComparer.OrdinalIgnoreCase));
         return immunity != null;
-
     }
 
     public bool ImmuneToStatusCategory(string category, out CreatureImmunity immunity)
     {
-        immunity = Immunities?.FirstOrDefault(x =>
+        immunity = Immunities?.FirstOrDefault(predicate: x =>
             x.Type == CreatureImmunityType.StatusCategory &&
             string.Equals(x.Value, category, StringComparison.CurrentCultureIgnoreCase));
         return immunity != null;
@@ -174,7 +172,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
     public bool ImmuneToStatusCategories(IEnumerable<string> categories, out CreatureImmunity immunity)
     {
-        immunity = Immunities?.FirstOrDefault(x =>
+        immunity = Immunities?.FirstOrDefault(predicate: x =>
             x.Type == CreatureImmunityType.StatusCategory &&
             categories.Contains(x.Value, StringComparer.OrdinalIgnoreCase));
         return immunity != null;
@@ -182,7 +180,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
     public bool ImmuneToStatus(string status, out CreatureImmunity immunity)
     {
-        immunity = Immunities?.FirstOrDefault(x =>
+        immunity = Immunities?.FirstOrDefault(predicate: x =>
             x.Type == CreatureImmunityType.Status &&
             string.Equals(x.Value, status, StringComparison.CurrentCultureIgnoreCase));
         return immunity != null;
@@ -190,7 +188,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
     public bool ImmuneToStatus(Status status, out CreatureImmunity immunity)
     {
-        immunity = Immunities?.FirstOrDefault(x =>
+        immunity = Immunities?.FirstOrDefault(predicate: x =>
             x.Type == CreatureImmunityType.Status &&
             string.Equals(x.Value, status.Name, StringComparison.CurrentCultureIgnoreCase));
         return immunity != null;
@@ -198,7 +196,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
     public bool ImmuneToCastable(string castable, out CreatureImmunity immunity)
     {
-        immunity = Immunities?.FirstOrDefault(x =>
+        immunity = Immunities?.FirstOrDefault(predicate: x =>
             x.Type == CreatureImmunityType.Castable &&
             string.Equals(x.Value, castable, StringComparison.CurrentCultureIgnoreCase));
         return immunity != null;
@@ -206,7 +204,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
     public bool ImmuneToCastable(Castable castable, out CreatureImmunity immunity)
     {
-        immunity = Immunities?.FirstOrDefault(x =>
+        immunity = Immunities?.FirstOrDefault(predicate: x =>
             x.Type == CreatureImmunityType.Castable &&
             string.Equals(x.Value, castable.Name, StringComparison.CurrentCultureIgnoreCase));
         return immunity != null;

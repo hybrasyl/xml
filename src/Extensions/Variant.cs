@@ -48,7 +48,7 @@ public partial class Variant
         // ensure boot hiding is carried to variants
         variantItem.Properties.Appearance.HideBoots = originalItem.Properties.Appearance.HideBoots;
         if (Properties.Restrictions?.Level != null)
-            variantItem.Properties.Restrictions.Level.Min = (byte)Math.Min(99,
+            variantItem.Properties.Restrictions.Level.Min = (byte) Math.Min(99,
                 variantItem.Properties.Restrictions.Level.Min + Properties.Restrictions.Level.Min);
 
         if (Properties.Appearance != null)
@@ -60,13 +60,13 @@ public partial class Variant
         if (originalItem.Properties.Equipment.Slot == EquipmentSlot.Weapon && Properties.Damage != null)
         {
             variantItem.Properties.Damage.LargeMin =
-                (ushort)(originalItem.Properties.Damage.LargeMin * Properties.Damage.LargeMin);
+                (ushort) (originalItem.Properties.Damage.LargeMin * Properties.Damage.LargeMin);
             variantItem.Properties.Damage.LargeMax =
-                (ushort)(originalItem.Properties.Damage.LargeMax * Properties.Damage.LargeMax);
+                (ushort) (originalItem.Properties.Damage.LargeMax * Properties.Damage.LargeMax);
             variantItem.Properties.Damage.SmallMin =
-                (ushort)(originalItem.Properties.Damage.SmallMin * Properties.Damage.SmallMin);
+                (ushort) (originalItem.Properties.Damage.SmallMin * Properties.Damage.SmallMin);
             variantItem.Properties.Damage.SmallMin =
-                (ushort)(originalItem.Properties.Damage.SmallMin * Properties.Damage.SmallMin);
+                (ushort) (originalItem.Properties.Damage.SmallMin * Properties.Damage.SmallMin);
         }
 
         if (Properties.StatModifiers?.BaseDefensiveElement != null)

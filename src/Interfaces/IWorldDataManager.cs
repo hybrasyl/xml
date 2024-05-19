@@ -16,10 +16,11 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using System;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
-using System;
+
 /* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
 Before:
 using System;
@@ -33,6 +34,8 @@ namespace Hybrasyl.Xml.Interfaces;
 public interface IWorldDataManager
 {
     public string RootPath { get; set; }
+
+    public bool IsReady { get; }
     public T Get<T>(dynamic name) where T : HybrasylEntity<T>;
     public T GetByIndex<T>(dynamic index) where T : HybrasylEntity<T>;
     public T GetByGuid<T>(Guid guid) where T : HybrasylEntity<T>;
@@ -55,8 +58,6 @@ public interface IWorldDataManager
     public void ProcessAll<T>() where T : HybrasylEntity<T>, IPostProcessable<T>;
     public void ValidateAll<T>() where T : HybrasylEntity<T>, IAdditionalValidation<T>;
     public void FlagAsError<T>(T entity, XmlError error, string message) where T : HybrasylEntity<T>;
-
-    public bool IsReady { get; }
     public void UpdateResult<T>(IProcessResult result) where T : HybrasylEntity<T>;
     public void UpdateResult<T>(ILoadResult result) where T : HybrasylEntity<T>;
     public void UpdateResult<T>(IValidationResult result) where T : HybrasylEntity<T>;

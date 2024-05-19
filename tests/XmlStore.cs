@@ -32,7 +32,7 @@ public class XmlStoreTests
         get
         {
             var values = Enum.GetValues(typeof(Book));
-            var booktype = (Book)(values.GetValue(Random.Shared.Next(values.Length)) ?? Book.PrimarySkill);
+            var booktype = (Book) (values.GetValue(Random.Shared.Next(values.Length)) ?? Book.PrimarySkill);
             return new Castable { Book = booktype, Name = $"Test Castable {Random.Shared.Next(0, 1000)}" };
         }
     }

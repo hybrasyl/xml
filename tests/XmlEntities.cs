@@ -1,12 +1,30 @@
-﻿using Hybrasyl.Xml.Objects;
+﻿// This file is part of Project Hybrasyl.
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the Affero General Public License as published by
+// the Free Software Foundation, version 3.
+// 
+// This program is distributed in the hope that it will be useful, but
+// without ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+// or FITNESS FOR A PARTICULAR PURPOSE. See the Affero General Public License
+// for more details.
+// 
+// You should have received a copy of the Affero General Public License along
+// with this program. If not, see <http://www.gnu.org/licenses/>.
+// 
+// (C) 2020-2023 ERISCO, LLC
+// 
+// For contributors and individual authors please refer to CONTRIBUTORS.MD.
+
+using Hybrasyl.Xml.Objects;
 
 namespace Hybrasyl.XmlTests;
 
 [Collection("Xml")]
 public class XmlEntityTests : IClassFixture<XmlManagerFixture>
 {
-    private readonly ITestOutputHelper output;
     private readonly XmlManagerFixture fixture;
+    private readonly ITestOutputHelper output;
 
     public XmlEntityTests(ITestOutputHelper output, XmlManagerFixture fixture)
     {
@@ -82,7 +100,7 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
     {
         var item = new Item();
         item.Name = "Test";
-        item.Properties.StatModifiers = new StatModifiers() { BonusDmg = "0.005", BonusHit = "0.004", BonusInt = "2" };
+        item.Properties.StatModifiers = new StatModifiers { BonusDmg = "0.005", BonusHit = "0.004", BonusInt = "2" };
         Assert.Equal("+2 Int\n+0.5% Dmg\n+0.4% Hit\n", item.Properties.StatModifiers.BonusString);
     }
 
@@ -98,7 +116,8 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
     [Fact]
     public void VariantBeltElementalTest()
     {
-        var belt = fixture.SyncManager.Find<Item>(x => x.Name.Contains("Light Variant Single Belt")).FirstOrDefault();
+        var belt = fixture.SyncManager.Find<Item>(condition: x => x.Name.Contains("Light Variant Single Belt"))
+            .FirstOrDefault();
         Assert.NotNull(belt);
         Assert.True(belt.Properties.StatModifiers.BaseDefensiveElement == ElementType.Light);
     }
@@ -122,5 +141,4 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         Assert.Equal(254, config.GetClassId("Derp"));
         Assert.Equal("Unknown", config.GetClassName(133));
     }
-
 }

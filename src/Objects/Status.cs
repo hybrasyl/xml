@@ -38,6 +38,7 @@ public partial class Status : HybrasylEntity<Status>
     private ushort _icon;
     private string _name;
     private bool _removeOnDeath;
+    private string _removeChance;
     #endregion
     
     public Status()
@@ -45,6 +46,7 @@ public partial class Status : HybrasylEntity<Status>
         _categories = new List<Category>();
         _tick = 1;
         _removeOnDeath = true;
+        _removeChance = "1";
     }
     
     [XmlArrayItemAttribute(IsNullable=false)]
@@ -175,6 +177,20 @@ public partial class Status : HybrasylEntity<Status>
         set
         {
             _removeOnDeath = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue("1")]
+    public string RemoveChance
+    {
+        get
+        {
+            return _removeChance;
+        }
+        set
+        {
+            _removeChance = value;
         }
     }
 }

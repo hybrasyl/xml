@@ -19,6 +19,7 @@
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
+
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 namespace Hybrasyl.XmlTests;
@@ -26,8 +27,8 @@ namespace Hybrasyl.XmlTests;
 [Collection("Xml")]
 public class XmlManagerTests : IClassFixture<XmlManagerFixture>
 {
-    private readonly ITestOutputHelper output;
     private readonly XmlManagerFixture fixture;
+    private readonly ITestOutputHelper output;
 
     public XmlManagerTests(ITestOutputHelper output, XmlManagerFixture fixture)
     {
@@ -189,7 +190,8 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
             $"creaturebehaviorset process status: total {creaturebehaviorsetStatus.TotalProcessed} additional {creaturebehaviorsetStatus.AdditionalCount}");
         foreach (var kvp in creaturebehaviorsetStatus.Errors) Log.Error($"{kvp.Key}: {kvp.Value}");
 
-        Assert.Equal(0, creaturebehaviorsetStatus.ErrorCount); Log.Information("-- Load Data: Processing Checks --");
+        Assert.Equal(0, creaturebehaviorsetStatus.ErrorCount);
+        Log.Information("-- Load Data: Processing Checks --");
     }
 
 
@@ -244,7 +246,6 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
             manager.Count<ServerConfig>());
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "localizations"), "*.xml").Length,
             manager.Count<Localization>());
-
     }
 
     [Fact]
@@ -305,6 +306,7 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
         Assert.NotNull(skills);
         Assert.NotEmpty(skills);
     }
+
     [Fact]
     public void FindSpellsWithCategory()
     {
@@ -316,10 +318,10 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
     [Fact]
     public void Find()
     {
-        var item = fixture.SyncManager.Find<Item>(x => x.Name == "Hide Boots");
+        var item = fixture.SyncManager.Find<Item>(condition: x => x.Name == "Hide Boots");
         Assert.NotNull(item);
         Assert.Single(item);
-        var item2 = fixture.SyncManager.Find<Item>(x => x.Name.Contains("Rotten"));
+        var item2 = fixture.SyncManager.Find<Item>(condition: x => x.Name.Contains("Rotten"));
         Assert.NotNull(item2);
         Assert.Equal(6, item2.Count());
     }
@@ -343,10 +345,7 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
     }
 
     [Fact]
-    public void GetByCategory()
-    {
-
-    }
+    public void GetByCategory() { }
 
     [Fact]
     public void VariantExists()
@@ -368,9 +367,5 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
     }
 
     [Fact]
-    public void LoadDataAsync()
-    {
-
-    }
-
+    public void LoadDataAsync() { }
 }

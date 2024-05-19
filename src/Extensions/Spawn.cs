@@ -24,8 +24,7 @@ namespace Hybrasyl.Xml.Objects;
 
 public partial class Spawn
 {
-    [XmlIgnore]
-    public SpawnStatus Status { get; set; }
+    [XmlIgnore] public SpawnStatus Status { get; set; }
 
     public ElementType OffensiveElement
     {
@@ -39,8 +38,8 @@ public partial class Spawn
             };
             return ele switch
             {
-                ElementType.RandomExpanded => (ElementType)Random.Shared.Next(1, 10),
-                ElementType.RandomTemuair => (ElementType)Random.Shared.Next(1, 7),
+                ElementType.RandomExpanded => (ElementType) Random.Shared.Next(1, 10),
+                ElementType.RandomTemuair => (ElementType) Random.Shared.Next(1, 7),
                 _ => ele
             };
         }
@@ -58,8 +57,8 @@ public partial class Spawn
             };
             return ele switch
             {
-                ElementType.RandomExpanded => (ElementType)Random.Shared.Next(1, 10),
-                ElementType.RandomTemuair => (ElementType)Random.Shared.Next(1, 7),
+                ElementType.RandomExpanded => (ElementType) Random.Shared.Next(1, 10),
+                ElementType.RandomTemuair => (ElementType) Random.Shared.Next(1, 7),
                 _ => ele
             };
         }

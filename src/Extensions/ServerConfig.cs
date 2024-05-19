@@ -16,10 +16,10 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using Hybrasyl.Xml.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
+using Hybrasyl.Xml.Interfaces;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -27,8 +27,7 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
 {
     // In case there is nothing defined in XML, we still need some associations for basic
     // functionality
-    [XmlIgnoreAttribute]
-    private static Dictionary<byte, (string key, string setting)> Default = new()
+    [XmlIgnoreAttribute] private static Dictionary<byte, (string key, string setting)> Default = new()
     {
         { 6, ("exchange", "Exchange") },
         { 2, ("group", "Allow Grouping") }
@@ -39,6 +38,9 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
     [XmlIgnoreAttribute] public Dictionary<byte, ClientSetting> SettingsNumberIndex { get; set; }
 
     [XmlIgnoreAttribute] public Dictionary<string, ClientSetting> SettingsKeyIndex { get; set; }
+
+    private Dictionary<byte, string> ClassNames { get; set; } = new();
+    private Dictionary<string, byte> ClassIds { get; set; } = new();
 
     public new static void LoadAll(IWorldDataManager manager, string path = null) =>
         HybrasylEntity<ServerConfig>.LoadAll(manager, path);
@@ -85,9 +87,6 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
     public string GetSettingLabel(byte number) => SettingsNumberIndex[number].Value;
     public byte GetSettingNumber(string key) => SettingsKeyIndex[key.ToLower()].Number;
 
-    private Dictionary<byte, string> ClassNames { get; set; } = new();
-    private Dictionary<string, byte> ClassIds { get; set; } = new();
-
     private void GenerateIndex()
     {
         ClassNames.Clear();
@@ -109,7 +108,7 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
     {
         if (!ClassNames.Any())
             GenerateIndex();
-        return ClassIds.TryGetValue(name, out var id) ? id : (byte)254;
+        return ClassIds.TryGetValue(name, out var id) ? id : (byte) 254;
     }
 
     public string GetClassName(byte id)
@@ -118,5 +117,4 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
             GenerateIndex();
         return ClassNames.TryGetValue(id, out var name) ? name : "Unknown";
     }
-
 }
