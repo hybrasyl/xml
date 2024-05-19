@@ -25,7 +25,7 @@
       For contributors and individual authors please refer to CONTRIBUTORS.MD.
     </xs:documentation>
   </xs:annotation>
-  Damage effects type
+
   <xs:complexType name="StatusDamage">
     <xs:sequence>
       <xs:element name="Flags" type="hyb:DamageFlags" />
@@ -35,7 +35,7 @@
     <xs:attribute name="Type" type="hyb:DamageType" />
     <xs:attribute name="Element" type="hyb:ElementType" />
   </xs:complexType>
-  Heal effects type
+
   <xs:complexType name="StatusHeal">
     <xs:sequence minOccurs="0" maxOccurs="1">
       <xs:element name="Simple" type="hyb:SimpleQuantity" />
@@ -93,7 +93,7 @@
       <xs:element minOccurs="0" name="Shout" type="hyb:String8" />
     </xs:sequence>
   </xs:complexType>
-  Script source
+
   <xs:simpleType name="ScriptSource">
     <xs:restriction base="xs:token">
       <xs:enumeration value="Target" />

@@ -503,28 +503,37 @@
 
   <!-- Item metadata -->
   <xs:simpleType name="ItemTags">
-    <xs:restriction base="xs:token">
-      <xs:enumeration value="Junk" />
-      <xs:enumeration value="Common" />
-      <xs:enumeration value="Reagent" />
-      <xs:enumeration value="Magic" />
-      <xs:enumeration value="Rare" />
-      <xs:enumeration value="Masterwork" />
-      <xs:enumeration value="Legendary" />
-      <xs:enumeration value="Artifact" />
-      <xs:enumeration value="Religious" />
-      <xs:enumeration value="Social" />
-      <xs:enumeration value="Academic" />
-      <xs:enumeration value="Quest" />
-      <xs:enumeration value="Political" />
-      <xs:enumeration value="Currency" />
-      <xs:enumeration value="Peasantware" />
-      <xs:enumeration value="Armor" />
-      <xs:enumeration value="Weapon" />
-      <xs:enumeration value="Contraption" />
-      <xs:enumeration value="Food" />
-      <xs:enumeration value="Tool" />
-      <xs:enumeration value="Adornment" />
+    <xs:restriction>
+      <xs:simpleType>
+        <xs:list>
+          <xs:simpleType>
+
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="Junk" />
+              <xs:enumeration value="Common" />
+              <xs:enumeration value="Reagent" />
+              <xs:enumeration value="Magic" />
+              <xs:enumeration value="Rare" />
+              <xs:enumeration value="Masterwork" />
+              <xs:enumeration value="Legendary" />
+              <xs:enumeration value="Artifact" />
+              <xs:enumeration value="Religious" />
+              <xs:enumeration value="Social" />
+              <xs:enumeration value="Academic" />
+              <xs:enumeration value="Quest" />
+              <xs:enumeration value="Political" />
+              <xs:enumeration value="Currency" />
+              <xs:enumeration value="Peasantware" />
+              <xs:enumeration value="Armor" />
+              <xs:enumeration value="Weapon" />
+              <xs:enumeration value="Contraption" />
+              <xs:enumeration value="Food" />
+              <xs:enumeration value="Tool" />
+              <xs:enumeration value="Adornment" />
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:list>
+      </xs:simpleType>
     </xs:restriction>
   </xs:simpleType>
 

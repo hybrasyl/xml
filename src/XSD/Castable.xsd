@@ -169,12 +169,7 @@
         </xs:complexType>
       </xs:element>
       <!-- Prerequisites (other spells which must be learned first) -->
-      <xs:element name="Prerequisites" minOccurs="0" maxOccurs="0" type="hyb:LearnPrerequisites">
-        <xs:attribute name="ForbidCookie" type="xs:string" use="optional" />
-        <xs:attribute name="RequireCookie" type="xs:string" use="optional" />
-        <xs:attribute name="ForbidMessage" type="xs:string" use="optional" />
-        <xs:attribute name="RequireMessage" type="xs:string" use="optional" />
-      </xs:element>
+      <xs:element name="Prerequisites" minOccurs="0" maxOccurs="0" type="hyb:LearnPrerequisites" />
     </xs:sequence>
   </xs:complexType>
 
@@ -197,6 +192,10 @@
     <xs:sequence>
       <xs:element name="Prerequisite" minOccurs="1" maxOccurs="unbounded" type="hyb:LearnPrerequisite" />
     </xs:sequence>
+    <xs:attribute name="ForbidCookie" type="xs:string" use="optional" />
+    <xs:attribute name="RequireCookie" type="xs:string" use="optional" />
+    <xs:attribute name="ForbidMessage" type="xs:string" use="optional" />
+    <xs:attribute name="RequireMessage" type="xs:string" use="optional" />
   </xs:complexType>
 
   <!-- Individual prerequisite -->
