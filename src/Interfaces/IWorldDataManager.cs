@@ -16,12 +16,17 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using System;
-using System.Collections.Generic;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
-using Serilog;
+using System;
+/* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
+Before:
+using System;
+After:
+using System.Collections.Generic;
+*/
+
 
 namespace Hybrasyl.Xml.Interfaces;
 

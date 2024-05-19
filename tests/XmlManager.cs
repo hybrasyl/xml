@@ -16,14 +16,9 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using System.Diagnostics;
-using System.IO;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
-using Serilog;
-using Serilog.Sinks.TestCorrelator;
-using Xunit.Abstractions;
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 namespace Hybrasyl.XmlTests;
@@ -40,9 +35,11 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
         this.fixture = fixture;
     }
 
-    private Castable CategoryCastable { get;  } = new()
+    private Castable CategoryCastable { get; } = new()
     {
-        Book = Book.PrimarySkill, Name = "Test Skill", Categories = new List<Category>
+        Book = Book.PrimarySkill,
+        Name = "Test Skill",
+        Categories = new List<Category>
         {
             new()  { Value = "Category 1" },
             new()  { Value = "Category 2" }

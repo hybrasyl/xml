@@ -16,10 +16,10 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using Hybrasyl.Xml.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Hybrasyl.Xml.Interfaces;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -81,7 +81,7 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
     public byte GetMaxLevelByClass(Class castableClass)
     {
         var maxLevelProperty = MaxLevel.GetType().GetProperty(castableClass.ToString());
-        return (byte) (maxLevelProperty != null ? maxLevelProperty.GetValue(MaxLevel, null) : 0);
+        return (byte)(maxLevelProperty != null ? maxLevelProperty.GetValue(MaxLevel, null) : 0);
     }
 
     public bool TryGetMotion(Class castClass, out CastableMotion motion)

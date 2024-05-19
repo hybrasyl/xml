@@ -16,6 +16,9 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using Hybrasyl.Xml.Enums;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -23,9 +26,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Serialization;
-using Hybrasyl.Xml.Enums;
-using Hybrasyl.Xml.Interfaces;
-using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -121,7 +121,7 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
                         item.Variants[group].Add(variant);
                         manager.Add(variant);
                         ret.AdditionalCount++;
-                      
+
                     }
                 }
                 catch (Exception ex)
@@ -151,7 +151,7 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
                     ret.Errors[item.Guid] = "Variant group {name.Group}: variant {name.Value} does not exist";
                     continue;
                 }
-                
+
                 try
                 {
                     var variant = toApply.ResolveVariant(item);

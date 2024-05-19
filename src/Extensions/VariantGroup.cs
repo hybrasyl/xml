@@ -16,17 +16,32 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+
+/* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
+Before:
 using System;
-using System.Collections.Generic;
+After:
+using Hybrasyl.Xml.Interfaces;
+using System;
+*/
+using Hybrasyl.Xml.Interfaces;
+
+/* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
+Before:
 using System.Linq;
 using Hybrasyl.Xml.Interfaces;
+After:
+using System.Linq;
+*/
+using System;
+using System.Collections.Generic;
 
 namespace Hybrasyl.Xml.Objects;
 
 public partial class VariantGroup : ILoadOnStart<VariantGroup>
 {
     public override string PrimaryKey => Name;
-    
+
     public new static void LoadAll(IWorldDataManager manager, string path)
     {
         HybrasylEntity<VariantGroup>.LoadAll(manager, path);

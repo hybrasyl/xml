@@ -16,10 +16,10 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using Hybrasyl.Xml.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
-using Hybrasyl.Xml.Interfaces;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -27,7 +27,8 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
 {
     // In case there is nothing defined in XML, we still need some associations for basic
     // functionality
-    [XmlIgnoreAttribute] private static Dictionary<byte, (string key, string setting)> Default = new()
+    [XmlIgnoreAttribute]
+    private static Dictionary<byte, (string key, string setting)> Default = new()
     {
         { 6, ("exchange", "Exchange") },
         { 2, ("group", "Allow Grouping") }
@@ -108,7 +109,7 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
     {
         if (!ClassNames.Any())
             GenerateIndex();
-        return ClassIds.TryGetValue(name, out var id) ? id : (byte) 254;
+        return ClassIds.TryGetValue(name, out var id) ? id : (byte)254;
     }
 
     public string GetClassName(byte id)

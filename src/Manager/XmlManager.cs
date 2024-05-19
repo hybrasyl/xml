@@ -16,9 +16,12 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using System;
-using System.Collections.Generic;
-using System.IO;
+using Hybrasyl.Xml.Enums;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Objects;
+
+/* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
+Before:
 using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -29,6 +32,26 @@ using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Objects;
 using Pluralize.NET;
 using Serilog;
+After:
+using Pluralize.NET;
+using Serilog;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Hybrasyl.Xml.Reflection;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+*/
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Hybrasyl.Xml.Manager;
 
@@ -130,7 +153,7 @@ public class XmlDataManager : IWorldDataManager
 
     public string RootPath { get; set; }
 
-    public bool IsReady { get; set; } 
+    public bool IsReady { get; set; }
 
     public async void LoadDataAsync()
     {
@@ -264,7 +287,7 @@ public class XmlDataManager : IWorldDataManager
                 .FirstOrDefault(predicate: x => x.Name == "GetProcessResult");
             if (method == null) continue;
             var genMethod = method.MakeGenericMethod(kvp.Key);
-            var value = genMethod.Invoke(this, null);            
+            var value = genMethod.Invoke(this, null);
             if (value is not IProcessResult loadResult) continue;
             log.Information(
                 "{Type}: Processing: {processed} processed with {error} error(s) ({Additional} additional {Type}(s) from processing)",
@@ -299,7 +322,7 @@ public class XmlDataManager : IWorldDataManager
             .FirstOrDefault(predicate: x => x.Name == "GetByGuid" && x.IsGenericMethod);
         if (method == null) return "err";
         var genMethod = method.MakeGenericMethod(target);
-        var o = genMethod.Invoke(this, new object[] {guid});
+        var o = genMethod.Invoke(this, new object[] { guid });
         var oAsType = Convert.ChangeType(o, target);
         if (oAsType == null) return string.Empty;
         var property = target.GetProperties().FirstOrDefault(predicate: x => x.Name == "Filename");

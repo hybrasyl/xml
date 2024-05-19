@@ -1,6 +1,4 @@
-﻿using Hybrasyl.XmlTests;
-using Hybrasyl.Xml.Objects;
-using Xunit.Abstractions;
+﻿using Hybrasyl.Xml.Objects;
 
 namespace Hybrasyl.XmlTests;
 
@@ -33,6 +31,10 @@ public class ImmunitiesTests(ITestOutputHelper output, XmlManagerFixture fixture
         Assert.NotNull(castableImmune);
         Assert.True(castableImmune.ImmuneToCastableCategory("Debuff", out var immunity));
         Assert.True(castableImmune.ImmuneToCastableCategory("DeBuFf", out immunity));
+        Assert.True(castableImmune.ImmuneToCastableCategories(new List<string> { "debuff", "DEBUFF" }, out _));
+        Assert.True(castableImmune.ImmuneToCastableCategories(new List<string> { "bazbar", "DEBUFF" }, out _));
+        Assert.False(castableImmune.ImmuneToCastableCategories(new List<string> { "bazbar", "quux" }, out _));
+
     }
 
     [Fact]
@@ -54,6 +56,10 @@ public class ImmunitiesTests(ITestOutputHelper output, XmlManagerFixture fixture
         var statusImmune = Fixture.SyncManager.Get<CreatureBehaviorSet>("StatCatImmune");
         Assert.NotNull(statusImmune);
         Assert.True(statusImmune.ImmuneToStatusCategory("Str", out _));
+        Assert.True(statusImmune.ImmuneToStatusCategories(new List<string> { "str", "STR" }, out _));
+        Assert.True(statusImmune.ImmuneToStatusCategories(new List<string> { "iNt", "STR" }, out _));
+        Assert.False(statusImmune.ImmuneToStatusCategories(new List<string> { "int", "wis" }, out _));
+
     }
 
     [Fact]

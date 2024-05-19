@@ -16,14 +16,14 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Serialization;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Extensions;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Serialization;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -155,6 +155,15 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
         return immunity != null;
     }
 
+    public bool ImmuneToCastableCategories(IEnumerable<string> categories, out CreatureImmunity immunity)
+    {
+        immunity = Immunities?.FirstOrDefault(x =>
+            x.Type == CreatureImmunityType.CastableCategory &&
+            categories.Contains(x.Value, StringComparer.OrdinalIgnoreCase));
+        return immunity != null;
+
+    }
+
     public bool ImmuneToStatusCategory(string category, out CreatureImmunity immunity)
     {
         immunity = Immunities?.FirstOrDefault(x =>
@@ -163,6 +172,13 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
         return immunity != null;
     }
 
+    public bool ImmuneToStatusCategories(IEnumerable<string> categories, out CreatureImmunity immunity)
+    {
+        immunity = Immunities?.FirstOrDefault(x =>
+            x.Type == CreatureImmunityType.StatusCategory &&
+            categories.Contains(x.Value, StringComparer.OrdinalIgnoreCase));
+        return immunity != null;
+    }
 
     public bool ImmuneToStatus(string status, out CreatureImmunity immunity)
     {

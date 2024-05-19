@@ -1,5 +1,4 @@
 ﻿using Hybrasyl.Xml.Objects;
-using Xunit.Abstractions;
 
 namespace Hybrasyl.XmlTests;
 
@@ -84,7 +83,7 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         var item = new Item();
         item.Name = "Test";
         item.Properties.StatModifiers = new StatModifiers() { BonusDmg = "0.005", BonusHit = "0.004", BonusInt = "2" };
-        Assert.Equal("+2 Int\n+0.5% Dmg\n+0.4% Hit\n",item.Properties.StatModifiers.BonusString);
+        Assert.Equal("+2 Int\n+0.5% Dmg\n+0.4% Hit\n", item.Properties.StatModifiers.BonusString);
     }
 
     [Fact]
@@ -101,7 +100,7 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
     {
         var belt = fixture.SyncManager.Find<Item>(x => x.Name.Contains("Light Variant Single Belt")).FirstOrDefault();
         Assert.NotNull(belt);
-        Assert.True(belt.Properties.StatModifiers.BaseDefensiveElement == ElementType.Light );
+        Assert.True(belt.Properties.StatModifiers.BaseDefensiveElement == ElementType.Light);
     }
 
     [Fact]
@@ -119,7 +118,7 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         var config = fixture.SyncManager.Values<ServerConfig>().First();
         Assert.NotNull(config);
         Assert.Equal(config.Constants.ClassName0, config.GetClassName(0));
-        Assert.Equal(0,config.GetClassId(config.Constants.ClassName0));
+        Assert.Equal(0, config.GetClassId(config.Constants.ClassName0));
         Assert.Equal(254, config.GetClassId("Derp"));
         Assert.Equal("Unknown", config.GetClassName(133));
     }

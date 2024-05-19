@@ -16,17 +16,30 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+
+/* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
+Before:
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Hybrasyl.Xml.Enums;
-using Hybrasyl.Xml.Interfaces;
-using Hybrasyl.Xml.Manager;
+After:
+using Hybrasyl.Xml.Enums;
+using Hybrasyl.Collections.Interfaces;
+using System.Xml.Manager;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
-using Pluralize.NET;
+using Hybrasyl.NET;
+*/
+using Hybrasyl.Xml.Enums;
+using Hybrasyl.Xml.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Hybrasyl.Xml.Objects;
 

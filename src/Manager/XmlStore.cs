@@ -16,6 +16,9 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+
+/* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
+Before:
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,6 +26,21 @@ using System.Runtime.InteropServices;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Objects;
+After:
+using Hybrasyl.Xml.Enums;
+using Hybrasyl.Collections.Interfaces;
+using System.Xml.Objects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+*/
+using Hybrasyl.Xml.Enums;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Objects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Hybrasyl.Xml.Manager;
 
@@ -33,7 +51,7 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
     private Dictionary<StoreKey, Guid> _index { get; set; } = new();
     private Dictionary<Guid, HashSet<StoreKey>> _reverseIndex { get; set; } = new();
 
-    private HashSet<Guid> _errors { get;  } = new();
+    private HashSet<Guid> _errors { get; } = new();
 
     private object _lock { get; } = new();
 
@@ -79,7 +97,7 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
 
     public T GetByIndex(dynamic index) =>
         _index.TryGetValue(new StoreKey(index, false), out var guid) ? _store[guid] : null;
-    
+
     public void Add(T entity, dynamic name) => StoreItem(entity, name);
     public void AddWithIndex(T entity, dynamic name, params dynamic[] indexes) => StoreItem(entity, name, indexes);
 

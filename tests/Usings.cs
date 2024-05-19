@@ -16,4 +16,3 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-global using Xunit;

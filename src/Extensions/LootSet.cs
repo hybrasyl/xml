@@ -16,8 +16,8 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using System;
 using Hybrasyl.Xml.Interfaces;
+using System;
 
 namespace Hybrasyl.Xml.Objects;
 
