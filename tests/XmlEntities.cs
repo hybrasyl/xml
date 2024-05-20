@@ -143,4 +143,11 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         Assert.Equal(254, config.GetClassId("Derp"));
         Assert.Equal("Unknown", config.GetClassName(133));
     }
+
+    [Fact]
+    public void StatusDamageIsNotList()
+    {
+        var sd = new StatusDamage();
+        Assert.Equal(typeof(ElementType), sd.Element.GetType());
+    }
 }

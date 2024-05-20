@@ -31,12 +31,11 @@ public partial class StatusDamage : HybrasylEntity<StatusDamage>
     private SimpleQuantity _simple;
     private string _formula;
     private DamageType _type;
-    private List<ElementType> _element;
+    private ElementType _element;
     #endregion
     
     public StatusDamage()
     {
-        _element = new List<ElementType>();
         _simple = new SimpleQuantity();
     }
     
@@ -90,7 +89,7 @@ public partial class StatusDamage : HybrasylEntity<StatusDamage>
     }
     
     [XmlAttribute]
-    public List<ElementType> Element
+    public ElementType Element
     {
         get
         {
