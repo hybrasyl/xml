@@ -38,7 +38,7 @@ public partial class Creature : HybrasylEntity<Creature>
     private string _behaviorSet;
     private int _minDmg;
     private int _maxDmg;
-    private sbyte _assailSound;
+    private byte _assailSound;
     #endregion
     
     public Creature()
@@ -178,7 +178,7 @@ public partial class Creature : HybrasylEntity<Creature>
     }
     
     [XmlAttribute]
-    public sbyte AssailSound
+    public byte AssailSound
     {
         get
         {

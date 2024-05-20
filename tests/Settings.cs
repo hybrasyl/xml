@@ -16,6 +16,9 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using Newtonsoft.Json;
+using Serilog;
+
 namespace Hybrasyl.XmlTests;
 
 public class Settings

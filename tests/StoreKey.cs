@@ -17,6 +17,7 @@
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
 using Hybrasyl.Xml.Manager;
+using Xunit;
 
 namespace Hybrasyl.XmlTests;
 

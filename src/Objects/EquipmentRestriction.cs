@@ -27,20 +27,17 @@ using System.Collections.Generic;
 public partial class EquipmentRestriction : HybrasylEntity<EquipmentRestriction>
 {
     #region Private fields
-    private List<WeaponType> _weaponType;
+
+    private WeaponType _weaponType = WeaponType.None;
     private EquipmentSlot _slot;
     private RestrictionType _restrictionType;
     private string _message;
     private string _value;
     #endregion
     
-    public EquipmentRestriction()
-    {
-        _weaponType = new List<WeaponType>();
-    }
     
     [XmlAttribute]
-    public List<WeaponType> WeaponType
+    public WeaponType WeaponType
     {
         get
         {

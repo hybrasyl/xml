@@ -17,6 +17,8 @@
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
 using Hybrasyl.Xml.Objects;
+using Xunit;
+using Xunit.Abstractions;
 
 namespace Hybrasyl.XmlTests;
 

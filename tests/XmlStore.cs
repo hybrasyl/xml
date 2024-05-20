@@ -19,6 +19,7 @@
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
+using Xunit;
 
 namespace Hybrasyl.XmlTests;
 

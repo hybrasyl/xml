@@ -28,12 +28,11 @@ public partial class ElementTableSourceElement : HybrasylEntity<ElementTableSour
 {
     #region Private fields
     private List<ElementTableTargetElement> _target;
-    private List<ElementType> _element;
+    private ElementType _element;
     #endregion
     
     public ElementTableSourceElement()
     {
-        _element = new List<ElementType>();
         _target = new List<ElementTableTargetElement>();
     }
     
@@ -51,7 +50,7 @@ public partial class ElementTableSourceElement : HybrasylEntity<ElementTableSour
     }
     
     [XmlAttribute]
-    public List<ElementType> Element
+    public ElementType Element
     {
         get
         {

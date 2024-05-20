@@ -27,31 +27,8 @@ using System.Threading.Tasks;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Objects;
-
-/* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
-Before:
-using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using Hybrasyl.Xml.Enums;
-using Hybrasyl.Xml.Interfaces;
-using Hybrasyl.Xml.Objects;
 using Pluralize.NET;
 using Serilog;
-After:
-using Pluralize.NET;
-using Serilog;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Hybrasyl.Xml.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-*/
 
 namespace Hybrasyl.Xml.Manager;
 

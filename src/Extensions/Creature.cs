@@ -17,6 +17,7 @@
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
 using System;
+using System.Linq;
 using System.Xml.Serialization;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;

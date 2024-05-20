@@ -18,6 +18,7 @@
 
 using System.Diagnostics;
 using Hybrasyl.Xml.Manager;
+using Serilog;
 
 namespace Hybrasyl.XmlTests;
 

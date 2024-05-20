@@ -19,6 +19,10 @@
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
+using Serilog;
+using Serilog.Sinks.TestCorrelator;
+using Xunit;
+using Xunit.Abstractions;
 
 [assembly: CollectionBehavior(DisableTestParallelization = true)]
 
