@@ -35,9 +35,9 @@ public partial class Variant
         if (variantItem.Properties.Flags != 0)
             variantItem.Properties.Flags = Properties.Flags;
 
-        var newValue = originalItem.Properties.Physical.Value * Properties.Physical.Value;
-        var newDura = originalItem.Properties.Physical.Durability * Properties.Physical.Durability;
-        var newWeight = originalItem.Properties.Physical.Weight * Properties.Physical.Weight;
+        var newValue = originalItem.Properties.Physical.Value * Properties.Physical?.Value ?? 1;
+        var newDura = originalItem.Properties.Physical.Durability * Properties.Physical?.Durability ?? 1;
+        var newWeight = originalItem.Properties.Physical.Weight * Properties.Physical?.Weight ?? 1;
 
         variantItem.Properties.StatModifiers ??= new StatModifiers();
 

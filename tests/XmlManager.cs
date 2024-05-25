@@ -226,7 +226,7 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
             $"Element Tables: {manager.Count<ElementTable>()} Server Configs: {manager.Count<ServerConfig>()} Localization Files: {manager.Count<Localization>()}");
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "castables"), "*.xml").Length,
             manager.Count<Castable>());
-        Assert.Equal(167, manager.Count<Item>());
+        Assert.Equal(168, manager.Count<Item>());
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "npcs"), "*.xml").Length, manager.Count<Npc>());
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "maps"), "*.xml").Length, manager.Count<Map>());
         Assert.Equal(17, manager.Count<Creature>());
