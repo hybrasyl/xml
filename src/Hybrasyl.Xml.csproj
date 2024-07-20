@@ -3,6 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>net7.0;net8.0</TargetFrameworks>
     <AssemblyName>Hybrasyl.Xml</AssemblyName>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <RootNamespace>Hybrasyl.Xml</RootNamespace>
     <PackageVersion>0.9.4</PackageVersion>
     <Version>0.9.4</Version>

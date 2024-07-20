@@ -16,17 +16,8 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-/* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
-Before:
-using System;
-using System.Xml.Serialization;
-After:
 using Hybrasyl.Xml.Interfaces;
-using System;
-*/
-
 using System.Xml.Serialization;
-using Hybrasyl.Xml.Interfaces;
 
 namespace Hybrasyl.Xml.Objects;
 

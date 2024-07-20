@@ -16,25 +16,10 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-/* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
-Before:
-using System;
-After:
-using Hybrasyl.Xml.Interfaces;
-using System;
-*/
 
 using Hybrasyl.Xml.Interfaces;
 using System;
 using System.Collections.Generic;
-
-/* Unmerged change from project 'Hybrasyl.Xml (net7.0)'
-Before:
-using System.Linq;
-using Hybrasyl.Xml.Interfaces;
-After:
-using System.Linq;
-*/
 
 namespace Hybrasyl.Xml.Objects;
 
