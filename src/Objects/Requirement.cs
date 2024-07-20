@@ -28,6 +28,8 @@ public partial class Requirement : ClassRequirement
 {
     #region Private fields
     private List<Class> _class;
+    private string _forbidCookie;
+    private string _requireCookie;
     #endregion
     
     public Requirement()
@@ -45,6 +47,32 @@ public partial class Requirement : ClassRequirement
         set
         {
             _class = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public string ForbidCookie
+    {
+        get
+        {
+            return _forbidCookie;
+        }
+        set
+        {
+            _forbidCookie = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public string RequireCookie
+    {
+        get
+        {
+            return _requireCookie;
+        }
+        set
+        {
+            _requireCookie = value;
         }
     }
 }

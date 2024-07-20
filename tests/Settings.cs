@@ -23,7 +23,7 @@ namespace Hybrasyl.XmlTests;
 
 public class Settings
 {
-    private static Settings _settings;
+    private static Settings? _settings;
     public JsonSettings JsonSettings;
 
     private Settings()
@@ -36,7 +36,7 @@ public class Settings
             .CreateLogger();
 
         var json = File.ReadAllText("xmltest-settings.json");
-        JsonSettings = JsonConvert.DeserializeObject<JsonSettings>(json);
+        JsonSettings = JsonConvert.DeserializeObject<JsonSettings>(json) ?? new JsonSettings();
     }
 
     private static object _lock { get; } = new();
@@ -56,5 +56,5 @@ public class Settings
 
 public class JsonSettings
 {
-    public string WorldDataDirectory { get; set; }
+    public string WorldDataDirectory { get; set; } = string.Empty;
 }

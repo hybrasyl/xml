@@ -16,6 +16,9 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using Hybrasyl.Xml.Enums;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -23,9 +26,6 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Serialization;
-using Hybrasyl.Xml.Enums;
-using Hybrasyl.Xml.Interfaces;
-using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -120,8 +120,15 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
                     var variants = toApply.ResolveVariants(item);
                     foreach (var variant in variants)
                     {
-                        item.Variants[group].Add(variant);
-                        manager.Add(variant);
+                        if (!string.IsNullOrWhiteSpace(variant.Error))
+                        {
+                            ret.Errors[item.Guid] =
+                                $"{item.Name}: failed to apply variant within {toApply.Name}: {variant.Error}";
+                            continue;
+                        }
+
+                        item.Variants[group].Add(variant.Variant);
+                        manager.Add(variant.Variant);
                         ret.AdditionalCount++;
                     }
                 }
