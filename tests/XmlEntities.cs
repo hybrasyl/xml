@@ -138,6 +138,7 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
     {
         var config = fixture.SyncManager.Values<ServerConfig>().First();
         Assert.NotNull(config);
+        config.Init();
         Assert.Equal(config.Constants.ClassName0, config.GetClassName(0));
         Assert.Equal(0, config.GetClassId(config.Constants.ClassName0));
         Assert.Equal(254, config.GetClassId("Derp"));

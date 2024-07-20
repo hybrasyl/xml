@@ -17,6 +17,7 @@
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
 using System;
+using System.Collections.Generic;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -83,7 +84,7 @@ public partial class Variant
             variantItem.Properties.StatModifiers.BaseDefensiveElement =
                 Properties.StatModifiers?.BaseOffensiveElement ?? ElementType.None;
 
-        variantItem.Properties.Tags.AddRange(Properties.Tags);
+        variantItem.Properties?.Tags?.AddRange(Properties?.Tags ?? new List<ItemTag>());
         return variantItem;
     }
 }

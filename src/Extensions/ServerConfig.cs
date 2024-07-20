@@ -16,10 +16,10 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using Hybrasyl.Xml.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
-using Hybrasyl.Xml.Interfaces;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -27,7 +27,8 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
 {
     // In case there is nothing defined in XML, we still need some associations for basic
     // functionality
-    [XmlIgnoreAttribute] private static Dictionary<byte, (string key, string setting)> Default = new()
+    [XmlIgnoreAttribute]
+    private static Dictionary<byte, (string key, string setting)> Default = new()
     {
         { 6, ("exchange", "Exchange") },
         { 2, ("group", "Allow Grouping") }
@@ -45,7 +46,15 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
     public new static void LoadAll(IWorldDataManager manager, string path = null) =>
         HybrasylEntity<ServerConfig>.LoadAll(manager, path);
 
-    public void InitializeClientSettings()
+    public void Init()
+    {
+        Time ??= new Time();
+        Time.Ages ??= new List<HybrasylAge>();
+        InitializeClientSettings();
+        GenerateIndex();
+    }
+
+    private void InitializeClientSettings()
     {
         SettingsNumberIndex = new Dictionary<byte, ClientSetting>();
         SettingsKeyIndex = new Dictionary<string, ClientSetting>();
@@ -56,8 +65,8 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
             {
                 Default = true,
                 Number = x,
-                Key = Default.ContainsKey(x) ? Default[x].key : $"setting{x}",
-                Value = Default.ContainsKey(x) ? Default[x].setting : $"Setting {x}"
+                Key = Default.TryGetValue(x, out var value) ? value.key : $"setting{x}",
+                Value = Default.TryGetValue(x, out var value1) ? value1.setting : $"Setting {x}"
             };
 
             if (ClientSettings == null) // No settings at all in xml
@@ -104,17 +113,7 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
         ClassIds[Constants.ClassName5] = 5;
     }
 
-    public byte GetClassId(string name)
-    {
-        if (!ClassNames.Any())
-            GenerateIndex();
-        return ClassIds.TryGetValue(name, out var id) ? id : (byte) 254;
-    }
+    public byte GetClassId(string name) => ClassIds.TryGetValue(name, out var id) ? id : (byte)254;
 
-    public string GetClassName(byte id)
-    {
-        if (!ClassIds.Any())
-            GenerateIndex();
-        return ClassNames.TryGetValue(id, out var name) ? name : "Unknown";
-    }
+    public string GetClassName(byte id) => ClassNames.TryGetValue(id, out var name) ? name : "Unknown";
 }

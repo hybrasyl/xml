@@ -177,6 +177,8 @@
     <xs:complexContent>
       <xs:extension base="hyb:ClassRequirement">
         <xs:attribute name="Class" use="optional" type="hyb:ClassList" />
+        <xs:attribute name="ForbidCookie" type="xs:string" use="optional" />
+        <xs:attribute name="RequireCookie" type="xs:string" use="optional" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>

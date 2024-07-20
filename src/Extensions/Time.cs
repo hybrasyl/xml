@@ -63,7 +63,6 @@ public partial class Time
         return nextAge != null;
     }
 
-
     public HybrasylAge GetAgeFromTerranDatetime(DateTime datetime)
     {
         return Ages.Count switch

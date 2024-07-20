@@ -16,17 +16,17 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using Hybrasyl.Xml.Enums;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
-using Hybrasyl.Xml.Enums;
-using Hybrasyl.Xml.Interfaces;
-using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>, ILoadOnStart<CreatureBehaviorSet>
+public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>, ILoadOnStart<CreatureBehaviorSet>, IAdditionalValidation<CreatureBehaviorSet>
 {
     [XmlIgnore]
     public List<string> LearnSkillCategories => string.IsNullOrEmpty(Castables?.SkillCategories)
@@ -64,6 +64,17 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
             ret.TotalProcessed++;
         }
 
+        manager.UpdateResult<CreatureBehaviorSet>(ret);
+    }
+
+    public static void ValidateAll(IWorldDataManager manager)
+    {
+        var ret = new XmlProcessResult();
+        foreach (var cbs in manager.Values<CreatureBehaviorSet>())
+        {
+            if (cbs.Castables?.Castable == null)
+                ret.Errors.Add(cbs.Guid, "Creature behavior set has no castables");
+        }
         manager.UpdateResult<CreatureBehaviorSet>(ret);
     }
 
