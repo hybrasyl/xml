@@ -42,19 +42,19 @@ public partial class ServerFormulas : HybrasylEntity<ServerFormulas>
     
     public ServerFormulas()
     {
-        _xpToNextLevel = "Pow($SOURCELEVEL,3)*250";
-        _hpGainPerLevel = "($SOURCECON/($SOURCELEVEL + 1)*50)+25";
-        _mpGainPerLevel = "($SOURCEWIS/($SOURCELEVEL + 1)*50)+25";
-        _allowedCarryWeight = "$SOURCESTR+($SOURCELEVEL/4) + 48";
-        _allowedEquipmentWeight = "($SOURCESTR+($SOURCELEVEL/4) + 48)/2";
-        _mpRegenPerTick = "Min($SOURCEMAXIMUMMP * (0.1 + Max($SOURCEWIS, $SOURCEWIS - $SOURCELEVEL) * 0.01, " +
-            "$SOURCEMAXIMUMMP *0.20)";
-        _hpRegenPerTick = "Min($SOURCEMAXIMUMHP * (0.1 + Max($SOURCECON, $SOURCECON - $SOURCELEVEL) * 0.01, " +
-            "$SOURCEMAXIMUMHP *0.20)";
+        _xpToNextLevel = "Pow(SOURCELEVEL,3)*250";
+        _hpGainPerLevel = "((SOURCECON/(SOURCELEVEL + 1)*50)*(RANDDOUBLE*0.30+0.85))+25";
+        _mpGainPerLevel = "((SOURCEWIS/(SOURCELEVEL + 1)*50)*(RANDDOUBLE*0.30+0.85))+25";
+        _allowedCarryWeight = "SOURCESTR+(SOURCELEVEL/4) + 48";
+        _allowedEquipmentWeight = "(SOURCESTR+(SOURCELEVEL/4) + 48)/2";
+        _mpRegenPerTick = "Min(SOURCEMAXIMUMMP * (0.1 + Max(SOURCEWIS, SOURCEWIS - SOURCELEVEL) * 0.01, SOUR" +
+            "CEMAXIMUMMP * 0.20)";
+        _hpRegenPerTick = "Min(SOURCEMAXIMUMHP * (0.1 + Max(SOURCECON, SOURCECON - SOURCELEVEL) * 0.01, SOUR" +
+            "CEMAXIMUMHP * 0.20)";
         _acDamageMitigation = "";
         _acMagicDamageMitigation = "";
-        _monsterHpGainPerLevel = "($SOURCECON/($SOURCELEVEL + 1)*50)+25";
-        _monsterMpGainPerLevel = "($SOURCEWIS/($SOURCELEVEL + 1)*50)+25";
+        _monsterHpGainPerLevel = "((SOURCECON/(SOURCELEVEL + 1)*50)*(RANDDOUBLE*0.30+0.85))+25";
+        _monsterMpGainPerLevel = "((SOURCEWIS/(SOURCELEVEL + 1)*50)*(RANDDOUBLE*0.30+0.85))+25";
     }
     
     public string XpToNextLevel

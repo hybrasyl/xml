@@ -256,6 +256,7 @@
     <xs:attribute name="DisplayGroup" default="false" type="xs:boolean" />
     <xs:attribute name="DisplayStatus" type="xs:token" use="optional" />
     <xs:attribute name="DisplayCookie" type="xs:token" use="optional" />
+    <xs:attribute name="DisplayName" type="xs:string" use="optional" />
   </xs:complexType>
 
   <!-- Effects type -->

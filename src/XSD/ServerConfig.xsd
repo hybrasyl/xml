@@ -238,17 +238,17 @@
 
   <xs:complexType name="ServerFormulas">
     <xs:sequence>
-      <xs:element name="XpToNextLevel" type="xs:string" default="Pow($SOURCELEVEL,3)*250"/>
-      <xs:element name="HpGainPerLevel" type="xs:string" default="($SOURCECON/($SOURCELEVEL + 1)*50)+25"/>
-      <xs:element name="MpGainPerLevel" type="xs:string" default="($SOURCEWIS/($SOURCELEVEL + 1)*50)+25"/>
-      <xs:element name="AllowedCarryWeight" type="xs:string" default="$SOURCESTR+($SOURCELEVEL/4) + 48"/>
-      <xs:element name="AllowedEquipmentWeight" type="xs:string" default="($SOURCESTR+($SOURCELEVEL/4) + 48)/2"/>
-      <xs:element name="MpRegenPerTick" type="xs:string" default="Min($SOURCEMAXIMUMMP * (0.1 + Max($SOURCEWIS, $SOURCEWIS - $SOURCELEVEL) * 0.01, $SOURCEMAXIMUMMP *0.20)"/>
-      <xs:element name="HpRegenPerTick" type="xs:string" default="Min($SOURCEMAXIMUMHP * (0.1 + Max($SOURCECON, $SOURCECON - $SOURCELEVEL) * 0.01, $SOURCEMAXIMUMHP *0.20)"/>                  
+      <xs:element name="XpToNextLevel" type="xs:string" default="Pow(SOURCELEVEL,3)*250"/>
+      <xs:element name="HpGainPerLevel" type="xs:string" default="((SOURCECON/(SOURCELEVEL + 1)*50)*(RANDDOUBLE*0.30+0.85))+25"/>
+      <xs:element name="MpGainPerLevel" type="xs:string" default="((SOURCEWIS/(SOURCELEVEL + 1)*50)*(RANDDOUBLE*0.30+0.85))+25"/>
+      <xs:element name="AllowedCarryWeight" type="xs:string" default="SOURCESTR+(SOURCELEVEL/4) + 48"/>
+      <xs:element name="AllowedEquipmentWeight" type="xs:string" default="(SOURCESTR+(SOURCELEVEL/4) + 48)/2"/>
+      <xs:element name="MpRegenPerTick" type="xs:string" default="Min(SOURCEMAXIMUMMP * (0.1 + Max(SOURCEWIS, SOURCEWIS - SOURCELEVEL) * 0.01, SOURCEMAXIMUMMP * 0.20)"/>
+      <xs:element name="HpRegenPerTick" type="xs:string" default="Min(SOURCEMAXIMUMHP * (0.1 + Max(SOURCECON, SOURCECON - SOURCELEVEL) * 0.01, SOURCEMAXIMUMHP * 0.20)"/>                  
       <xs:element name="AcDamageMitigation" type="xs:string" default=""/>
       <xs:element name="AcMagicDamageMitigation" type="xs:string" default=""/>
-      <xs:element name="MonsterHpGainPerLevel" type="xs:string" default="($SOURCECON/($SOURCELEVEL + 1)*50)+25"/>
-      <xs:element name="MonsterMpGainPerLevel" type="xs:string" default="($SOURCEWIS/($SOURCELEVEL + 1)*50)+25"/>     
+      <xs:element name="MonsterHpGainPerLevel" type="xs:string" default="((SOURCECON/(SOURCELEVEL + 1)*50)*(RANDDOUBLE*0.30+0.85))+25"/>
+      <xs:element name="MonsterMpGainPerLevel" type="xs:string" default="((SOURCEWIS/(SOURCELEVEL + 1)*50)*(RANDDOUBLE*0.30+0.85))+25"/>     
     </xs:sequence>
   </xs:complexType>
   
@@ -278,8 +278,13 @@
       <xs:element name="MonsterTaggingTimeout" type="xs:int" default="300" />
       <xs:element name="ByteHeartbeatInterval" type="xs:int" default="60" />
       <xs:element name="TickHeartbeatInterval" type="xs:int" default="60" />
-      <xs:element name="ReapHeartbeatInterval" type="xs:int" default="5" />
-      <xs:element name="PlayerIdleTime" type="xs:int" default="60" />
+      <xs:element name="HeartbeatReaperInterval" type="xs:int" default="5" />
+      <xs:element name="CheckpointInterval" type="xs:int" default="300"/>
+      <xs:element name="RegenInterval" type="xs:int" default="25"/>
+      <xs:element name="SnoreInterval" type="xs:int" default="10"/>
+      <xs:element name="IdleDetectionInterval" type="xs:int" default="60" />
+      <xs:element name="MailboxCleanupInterval" type="xs:int" default="3600" />
+      <xs:element name="MerchantInventoryRefreshInterval" type="xs:int" default="60"/>      
       <xs:element name="PlayerIdleCheck" type="xs:int" default="10" />
       <xs:element name="DialogSequenceShared" type="xs:int" default="5000" />
       <xs:element name="DialogSequencePursuits" type="xs:int" default="5100" />

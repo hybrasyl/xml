@@ -33,6 +33,7 @@ public partial class Reactor : HybrasylEntity<Reactor>
     private byte _y;
     private bool _blocking;
     private bool _allowDead;
+    private string _displayName;
     #endregion
     
     public Reactor()
@@ -116,6 +117,19 @@ public partial class Reactor : HybrasylEntity<Reactor>
         set
         {
             _allowDead = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public string DisplayName
+    {
+        get
+        {
+            return _displayName;
+        }
+        set
+        {
+            _displayName = value;
         }
     }
 }

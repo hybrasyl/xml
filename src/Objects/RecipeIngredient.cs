@@ -6,56 +6,56 @@
 #pragma warning disable
 namespace Hybrasyl.Xml.Objects
 {
-    using System;
-    using System.Diagnostics;
-    using System.Xml.Serialization;
-    using System.Runtime.Serialization;
-    using System.Collections;
-    using System.Xml.Schema;
-    using System.ComponentModel;
-    using System.Xml;
-    using System.IO;
-    using System.Text;
-    using System.ComponentModel.DataAnnotations;
-    using System.Collections.Generic;
+using System;
+using System.Diagnostics;
+using System.Xml.Serialization;
+using System.Runtime.Serialization;
+using System.Collections;
+using System.Xml.Schema;
+using System.ComponentModel;
+using System.Xml;
+using System.IO;
+using System.Text;
+using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.9032.0")]
-    [Serializable]
-    [DebuggerStepThrough]
-    [DesignerCategoryAttribute("code")]
-    [XmlTypeAttribute(Namespace = "http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-    public partial class RecipeIngredient : HybrasylEntity<RecipeIngredient>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.8.9032.0")]
+[Serializable]
+[DebuggerStepThrough]
+[DesignerCategoryAttribute("code")]
+[XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
+public partial class RecipeIngredient : HybrasylEntity<RecipeIngredient>
+{
+    #region Private fields
+    private string _name;
+    private ushort _quantity;
+    #endregion
+    
+    [XmlAttribute]
+    public string Name
     {
-        #region Private fields
-        private string _name;
-        private ushort _quantity;
-        #endregion
-
-        [XmlAttribute]
-        public string Name
+        get
         {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-            }
+            return _name;
         }
-
-        [XmlAttribute]
-        public ushort Quantity
+        set
         {
-            get
-            {
-                return _quantity;
-            }
-            set
-            {
-                _quantity = value;
-            }
+            _name = value;
         }
     }
+    
+    [XmlAttribute]
+    public ushort Quantity
+    {
+        get
+        {
+            return _quantity;
+        }
+        set
+        {
+            _quantity = value;
+        }
+    }
+}
 }
 #pragma warning restore

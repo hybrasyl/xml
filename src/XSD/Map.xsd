@@ -58,6 +58,7 @@
     <xs:attribute name="Y" type="xs:unsignedByte" use="required" />
     <xs:attribute name="Blocking" default="false" type="xs:boolean" />
     <xs:attribute name="AllowDead" default="false" type="xs:boolean" />
+    <xs:attribute name="DisplayName" type="xs:string" use="optional" />
   </xs:complexType>
 
 
@@ -133,6 +134,7 @@
     <xs:attribute name="X" type="xs:unsignedByte" />
     <xs:attribute name="Y" type="xs:unsignedByte" />
     <xs:attribute name="Direction" type="hyb:Direction" default="North" />
+    <xs:attribute name="DisplayName" type="xs:string" use="optional" />
   </xs:complexType>
 
   <!-- Worldmap point -->

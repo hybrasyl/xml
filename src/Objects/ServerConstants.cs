@@ -48,8 +48,13 @@ public partial class ServerConstants : HybrasylEntity<ServerConstants>
     private int _monsterTaggingTimeout;
     private int _byteHeartbeatInterval;
     private int _tickHeartbeatInterval;
-    private int _reapHeartbeatInterval;
-    private int _playerIdleTime;
+    private int _heartbeatReaperInterval;
+    private int _checkpointInterval;
+    private int _regenInterval;
+    private int _snoreInterval;
+    private int _idleDetectionInterval;
+    private int _mailboxCleanupInterval;
+    private int _merchantInventoryRefreshInterval;
     private int _playerIdleCheck;
     private int _dialogSequenceShared;
     private int _dialogSequencePursuits;
@@ -107,8 +112,13 @@ public partial class ServerConstants : HybrasylEntity<ServerConstants>
         _monsterTaggingTimeout = 300;
         _byteHeartbeatInterval = 60;
         _tickHeartbeatInterval = 60;
-        _reapHeartbeatInterval = 5;
-        _playerIdleTime = 60;
+        _heartbeatReaperInterval = 5;
+        _checkpointInterval = 300;
+        _regenInterval = 25;
+        _snoreInterval = 10;
+        _idleDetectionInterval = 60;
+        _mailboxCleanupInterval = 3600;
+        _merchantInventoryRefreshInterval = 60;
         _playerIdleCheck = 10;
         _dialogSequenceShared = 5000;
         _dialogSequencePursuits = 5100;
@@ -395,27 +405,87 @@ public partial class ServerConstants : HybrasylEntity<ServerConstants>
         }
     }
     
-    public int ReapHeartbeatInterval
+    public int HeartbeatReaperInterval
     {
         get
         {
-            return _reapHeartbeatInterval;
+            return _heartbeatReaperInterval;
         }
         set
         {
-            _reapHeartbeatInterval = value;
+            _heartbeatReaperInterval = value;
         }
     }
     
-    public int PlayerIdleTime
+    public int CheckpointInterval
     {
         get
         {
-            return _playerIdleTime;
+            return _checkpointInterval;
         }
         set
         {
-            _playerIdleTime = value;
+            _checkpointInterval = value;
+        }
+    }
+    
+    public int RegenInterval
+    {
+        get
+        {
+            return _regenInterval;
+        }
+        set
+        {
+            _regenInterval = value;
+        }
+    }
+    
+    public int SnoreInterval
+    {
+        get
+        {
+            return _snoreInterval;
+        }
+        set
+        {
+            _snoreInterval = value;
+        }
+    }
+    
+    public int IdleDetectionInterval
+    {
+        get
+        {
+            return _idleDetectionInterval;
+        }
+        set
+        {
+            _idleDetectionInterval = value;
+        }
+    }
+    
+    public int MailboxCleanupInterval
+    {
+        get
+        {
+            return _mailboxCleanupInterval;
+        }
+        set
+        {
+            _mailboxCleanupInterval = value;
+        }
+    }
+    
+    public int MerchantInventoryRefreshInterval
+    {
+        get
+        {
+            return _merchantInventoryRefreshInterval;
+        }
+        set
+        {
+            _merchantInventoryRefreshInterval = value;
         }
     }
     

@@ -31,6 +31,7 @@ public partial class MapNpc : HybrasylEntity<MapNpc>
     private byte _x;
     private byte _y;
     private Direction _direction;
+    private string _displayName;
     #endregion
     
     public MapNpc()
@@ -88,6 +89,19 @@ public partial class MapNpc : HybrasylEntity<MapNpc>
         set
         {
             _direction = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public string DisplayName
+    {
+        get
+        {
+            return _displayName;
+        }
+        set
+        {
+            _displayName = value;
         }
     }
 }

@@ -38,6 +38,7 @@ public partial class CastableReactor : HybrasylEntity<CastableReactor>
     private bool _displayGroup;
     private string _displayStatus;
     private string _displayCookie;
+    private string _displayName;
     #endregion
     
     public CastableReactor()
@@ -202,6 +203,19 @@ public partial class CastableReactor : HybrasylEntity<CastableReactor>
         set
         {
             _displayCookie = value;
+        }
+    }
+    
+    [XmlAttribute]
+    public string DisplayName
+    {
+        get
+        {
+            return _displayName;
+        }
+        set
+        {
+            _displayName = value;
         }
     }
 }
