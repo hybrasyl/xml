@@ -6,8 +6,8 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <RootNamespace>Hybrasyl.Xml</RootNamespace>
-    <PackageVersion>0.9.4.1</PackageVersion>
-    <Version>0.9.4.1</Version>
+    <PackageVersion>0.9.4.2</PackageVersion>
+    <Version>0.9.4.2</Version>
     <BuildDocFx Condition="'$(Configuration)'=='Debug'">false</BuildDocFx>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Authors>ERISCO LLC</Authors>

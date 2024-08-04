@@ -228,6 +228,7 @@
       <xs:element name="Plugins" type="hyb:ServerPlugins" minOccurs="0" maxOccurs="1" />
       <xs:element name="ClientSettings" type="hyb:ClientSettings" minOccurs="0" maxOccurs="1" />
       <xs:element name="Constants" type="hyb:ServerConstants" minOccurs="1" maxOccurs="1" />
+      <xs:element name="Formulas" type="hyb:ServerFormulas" minOccurs="1" maxOccurs="1"/>
     </xs:sequence>
     <xs:attribute name="Name" type="xs:string" default="default" />
     <xs:attribute name="ElementTable" type="xs:string" default="default" />
@@ -235,6 +236,22 @@
     <xs:attribute name="Environment" default="dev" type="xs:string" />
   </xs:complexType>
 
+  <xs:complexType name="ServerFormulas">
+    <xs:sequence>
+      <xs:element name="XpToNextLevel" type="xs:string" default="Pow($SOURCELEVEL,3)*250"/>
+      <xs:element name="HpGainPerLevel" type="xs:string" default="($SOURCECON/($SOURCELEVEL + 1)*50)+25"/>
+      <xs:element name="MpGainPerLevel" type="xs:string" default="($SOURCEWIS/($SOURCELEVEL + 1)*50)+25"/>
+      <xs:element name="AllowedCarryWeight" type="xs:string" default="$SOURCESTR+($SOURCELEVEL/4) + 48"/>
+      <xs:element name="AllowedEquipmentWeight" type="xs:string" default="($SOURCESTR+($SOURCELEVEL/4) + 48)/2"/>
+      <xs:element name="MpRegenPerTick" type="xs:string" default="Min($SOURCEMAXIMUMMP * (0.1 + Max($SOURCEWIS, $SOURCEWIS - $SOURCELEVEL) * 0.01, $SOURCEMAXIMUMMP *0.20)"/>
+      <xs:element name="HpRegenPerTick" type="xs:string" default="Min($SOURCEMAXIMUMHP * (0.1 + Max($SOURCECON, $SOURCECON - $SOURCELEVEL) * 0.01, $SOURCEMAXIMUMHP *0.20)"/>                  
+      <xs:element name="AcDamageMitigation" type="xs:string" default=""/>
+      <xs:element name="AcMagicDamageMitigation" type="xs:string" default=""/>
+      <xs:element name="MonsterHpGainPerLevel" type="xs:string" default="($SOURCECON/($SOURCELEVEL + 1)*50)+25"/>
+      <xs:element name="MonsterMpGainPerLevel" type="xs:string" default="($SOURCEWIS/($SOURCELEVEL + 1)*50)+25"/>     
+    </xs:sequence>
+  </xs:complexType>
+  
   <xs:complexType name="ServerConstants">
     <xs:sequence>
       <!-- The percentage of an item's value that will be paid to a player for selling an item.-->

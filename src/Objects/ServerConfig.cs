@@ -40,6 +40,7 @@ public partial class ServerConfig : HybrasylEntity<ServerConfig>
     private ServerPlugins _plugins;
     private List<ClientSetting> _clientSettings;
     private ServerConstants _constants;
+    private ServerFormulas _formulas;
     private string _name;
     private string _elementTable;
     private string _locale;
@@ -48,6 +49,7 @@ public partial class ServerConfig : HybrasylEntity<ServerConfig>
     
     public ServerConfig()
     {
+        _formulas = new ServerFormulas();
         _constants = new ServerConstants();
         _apiEndpoints = new ApiEndpoints();
         _network = new Network();
@@ -203,6 +205,18 @@ public partial class ServerConfig : HybrasylEntity<ServerConfig>
         set
         {
             _constants = value;
+        }
+    }
+    
+    public ServerFormulas Formulas
+    {
+        get
+        {
+            return _formulas;
+        }
+        set
+        {
+            _formulas = value;
         }
     }
     

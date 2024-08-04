@@ -48,7 +48,8 @@ public enum CreatureCondition
     ProhibitMpRegen = 1048576,
     ProhibitHpIncrease = 2097152,
     ProhibitMpIncrease = 4194304,
-    ProhibitMpDecrease = 8388608
+    ProhibitMpDecrease = 8388608,
+    ProhibitXpIncrease = 16777216,
 }
 }
 #pragma warning restore
