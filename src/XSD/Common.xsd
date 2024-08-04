@@ -461,9 +461,9 @@
         <xs:list>
           <xs:simpleType>
             <xs:restriction base="xs:token">
-              <xs:enumeration value="Freeze" />
+              <xs:enumeration value="Stun" />
               <xs:enumeration value="Sleep" />
-              <xs:enumeration value="Paralyze" />
+              <xs:enumeration value="Root" />
               <xs:enumeration value="Blind" />
               <xs:enumeration value="Coma" />
               <xs:enumeration value="Poison" />
@@ -480,11 +480,16 @@
               <xs:enumeration value="Disoriented" />
               <xs:enumeration value="Disarm" />
               <xs:enumeration value="Fear" />
+              <xs:enumeration value="ProhibitHpRegen"/>
+              <xs:enumeration value="ProhibitMpRegen"/>
+              <xs:enumeration value="ProhibitHpIncrease"/>
+              <xs:enumeration value="ProhibitMpIncrease"/>
+              <xs:enumeration value="ProhibitMpDecrease"/>
             </xs:restriction>
           </xs:simpleType>
         </xs:list>
       </xs:simpleType>
-      <xs:maxLength value="19" />
+      <xs:maxLength value="22" />
     </xs:restriction>
   </xs:simpleType>
 
