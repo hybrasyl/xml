@@ -28,7 +28,7 @@ public partial class NpcRolePostSurcharge : HybrasylEntity<NpcRolePostSurcharge>
 {
     #region Private fields
     private string _nation;
-    private int _percent;
+    private float _percent;
     #endregion
     
     [XmlAttribute]
@@ -45,7 +45,7 @@ public partial class NpcRolePostSurcharge : HybrasylEntity<NpcRolePostSurcharge>
     }
     
     [XmlAttribute]
-    public int Percent
+    public float Percent
     {
         get
         {

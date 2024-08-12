@@ -42,7 +42,7 @@ public enum CreatureTargetPriority
     AllyWithLessThanMaxHp,
     AllyWithLessThanMaxMp,
     AllyWithStatusConditions,
-    AllyWithNoStatusConditions
+    AllyWithNoStatusConditions,
 }
 }
 #pragma warning restore

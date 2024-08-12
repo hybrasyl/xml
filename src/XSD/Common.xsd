@@ -1025,7 +1025,7 @@
 
   <xs:complexType name="NpcRolePostSurcharge">
     <xs:attribute name="Nation" type="hyb:String8" />
-    <xs:attribute name="Percent" type="xs:int" />
+    <xs:attribute name="Percent" type="xs:float" />
   </xs:complexType>
 
   <xs:complexType name="NpcRolePost">
