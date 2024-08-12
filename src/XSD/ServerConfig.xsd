@@ -243,8 +243,8 @@
       <xs:element name="MpGainPerLevel" type="xs:string" default="((SOURCEWIS/(SOURCELEVEL + 1)*50)*(RANDDOUBLE*0.30+0.85))+25"/>
       <xs:element name="AllowedCarryWeight" type="xs:string" default="SOURCESTR+(SOURCELEVEL/4) + 48"/>
       <xs:element name="AllowedEquipmentWeight" type="xs:string" default="(SOURCESTR+(SOURCELEVEL/4) + 48)/2"/>
-      <xs:element name="MpRegenPerTick" type="xs:string" default="Min(SOURCEMAXIMUMMP * (0.1 + Max(SOURCEWIS, SOURCEWIS - SOURCELEVEL) * 0.01, SOURCEMAXIMUMMP * 0.20)"/>
-      <xs:element name="HpRegenPerTick" type="xs:string" default="Min(SOURCEMAXIMUMHP * (0.1 + Max(SOURCECON, SOURCECON - SOURCELEVEL) * 0.01, SOURCEMAXIMUMHP * 0.20)"/>                  
+      <xs:element name="MpRegenPerTick" type="xs:string" default="Min(SOURCEMAXIMUMMP * (0.1 + Max(SOURCEWIS, SOURCEWIS - SOURCELEVEL) * 0.01, SOURCEMAXIMUMMP * 0.20))"/>
+      <xs:element name="HpRegenPerTick" type="xs:string" default="Min(SOURCEMAXIMUMHP * (0.1 + Max(SOURCECON, SOURCECON - SOURCELEVEL) * 0.01, SOURCEMAXIMUMHP * 0.20))"/>                  
       <xs:element name="AcDamageMitigation" type="xs:string" default=""/>
       <xs:element name="AcMagicDamageMitigation" type="xs:string" default=""/>
       <xs:element name="MonsterHpGainPerLevel" type="xs:string" default="((SOURCECON/(SOURCELEVEL + 1)*50)*(RANDDOUBLE*0.30+0.85))+25"/>
