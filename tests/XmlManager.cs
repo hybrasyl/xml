@@ -229,7 +229,7 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
         Assert.Equal(176, manager.Count<Item>());
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "npcs"), "*.xml").Length, manager.Count<Npc>());
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "maps"), "*.xml").Length, manager.Count<Map>());
-        Assert.Equal(17, manager.Count<Creature>());
+        Assert.Equal(19, manager.Count<Creature>());
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "variantgroups"), "*.xml").Length,
             manager.Count<VariantGroup>());
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "lootsets"), "*.xml").Length,

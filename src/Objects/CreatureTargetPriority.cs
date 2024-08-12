@@ -35,6 +35,14 @@ public enum CreatureTargetPriority
     AttackingHealer,
     RandomAttacker,
     AttackingGroup,
+    AllyWithLowestHp,
+    AllyWithLowestMp,
+    AllyWithHighestHp,
+    AllyWithHighestMp,
+    AllyWithLessThanMaxHp,
+    AllyWithLessThanMaxMp,
+    AllyWithStatusConditions,
+    AllyWithNoStatusConditions
 }
 }
 #pragma warning restore

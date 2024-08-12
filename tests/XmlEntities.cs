@@ -151,4 +151,14 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         var sd = new StatusDamage();
         Assert.Equal(typeof(ElementType), sd.Element.GetType());
     }
+
+    [Fact]
+
+    public void HostilitySettingsAreCorrect()
+    {
+        var monster = fixture.SyncManager.Get<Creature>("Aggro Gabbaghoul");
+        Assert.NotNull(monster.Hostility);
+        Assert.NotNull(monster.Hostility.Players);
+    }
+
 }

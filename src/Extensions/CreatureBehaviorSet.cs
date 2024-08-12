@@ -26,7 +26,7 @@ using System.Xml.Serialization;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>, ILoadOnStart<CreatureBehaviorSet>, IAdditionalValidation<CreatureBehaviorSet>
+public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>, ILoadOnStart<CreatureBehaviorSet>, IAdditionalValidation<CreatureBehaviorSet>, IEquatable<CreatureBehaviorSet>
 {
     [XmlIgnore]
     public List<string> LearnSkillCategories => string.IsNullOrEmpty(Castables?.SkillCategories)
@@ -39,6 +39,9 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
         : Castables.SpellCategories.Trim().ToLower().Split(" ").ToList();
 
     public override string PrimaryKey => Name;
+
+    [XmlIgnore] 
+    public CreatureBehaviorSet BeforeImport { get; protected set;  } = null;
 
     public new static void LoadAll(IWorldDataManager manager, string path) =>
         HybrasylEntity<CreatureBehaviorSet>.LoadAll(manager, path);
@@ -59,6 +62,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
             var newSet = import.Clone<CreatureBehaviorSet>(true);
             var resolved = newSet & creatureBehaviorSet;
             resolved.Name = import.Name;
+            resolved.BeforeImport = import.Clone<CreatureBehaviorSet>();
             manager.Add(resolved, resolved.Name);
             ret.AdditionalCount++;
             ret.TotalProcessed++;
@@ -136,6 +140,13 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
         newCbs.Immunities = cbs1.Immunities == null ? cbs2.Immunities : cbs1.Immunities.Union(cbs2.Immunities).ToList();
 
+        if (cbs1.StatModifiers == null) newCbs.StatModifiers = cbs2.StatModifiers;
+        else if (cbs2.StatModifiers == null) newCbs.StatModifiers = cbs1.StatModifiers;
+        else
+        {
+            // Both are null
+            newCbs.StatModifiers = cbs1.StatModifiers + cbs2.StatModifiers;
+        }
         return newCbs;
     }
 
@@ -220,4 +231,36 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
             string.Equals(x.Value, castable.Name, StringComparison.CurrentCultureIgnoreCase));
         return immunity != null;
     }
+
+    public bool Equals(CreatureBehaviorSet other)
+    {
+        if (ReferenceEquals(null, other)) return false;
+        if (ReferenceEquals(this, other)) return true;
+        return _statAlloc == other._statAlloc && Equals(_castables, other._castables) && 
+               Equals(_behavior, other._behavior) && Equals(_immunities, other._immunities) && 
+               Equals(_statModifiers, other._statModifiers) && _name == other._name;
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (ReferenceEquals(null, obj)) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        return obj.GetType() == GetType() && Equals((CreatureBehaviorSet) obj);
+    }
+
+    public static bool operator ==(CreatureBehaviorSet lhs, CreatureBehaviorSet rhs)
+    {
+        return lhs switch
+        {
+            null when rhs is null => true,
+            null => false,
+            _ => lhs.Equals(rhs)
+        };
+    }
+
+    public static bool operator !=(CreatureBehaviorSet lhs, CreatureBehaviorSet rhs) => !(lhs == rhs);
+
+    public override int GetHashCode() => HashCode.Combine(_statAlloc, _castables, _behavior, _immunities, _statModifiers, _name);
+
+
 }

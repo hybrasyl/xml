@@ -862,6 +862,14 @@
       <xs:enumeration value="AttackingHealer" />
       <xs:enumeration value="RandomAttacker" />
       <xs:enumeration value="AttackingGroup" />
+      <xs:enumeration value="AllyWithLowestHp"/>
+      <xs:enumeration value="AllyWithLowestMp"/>
+      <xs:enumeration value="AllyWithHighestHp"/>
+      <xs:enumeration value="AllyWithHighestMp"/>                     
+      <xs:enumeration value="AllyWithLessThanMaxHp"/>
+      <xs:enumeration value="AllyWithLessThanMaxMp"/>
+      <xs:enumeration value="AllyWithStatusConditions"/>
+      <xs:enumeration value="AllyWithNoStatusConditions"/>
     </xs:restriction>
   </xs:simpleType>
 

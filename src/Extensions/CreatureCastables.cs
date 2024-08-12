@@ -20,31 +20,24 @@ using System;
 
 namespace Hybrasyl.Xml.Objects;
 
-public partial class CreatureCastable : IEquatable<CreatureCastable>
+public partial class CreatureCastables : IEquatable<CreatureCastables>
 {
-    public CreatureCastable(int interval, CreatureTargetPriority priority, string value) : this()
-    {
-        Interval = interval;
-        TargetPriority = priority;
-        Value = value;
-    }
-
-    public bool Equals(CreatureCastable other)
+    public bool Equals(CreatureCastables other)
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        return _targetPriority == other._targetPriority && _healthPercentage == other._healthPercentage 
-                                                        && _useOnce == other._useOnce && _interval == other._interval && _value == other._value;
+        return Equals(_castable, other._castable) && _auto == other._auto 
+                                                  && _skillCategories == other._skillCategories 
+                                                  && _spellCategories == other._spellCategories;
     }
 
     public override bool Equals(object obj)
     {
         if (ReferenceEquals(null, obj)) return false;
         if (ReferenceEquals(this, obj)) return true;
-        return obj.GetType() == GetType() && Equals((CreatureCastable) obj);
+        return obj.GetType() == GetType() && Equals((CreatureCastables) obj);
     }
-
-    public static bool operator ==(CreatureCastable lhs, CreatureCastable rhs)
+    public static bool operator ==(CreatureCastables lhs, CreatureCastables rhs)
     {
         return lhs switch
         {
@@ -54,8 +47,7 @@ public partial class CreatureCastable : IEquatable<CreatureCastable>
         };
     }
 
-    public static bool operator !=(CreatureCastable lhs, CreatureCastable rhs) => !(lhs == rhs);
+    public static bool operator !=(CreatureCastables lhs, CreatureCastables rhs) => !(lhs == rhs);
 
-
-    public override int GetHashCode() => HashCode.Combine((int) _targetPriority, _healthPercentage, _useOnce, _interval, _value);
+    public override int GetHashCode() => HashCode.Combine(_castable, _auto, _skillCategories, _spellCategories);
 }
