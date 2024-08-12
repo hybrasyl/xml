@@ -156,7 +156,7 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
 
     public void HostilitySettingsAreCorrect()
     {
-        var monster = fixture.SyncManager.Get<Creature>("Aggro Gabbaghoul");
+        var monster = fixture.SyncManager.Get<Creature>("Gabbaghoul");
         Assert.NotNull(monster.Hostility);
         Assert.NotNull(monster.Hostility.Players);
     }
