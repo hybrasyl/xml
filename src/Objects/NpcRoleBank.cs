@@ -28,7 +28,7 @@ public partial class NpcRoleBank : HybrasylEntity<NpcRoleBank>
 {
     #region Private fields
     private string _nation;
-    private string _discount;
+    private float _discount;
     #endregion
     
     [XmlAttribute]
@@ -45,7 +45,7 @@ public partial class NpcRoleBank : HybrasylEntity<NpcRoleBank>
     }
     
     [XmlAttribute]
-    public string Discount
+    public float Discount
     {
         get
         {

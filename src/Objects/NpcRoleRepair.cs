@@ -28,7 +28,7 @@ public partial class NpcRoleRepair : HybrasylEntity<NpcRoleRepair>
 {
     #region Private fields
     private string _nation;
-    private int _discount;
+    private float _discount;
     private List<NpcRepairType> _type;
     #endregion
     
@@ -51,7 +51,7 @@ public partial class NpcRoleRepair : HybrasylEntity<NpcRoleRepair>
     }
     
     [XmlAttribute]
-    public int Discount
+    public float Discount
     {
         get
         {

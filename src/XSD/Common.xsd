@@ -1037,7 +1037,7 @@
 
   <xs:complexType name="NpcRoleRepair">
     <xs:attribute name="Nation" type="hyb:String8" />
-    <xs:attribute name="Discount" type="xs:int" />
+    <xs:attribute name="Discount" type="xs:float" />
     <xs:attribute name="Type">
       <xs:simpleType>
         <xs:list itemType="hyb:NpcRepairType" />
@@ -1047,9 +1047,8 @@
 
   <xs:complexType name="NpcRoleBank">
     <xs:attribute name="Nation" type="hyb:String8" />
-    <xs:attribute name="Discount" type="hyb:String8" />
+    <xs:attribute name="Discount" type="xs:float" />
   </xs:complexType>
-
 
   <xs:complexType name="NpcRoleList">
     <xs:sequence>
