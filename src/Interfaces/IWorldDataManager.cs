@@ -16,12 +16,13 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using System;
-using System.Collections.Generic;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
 using Serilog;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Hybrasyl.Xml.Interfaces;
 
@@ -61,7 +62,7 @@ public interface IWorldDataManager
     public IValidationResult GetValidationResult<T>() where T : HybrasylEntity<T>;
 
     public void LoadData();
-    public void LoadDataAsync();
+    public Task LoadDataAsync();
 
     public IEnumerable<Castable> FindSkills(long str = 0, long @int = 0, long wis = 0, long con = 0, long dex = 0,
         string category = null);

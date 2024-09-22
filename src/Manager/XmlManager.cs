@@ -16,6 +16,11 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using Hybrasyl.Xml.Enums;
+using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Objects;
+using Pluralize.NET;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,11 +29,6 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Hybrasyl.Xml.Enums;
-using Hybrasyl.Xml.Interfaces;
-using Hybrasyl.Xml.Objects;
-using Pluralize.NET;
-using Serilog;
 
 namespace Hybrasyl.Xml.Manager;
 
@@ -41,18 +41,34 @@ public class XmlDataManager : IWorldDataManager
     private readonly Dictionary<Type, MethodInfo> _processableTypes = new();
     private readonly Dictionary<Type, MethodInfo> _validatableTypes = new();
 
+    public XmlDataManager()
+    {
+        Initialize();
+    }
+
     public XmlDataManager(string rootPath)
     {
         RootPath = rootPath;
+        Initialize();
+    }
+
+    public void Initialize()
+    {
         var loadOnStartType = typeof(ILoadOnStart<>);
+        
         // find all classes that implement ILoadOnStart<T>
         var assembly = Assembly.GetAssembly(loadOnStartType);
+
+        // Nothing to do
+        if (assembly == null)
+            return;
 
         var targetTypes = assembly.GetTypes()
             .Where(predicate: t => t.GetInterfaces()
                 .Any(predicate: i => i.IsGenericType && i.GetGenericTypeDefinition() == loadOnStartType));
 
         var storeType = typeof(XmlDataStore<>);
+        
         foreach (var targetType in targetTypes)
         {
             // Gather our methods to run later
@@ -102,7 +118,7 @@ public class XmlDataManager : IWorldDataManager
 
     public bool IsReady { get; set; }
 
-    public async void LoadDataAsync()
+    public async Task LoadDataAsync()
     {
         if (!Directory.Exists(RootPath))
             throw new FileNotFoundException($"{RootPath} doesn't exist or is not readable");
