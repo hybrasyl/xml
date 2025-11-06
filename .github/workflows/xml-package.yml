@@ -50,8 +50,9 @@ jobs:
         run: cat <<< $(jq --arg wdd "$GITHUB_WORKSPACE/ceridwen/xml" '.WorldDataDirectory = $wdd' tests/xmltest-settings.json) > tests/xmltest-settings.json && cat tests/xmltest-settings.json
       - name: run tests
         run: cd tests && dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage" && dotnet pack
+      - run: mkdir ${GITHUB_WORKSPACE}/signed; mkdir ${GITHUB_WORKSPACE}/packages
       - name: Make nuget package
-        run: dotnet pack
+        run: dotnet pack -o ${GITHUB_WORKSPACE}/packages
       - name: Codecov
         uses: codecov/codecov-action@v3
         with:
@@ -59,7 +60,7 @@ jobs:
           verbose: true
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      - run: mkdir ${GITHUB_WORKSPACE}/signed
+      - run: ls ${GITHUB_WORKSPACE}/packages
       - name: Sign package
         uses: sslcom/esigner-codesign@develop
         with:
@@ -68,7 +69,7 @@ jobs:
           password: ${{ secrets.ES_PASSWORD }}
           credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
           totp_secret: ${{ secrets.ES_TOTP_SECRET }}
-          file_path: ${GITHUB_WORKSPACE}/src/bin/Release/Hybrasyl.Xml.${TAG}.nupkg
+          file_path: ${GITHUB_WORKSPACE}/packages/Hybrasyl.Xml.${TAG}.nupkg
           output_path: ${GITHUB_WORKSPACE}/signed
           malware_block: false
           override: false
