@@ -65,7 +65,8 @@ jobs:
         with:
           command: sign
           username: ${{ secrets.ES_USERNAME }}
-          credential_id: ${{ secrets.CREDENTIAL_ID }}
+          password: ${{ secrets.ES_PASSWORD }}
+          credential_id: ${{ secrets.ES_CREDENTIAL_ID }}
           totp_secret: ${{ secrets.ES_TOTP_SECRET }}
           file_path: ${GITHUB_WORKSPACE}/src/bin/Release/Hybrasyl.Xml.${TAG}.nupkg
           output_path: ${GITHUB_WORKSPACE}/signed
