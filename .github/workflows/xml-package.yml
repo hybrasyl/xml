@@ -1,5 +1,5 @@
 ---
-name: Package and ship XML NuGet package
+name: Package and upload XML NuGet package to nuget.org
 
 on:
   push:
@@ -24,9 +24,9 @@ jobs:
         dotnet-version: ['9.0.x']
     steps:
       - if: "${{ github.event.inputs.tag == '' }}"
-        run: echo "TAG=${{ github.ref_name }}" | sed -e 's/v-//' >> $GITHUB_ENV
+        run: echo "TAG=${{ github.ref_name }}" | sed -e 's/v//' >> $GITHUB_ENV
       - if: "${{ github.event.inputs.tag != '' }}"
-        run: echo "TAG=${{ github.event.inputs.tag }}" | sed -e 's/v-//' >> $GITHUB_ENV
+        run: echo "TAG=${{ github.event.inputs.tag }}" | sed -e 's/v//' >> $GITHUB_ENV
       - name: Display tag
         run: echo "[${{ github.event.inputs.tag }}] - Now building XML tag ${{ env.TAG }}"
       - name: Check out source

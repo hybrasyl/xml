@@ -1,4 +1,4 @@
-name: XML packaging and testing
+name: Build library and test
 
 on:
   push:
