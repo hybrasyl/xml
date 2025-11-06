@@ -1097,7 +1097,7 @@
   <xs:complexType name="Npc">
     <xs:sequence>
       <xs:element name="Name" minOccurs="1" maxOccurs="1" type="hyb:String8" />
-      <xs:element name="DisplayName" minOccurs="0" maxOccurs="1" type="hyb:String8" />
+      <xs:element name="DisplayName" minOccurs="1" maxOccurs="1" type="hyb:String8" />
       <xs:element name="Appearance" minOccurs="0" maxOccurs="1">
         <xs:complexType>
           <xs:attribute name="Sprite" type="xs:unsignedShort" use="required" />

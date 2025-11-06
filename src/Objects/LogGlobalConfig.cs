@@ -24,36 +24,74 @@ using System.Collections.Generic;
 [DebuggerStepThrough]
 [DesignerCategoryAttribute("code")]
 [XmlTypeAttribute(Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
-public partial class CreatureCookie : HybrasylEntity<CreatureCookie>
+public partial class LogGlobalConfig : HybrasylEntity<LogGlobalConfig>
 {
     #region Private fields
-    private string _name;
-    private string _value;
+    private List<LogConfig> _log;
+    private bool _singleStreamEnabled;
+    private bool _jsonOutputEnabled;
+    private LogLevel _minimumLevel;
     #endregion
     
-    [XmlAttribute]
-    public string Name
+    public LogGlobalConfig()
+    {
+        _singleStreamEnabled = false;
+        _jsonOutputEnabled = false;
+        _minimumLevel = LogLevel.Info;
+    }
+    
+    [XmlElement("Log")]
+    public List<LogConfig> Log
     {
         get
         {
-            return _name;
+            return _log;
         }
         set
         {
-            _name = value;
+            _log = value;
         }
     }
     
     [XmlAttribute]
-    public string Value
+    [DefaultValue(false)]
+    public bool SingleStreamEnabled
     {
         get
         {
-            return _value;
+            return _singleStreamEnabled;
         }
         set
         {
-            _value = value;
+            _singleStreamEnabled = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(false)]
+    public bool JsonOutputEnabled
+    {
+        get
+        {
+            return _jsonOutputEnabled;
+        }
+        set
+        {
+            _jsonOutputEnabled = value;
+        }
+    }
+    
+    [XmlAttribute]
+    [DefaultValue(LogLevel.Info)]
+    public LogLevel MinimumLevel
+    {
+        get
+        {
+            return _minimumLevel;
+        }
+        set
+        {
+            _minimumLevel = value;
         }
     }
 }

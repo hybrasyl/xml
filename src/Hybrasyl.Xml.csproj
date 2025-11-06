@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net7.0;net8.0;net9.0</TargetFrameworks>
     <AssemblyName>Hybrasyl.Xml</AssemblyName>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <RootNamespace>Hybrasyl.Xml</RootNamespace>
-    <PackageVersion>0.9.4.9</PackageVersion>
-    <Version>0.9.4.9</Version>
+    <PackageVersion>0.9.4.10</PackageVersion>
+    <Version>0.9.4.10</Version>
     <BuildDocFx Condition="'$(Configuration)'=='Debug'">false</BuildDocFx>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Authors>ERISCO LLC</Authors>
@@ -34,11 +34,11 @@
     <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.3" />
     <PackageReference Include="Pluralize.NET" Version="1.0.2" />
-    <PackageReference Include="Serilog" Version="3.1.1" />
-    <PackageReference Include="Serilog.Sinks.TestCorrelator" Version="3.2.0" />
+    <PackageReference Include="Serilog" Version="4.3.0" />
+    <PackageReference Include="Serilog.Sinks.TestCorrelator" Version="4.0.0" />
   </ItemGroup>
 
 </Project>
