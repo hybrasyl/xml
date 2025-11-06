@@ -1,0 +1,72 @@
+name: Package and ship XML NuGet package
+
+on:
+  push:
+    tags: 
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "The tag to be used for the release"
+         required: true
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: deploy
+    strategy:
+      matrix:
+        dotnet-version: ['9.0.x']
+
+    steps:
+      - if: "${{ github.event.inputs.tag == '' }}"
+        run: echo "TAG=${{ github.ref_name }}" >> $GITHUB_ENV
+      - if: "${{ github.event.inputs.tag != '' }}"
+        run: echo "TAG=${{ github.event.inputs.tag }}" >> $GITHUB_ENV
+      - name: Display tag
+        run: echo "[${{ github.event.inputs.tag }}] - Now building XML tag ${{ env.TAG }}"
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up .NET SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install jq tool
+        run: |
+          sudo apt-get update
+          sudo apt-get install jq
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+      - name: Check out ceridwen
+        uses: actions/checkout@v3
+        with:
+          repository: hybrasyl/ceridwen
+          path: ceridwen
+      - name: update test settings
+        run: cat <<< $(jq --arg wdd "$GITHUB_WORKSPACE/ceridwen/xml" '.WorldDataDirectory = $wdd' tests/xmltest-settings.json) > tests/xmltest-settings.json && cat tests/xmltest-settings.json
+      - name: run tests
+        run: cd tests && dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage" && dotnet pack
+      - name: Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          fail_ci_if_error: true
+          verbose: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - name: Discord notification
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        uses: Ilshidur/action-discord@0.3.2
+      - name: NuGet login (OIDC)
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}         
+      - name: Push to NuGet
+        run: dotnet nuget push src/bin/Release/Hybrasyl.Xml.${TAG} --api-key ${{ steps.login.outputs.NUGET_API }}
