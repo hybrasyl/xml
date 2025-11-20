@@ -89,4 +89,4 @@ jobs:
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         with: 
-          args: "XML version {{ env.TAG }} has been pushed to nuget.org"
+          args: "XML version ${{ env.TAG }} has been pushed to nuget.org"
