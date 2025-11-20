@@ -44,6 +44,7 @@ public interface IWorldDataManager
     public bool ContainsKey<T>(dynamic key) where T : HybrasylEntity<T>;
     public bool ContainsIndex<T>(dynamic index) where T : HybrasylEntity<T>;
     public int Count<T>() where T : HybrasylEntity<T>;
+    public int Total { get; }
     public bool Remove<T>(dynamic key) where T : HybrasylEntity<T>;
     public bool Remove<T>(T entity) where T : HybrasylEntity<T>;
     public bool RemoveByIndex<T>(dynamic index) where T : HybrasylEntity<T>;

@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net8.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
     <AssemblyName>Hybrasyl.Xml</AssemblyName>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <RootNamespace>Hybrasyl.Xml</RootNamespace>
-    <PackageVersion>0.9.4.10</PackageVersion>
-    <Version>0.9.4.10</Version>
+    <PackageVersion>0.9.4.11</PackageVersion>
+    <Version>0.9.4.11</Version>
     <BuildDocFx Condition="'$(Configuration)'=='Debug'">false</BuildDocFx>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Authors>ERISCO LLC</Authors>

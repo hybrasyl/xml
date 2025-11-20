@@ -110,6 +110,7 @@ public class XmlDataManager : IWorldDataManager
     public bool ContainsKey<T>(dynamic name) where T : HybrasylEntity<T> => GetStore<T>().ContainsKey(name);
     public bool ContainsIndex<T>(dynamic index) where T : HybrasylEntity<T> => GetStore<T>().ContainsIndex(index);
     public int Count<T>() where T : HybrasylEntity<T> => GetStore<T>().Count;
+
     public bool Remove<T>(T entity) where T : HybrasylEntity<T> => GetStore<T>().Remove(entity.PrimaryKey);
     public bool Remove<T>(dynamic name) where T : HybrasylEntity<T> => GetStore<T>().Remove(name);
     public bool RemoveByIndex<T>(dynamic index) where T : HybrasylEntity<T> => GetStore<T>().RemoveByIndex(index);
@@ -117,6 +118,9 @@ public class XmlDataManager : IWorldDataManager
     public string RootPath { get; set; }
 
     public bool IsReady { get; set; }
+
+    // This is fairly disgusting
+    public int Total => _dataStore.Aggregate(0, (current, kvp) => {Console.WriteLine($"{kvp.Key.Name} - {kvp.Value.Count}"); return current + kvp.Value.Count; });
 
     public async Task LoadDataAsync()
     {

@@ -34,6 +34,11 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
     private readonly XmlManagerFixture fixture;
     private readonly ITestOutputHelper output;
 
+    // This can't be known easily because of variants / etc
+    // TODO: update to go through actual xml and calculate variants / creature types
+    private readonly int VariantItems = 176;
+    private readonly int VariantCreatures = 25;
+
     public XmlManagerTests(ITestOutputHelper output, XmlManagerFixture fixture)
     {
         this.output = output;
@@ -50,6 +55,11 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
             new()  { Value = "Category 2" }
         }
     };
+
+    private static readonly string[] xmlFileDirectories = [ "castables", "creatures", "creaturebehaviorsets", "elementtables",
+        "items", "localizations", "lootsets", "maps", "nations", "npcs", "serverconfigs", "spawngroups", "statuses", 
+        "variantgroups", "worldmaps"
+        ];
 
     [Fact]
     public void LoadDataContainsNoLoadErrors()
@@ -226,10 +236,10 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
             $"Element Tables: {manager.Count<ElementTable>()} Server Configs: {manager.Count<ServerConfig>()} Localization Files: {manager.Count<Localization>()}");
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "castables"), "*.xml").Length,
             manager.Count<Castable>());
-        Assert.Equal(176, manager.Count<Item>());
+        Assert.Equal(VariantItems, manager.Count<Item>());
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "npcs"), "*.xml").Length, manager.Count<Npc>());
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "maps"), "*.xml").Length, manager.Count<Map>());
-        Assert.Equal(25, manager.Count<Creature>());
+        Assert.Equal(VariantCreatures, manager.Count<Creature>());
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "variantgroups"), "*.xml").Length,
             manager.Count<VariantGroup>());
         Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "lootsets"), "*.xml").Length,
@@ -350,6 +360,23 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
 
     [Fact]
     public void GetByCategory() { }
+
+    [Fact]
+    public void GetTotal()
+    {
+        var count = 0;
+        // This could probably be improved, but for now it is what it is
+        foreach (var type in xmlFileDirectories)
+        {
+            var files = Directory.GetFiles(Path.Join(fixture.SyncManager.RootPath, type), "*.xml").Length;
+            count += files;
+        }
+
+        count += VariantCreatures;
+        count += VariantItems; 
+        count += fixture.SyncManager.Count<WorldMapPoint>(); // worldmap points are stored for indexing purposes
+        Assert.Equal(count, fixture.SyncManager.Total);
+    }
 
     [Fact]
     public void VariantExists()

@@ -41,8 +41,8 @@ public class ImportTests(ITestOutputHelper output, XmlManagerFixture fixture) : 
         {
             Assert.Contains(importedCastingSet, setWithImport.Behavior.CastingSets);
         }
-        Assert.True(setWithImport.Castables.Castable.Contains("mor ioc"));
-        Assert.True(setWithImport.Behavior.CastingSets.Any(x => x.Castable.FirstOrDefault(y => y.Value == "mor ioc") != null));
+        Assert.Contains("mor ioc", setWithImport.Castables.Castable);
+        Assert.Contains(setWithImport.Behavior.CastingSets, x => x.Castable.FirstOrDefault(y => y.Value == "mor ioc") != null);
         Assert.NotNull(setWithImport.StatModifiers);
         Assert.NotNull(importedSet.StatModifiers);
         Assert.NotEmpty(setWithImport.StatAlloc);
