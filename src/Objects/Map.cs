@@ -42,6 +42,7 @@ public partial class Map : HybrasylEntity<Map>
     private byte _y;
     private bool _isEnabled;
     private bool _allowCasting;
+    private bool _dynamicLighting;
     #endregion
     
     public Map()
@@ -54,6 +55,7 @@ public partial class Map : HybrasylEntity<Map>
         _music = ((byte)(0));
         _isEnabled = true;
         _allowCasting = true;
+        _dynamicLighting = false;
     }
     
     public string Name
@@ -234,6 +236,20 @@ public partial class Map : HybrasylEntity<Map>
         set
         {
             _allowCasting = value;
+        }
+    }
+
+    [XmlAttribute]
+    [DefaultValue(false)]
+    public bool DynamicLighting
+    {
+        get
+        {
+            return _dynamicLighting;
+        }
+        set
+        {
+            _dynamicLighting = value;
         }
     }
 }
