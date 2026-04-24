@@ -26,6 +26,8 @@
     </xs:documentation>
   </xs:annotation>
 
+  <xs:include schemaLocation="Common.xsd" />
+
   <xs:complexType name="SpawnPoints">
     <xs:sequence>
       <xs:element name="SpawnPoint" minOccurs="1" maxOccurs="unbounded" type="hyb:SpawnPoint">

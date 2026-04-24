@@ -26,6 +26,8 @@
     </xs:documentation>
   </xs:annotation>
 
+  <xs:include schemaLocation="Common.xsd" />
+
   <xs:complexType name="CastModifierAdd">
     <xs:attribute name="Match" type="xs:int" use="optional" default="-1" />
     <xs:attribute name="Amount" type="xs:int" use="required" />

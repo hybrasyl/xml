@@ -26,6 +26,8 @@
     </xs:documentation>
   </xs:annotation>
 
+  <xs:include schemaLocation="Common.xsd" />
+
   <xs:complexType name="StatusDamage">
     <xs:sequence>
       <xs:element name="Flags" type="hyb:DamageFlags" />

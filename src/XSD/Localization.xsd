@@ -27,6 +27,8 @@
     </xs:documentation>
   </xs:annotation>
 
+  <xs:include schemaLocation="Common.xsd" />
+
   <xs:complexType name="Localization">
     <xs:sequence>
       <xs:element name="Common" type="hyb:LocalizedStrings" minOccurs="1" maxOccurs="1" />

@@ -26,6 +26,8 @@
     </xs:documentation>
   </xs:annotation>
 
+  <xs:include schemaLocation="Common.xsd" />
+
   <xs:complexType name="LootSet">
     <xs:sequence>
       <xs:element name="Table" minOccurs="1" maxOccurs="unbounded" type="hyb:LootTable" />

@@ -25,6 +25,9 @@
     </xs:documentation>
   </xs:annotation>
 
+  <xs:include schemaLocation="Common.xsd" />
+  <xs:include schemaLocation="Spawns.xsd" />
+
   <!-- Mapwarp / worldwarp subelements -->
   <xs:complexType name="Warp">
     <xs:sequence>

@@ -26,6 +26,8 @@
     </xs:documentation>
   </xs:annotation>
 
+  <xs:include schemaLocation="Common.xsd" />
+
   <xs:complexType name="DataStore">
     <xs:sequence>
       <xs:element name="Username" type="xs:token" minOccurs="0" maxOccurs="1" />

@@ -27,6 +27,8 @@
     </xs:documentation>
   </xs:annotation>
 
+  <xs:include schemaLocation="Common.xsd" />
+
   <!-- Damage effects type -->
   <xs:complexType name="CastableDamage">
     <xs:sequence>

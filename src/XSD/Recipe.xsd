@@ -26,6 +26,8 @@
     </xs:documentation>
   </xs:annotation>
 
+  <xs:include schemaLocation="Common.xsd" />
+
   <xs:complexType name="RecipeItem">
     <xs:attribute name="Name" type="xs:string" />
   </xs:complexType>

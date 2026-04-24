@@ -25,6 +25,8 @@
     </xs:documentation>
   </xs:annotation>
 
+  <xs:include schemaLocation="Common.xsd" />
+
   <xs:element name="BehaviorSet" type="hyb:CreatureBehaviorSet" />
   <xs:element name="Creature" type="hyb:Creature" />
   <xs:element name="Npc" type="hyb:Npc" />

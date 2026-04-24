@@ -27,6 +27,8 @@
     </xs:documentation>
   </xs:annotation>
 
+  <xs:include schemaLocation="Common.xsd" />
+
   <!-- New, ERISCO SPAWNS (TM), with the capability of being put on ANY map! -->
 
   <xs:complexType name="SpawnGroup">
