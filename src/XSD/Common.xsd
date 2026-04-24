@@ -987,6 +987,14 @@
     <xs:attribute name="Random" type="xs:boolean" use="optional" default="true" />
   </xs:complexType>
 
+  <xs:complexType name="NpcRoleCostAdjustment">
+    <xs:simpleContent>
+      <xs:extension base="xs:float">
+        <xs:attribute name="Nation" type="hyb:String8" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
   <xs:complexType name="NpcRoleTrainCastable">
     <xs:attribute name="Type" type="hyb:String8" />
     <xs:attribute name="Class" type="hyb:ClassList" />
@@ -996,7 +1004,10 @@
   <xs:complexType name="NpcRoleTrain">
     <xs:sequence>
       <xs:element name="Castable" type="hyb:NpcRoleTrainCastable" minOccurs="1" maxOccurs="unbounded" />
+      <xs:element name="CostAdjustment" type="hyb:NpcRoleCostAdjustment" minOccurs="0" maxOccurs="unbounded" />
     </xs:sequence>
+    <xs:attribute name="ExceptCookie" type="hyb:String8" />
+    <xs:attribute name="OnlyCookie" type="hyb:String8" />
   </xs:complexType>
 
   <xs:complexType name="NpcRoleVendItemList">
@@ -1015,12 +1026,15 @@
   <xs:complexType name="NpcRoleVend">
     <xs:sequence>
       <xs:element name="Items" type="hyb:NpcRoleVendItemList" minOccurs="0" maxOccurs="1" />
+      <xs:element name="CostAdjustment" type="hyb:NpcRoleCostAdjustment" minOccurs="0" maxOccurs="unbounded" />
     </xs:sequence>
     <xs:attribute name="Tabs">
       <xs:simpleType>
         <xs:list itemType="hyb:String8" />
       </xs:simpleType>
     </xs:attribute>
+    <xs:attribute name="ExceptCookie" type="hyb:String8" />
+    <xs:attribute name="OnlyCookie" type="hyb:String8" />
   </xs:complexType>
 
   <xs:complexType name="NpcRolePostSurcharge">
@@ -1030,12 +1044,19 @@
 
   <xs:complexType name="NpcRolePost">
     <xs:sequence>
-      <xs:element name="Surcharge" minOccurs="1" maxOccurs="unbounded" type="hyb:NpcRolePostSurcharge" />
+      <xs:element name="Surcharge" minOccurs="0" maxOccurs="unbounded" type="hyb:NpcRolePostSurcharge" />
+      <xs:element name="CostAdjustment" type="hyb:NpcRoleCostAdjustment" minOccurs="0" maxOccurs="unbounded" />
     </xs:sequence>
     <xs:attribute name="Receive" type="hyb:String8" />
+    <xs:attribute name="Nation" type="hyb:String8" />
+    <xs:attribute name="ExceptCookie" type="hyb:String8" />
+    <xs:attribute name="OnlyCookie" type="hyb:String8" />
   </xs:complexType>
 
   <xs:complexType name="NpcRoleRepair">
+    <xs:sequence>
+      <xs:element name="CostAdjustment" type="hyb:NpcRoleCostAdjustment" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
     <xs:attribute name="Nation" type="hyb:String8" />
     <xs:attribute name="Discount" type="xs:float" />
     <xs:attribute name="Type">
@@ -1043,11 +1064,18 @@
         <xs:list itemType="hyb:NpcRepairType" />
       </xs:simpleType>
     </xs:attribute>
+    <xs:attribute name="ExceptCookie" type="hyb:String8" />
+    <xs:attribute name="OnlyCookie" type="hyb:String8" />
   </xs:complexType>
 
   <xs:complexType name="NpcRoleBank">
+    <xs:sequence>
+      <xs:element name="CostAdjustment" type="hyb:NpcRoleCostAdjustment" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
     <xs:attribute name="Nation" type="hyb:String8" />
     <xs:attribute name="Discount" type="xs:float" />
+    <xs:attribute name="ExceptCookie" type="hyb:String8" />
+    <xs:attribute name="OnlyCookie" type="hyb:String8" />
   </xs:complexType>
 
   <xs:complexType name="NpcRoleList">
