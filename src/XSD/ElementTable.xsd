@@ -33,14 +33,14 @@
 
   <xs:complexType name="ElementTableSourceElement">
     <xs:sequence>
-      <xs:element name="Target" type="hyb:ElementTableTargetElement" minOccurs="9" maxOccurs="9" />
+      <xs:element name="Target" type="hyb:ElementTableTargetElement" minOccurs="1" maxOccurs="unbounded" />
     </xs:sequence>
     <xs:attribute name="Element" type="hyb:ElementType" />
   </xs:complexType>
 
   <xs:complexType name="ElementTable">
     <xs:sequence>
-      <xs:element name="Source" type="hyb:ElementTableSourceElement" minOccurs="9" maxOccurs="9" />
+      <xs:element name="Source" type="hyb:ElementTableSourceElement" minOccurs="1" maxOccurs="unbounded" />
     </xs:sequence>
     <xs:attribute name="Name" default="default" />
   </xs:complexType>
