@@ -23,6 +23,8 @@ namespace Hybrasyl.XmlTests;
 
 public class Settings
 {
+    public const string WorldDataDirectoryEnvVar = "HYBRASYL_TEST_WORLD_DIR";
+
     private static Settings? _settings;
     public JsonSettings JsonSettings;
 
@@ -37,6 +39,10 @@ public class Settings
 
         var json = File.ReadAllText("xmltest-settings.json");
         JsonSettings = JsonConvert.DeserializeObject<JsonSettings>(json) ?? new JsonSettings();
+
+        var envWorldDir = Environment.GetEnvironmentVariable(WorldDataDirectoryEnvVar);
+        if (!string.IsNullOrWhiteSpace(envWorldDir))
+            JsonSettings.WorldDataDirectory = envWorldDir;
     }
 
     private static object _lock { get; } = new();
