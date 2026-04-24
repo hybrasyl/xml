@@ -40,7 +40,8 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
     public List<AddStatus> AddStatuses => Effects.Statuses?.Add ?? new List<AddStatus>();
     public List<RemoveStatus> RemoveStatuses => Effects.Statuses?.Remove ?? new List<RemoveStatus>();
     public List<CastableReactor> Reactors => Effects?.Reactors ?? new List<CastableReactor>();
-    public byte CastableLevel { get; set; }
+
+    public byte UseLevel { get; set; }
 
     public ElementType Element
     {
