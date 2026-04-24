@@ -121,11 +121,11 @@
     <xs:attribute name="BaseCrit" type="xs:string" />
     <xs:attribute name="BaseMagicCrit" type="xs:string" />
     <xs:attribute name="BaseInboundDamageToMp" type="xs:string" />
-    <xs:attribute name="BaseOffensiveElement" type="hyb:ElementType" default="None" />
-    <xs:attribute name="BaseDefensiveElement" type="hyb:ElementType" default="None" />
+    <xs:attribute name="BaseOffensiveElement" type="hyb:ElementType" default="Force" />
+    <xs:attribute name="BaseDefensiveElement" type="hyb:ElementType" default="Force" />
     <xs:attribute name="BaseExtraFaith" type="xs:string" />
-    <xs:attribute name="OffensiveElementOverride" type="hyb:ElementType" default="None" />
-    <xs:attribute name="DefensiveElementOverride" type="hyb:ElementType" default="None" />
+    <xs:attribute name="OffensiveElementOverride" type="hyb:ElementType" default="Force" />
+    <xs:attribute name="DefensiveElementOverride" type="hyb:ElementType" default="Force" />
     <xs:attribute name="BaseInboundDamageModifier" type="xs:string" />
     <xs:attribute name="BaseOutboundDamageModifier" type="xs:string" />
     <xs:attribute name="BaseInboundHealModifier" type="xs:string" />
@@ -556,18 +556,27 @@
   <!-- Elements -->
   <xs:simpleType name="ElementType">
     <xs:restriction base="xs:token">
-      <xs:enumeration value="None" />
+      <xs:enumeration value="Force" />
       <xs:enumeration value="Fire" />
       <xs:enumeration value="Water" />
       <xs:enumeration value="Wind" />
       <xs:enumeration value="Earth" />
-      <xs:enumeration value="Light" />
-      <xs:enumeration value="Dark" />
-      <xs:enumeration value="Wood" />
+      <xs:enumeration value="Flesh" />
+      <xs:enumeration value="Spirit" />
+      <xs:enumeration value="Nature" />
       <xs:enumeration value="Metal" />
       <xs:enumeration value="Undead" />
+      <xs:enumeration value="Time" />
+      <xs:enumeration value="Stasis" />
+      <xs:enumeration value="Light" />
+      <xs:enumeration value="Dark" />
+      <xs:enumeration value="Life" />
+      <xs:enumeration value="Arcane" />
+      <xs:enumeration value="Void" />
       <xs:enumeration value="RandomTemuair" />
       <xs:enumeration value="RandomExpanded" />
+      <xs:enumeration value="RandomClassic" />
+      <xs:enumeration value="RandomAll" />
       <xs:enumeration value="Necklace" />
       <xs:enumeration value="Belt" />
       <xs:enumeration value="Current" />

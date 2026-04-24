@@ -27,7 +27,7 @@
   </xs:annotation>
 
   <xs:complexType name="ElementTableTargetElement">
-    <xs:attribute name="Element" type="hyb:ElementType" default="None" />
+    <xs:attribute name="Element" type="hyb:ElementType" default="Force" />
     <xs:attribute name="Multiplier" type="xs:double" />
   </xs:complexType>
 
