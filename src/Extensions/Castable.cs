@@ -50,7 +50,7 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
             {
                 1 => Elements.First(),
                 > 1 => Elements.PickRandom(),
-                _ => ElementType.None
+                _ => ElementType.Force
             };
         }
     }

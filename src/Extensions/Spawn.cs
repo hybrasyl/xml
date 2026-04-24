@@ -34,7 +34,7 @@ public partial class Spawn
             {
                 1 => _damage.Elements.First(),
                 > 1 => _damage.Elements.PickRandom(),
-                _ => ElementType.None
+                _ => ElementType.Force
             };
             return ele switch
             {
@@ -53,7 +53,7 @@ public partial class Spawn
             {
                 1 => _damage.Elements.First(),
                 > 1 => _damage.Elements.PickRandom(),
-                _ => ElementType.None
+                _ => ElementType.Force
             };
             return ele switch
             {

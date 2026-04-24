@@ -101,10 +101,10 @@ public partial class StatModifiers : HybrasylEntity<StatModifiers>
     
     public StatModifiers()
     {
-        _baseOffensiveElement = ElementType.None;
-        _baseDefensiveElement = ElementType.None;
-        _offensiveElementOverride = ElementType.None;
-        _defensiveElementOverride = ElementType.None;
+        _baseOffensiveElement = ElementType.Force;
+        _baseDefensiveElement = ElementType.Force;
+        _offensiveElementOverride = ElementType.Force;
+        _defensiveElementOverride = ElementType.Force;
     }
     
     [XmlArrayItemAttribute(IsNullable=false)]
@@ -381,7 +381,7 @@ public partial class StatModifiers : HybrasylEntity<StatModifiers>
     }
     
     [XmlAttribute]
-    [DefaultValue(ElementType.None)]
+    [DefaultValue(ElementType.Force)]
     public ElementType BaseOffensiveElement
     {
         get
@@ -395,7 +395,7 @@ public partial class StatModifiers : HybrasylEntity<StatModifiers>
     }
     
     [XmlAttribute]
-    [DefaultValue(ElementType.None)]
+    [DefaultValue(ElementType.Force)]
     public ElementType BaseDefensiveElement
     {
         get
@@ -422,7 +422,7 @@ public partial class StatModifiers : HybrasylEntity<StatModifiers>
     }
     
     [XmlAttribute]
-    [DefaultValue(ElementType.None)]
+    [DefaultValue(ElementType.Force)]
     public ElementType OffensiveElementOverride
     {
         get
@@ -436,7 +436,7 @@ public partial class StatModifiers : HybrasylEntity<StatModifiers>
     }
     
     [XmlAttribute]
-    [DefaultValue(ElementType.None)]
+    [DefaultValue(ElementType.Force)]
     public ElementType DefensiveElementOverride
     {
         get

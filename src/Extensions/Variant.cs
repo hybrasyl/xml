@@ -75,14 +75,14 @@ public partial class Variant
                 Properties.StatModifiers.BaseDefensiveElement;
         else
             variantItem.Properties.StatModifiers.BaseDefensiveElement =
-                originalItem.Properties.StatModifiers?.BaseDefensiveElement ?? ElementType.None;
+                originalItem.Properties.StatModifiers?.BaseDefensiveElement ?? ElementType.Force;
 
         if (Properties.StatModifiers?.BaseOffensiveElement != null)
             variantItem.Properties.StatModifiers.BaseOffensiveElement =
                 Properties.StatModifiers.BaseOffensiveElement;
         else
             variantItem.Properties.StatModifiers.BaseDefensiveElement =
-                Properties.StatModifiers?.BaseOffensiveElement ?? ElementType.None;
+                Properties.StatModifiers?.BaseOffensiveElement ?? ElementType.Force;
 
         variantItem.Properties?.Tags?.AddRange(Properties?.Tags ?? new List<ItemTag>());
         return variantItem;

@@ -220,8 +220,8 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
     {
         get
         {
-            var off = Properties.StatModifiers?.BaseOffensiveElement ?? ElementType.None;
-            var def = Properties.StatModifiers?.BaseDefensiveElement ?? ElementType.None;
+            var off = Properties.StatModifiers?.BaseOffensiveElement ?? ElementType.Force;
+            var def = Properties.StatModifiers?.BaseDefensiveElement ?? ElementType.Force;
             return Properties.Equipment?.Slot == EquipmentSlot.Necklace ? off : def;
         }
     }
