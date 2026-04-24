@@ -16,7 +16,6 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using System;
 using System.Linq;
 using System.Xml.Serialization;
 
@@ -26,41 +25,17 @@ public partial class Spawn
 {
     [XmlIgnore] public SpawnStatus Status { get; set; }
 
-    public ElementType OffensiveElement
+    public ElementType OffensiveElement => _damage.Elements.Count switch
     {
-        get
-        {
-            var ele = _damage.Elements.Count switch
-            {
-                1 => _damage.Elements.First(),
-                > 1 => _damage.Elements.PickRandom(),
-                _ => ElementType.Force
-            };
-            return ele switch
-            {
-                ElementType.RandomExpanded => (ElementType) Random.Shared.Next(1, 10),
-                ElementType.RandomTemuair => (ElementType) Random.Shared.Next(1, 7),
-                _ => ele
-            };
-        }
-    }
+        1 => _damage.Elements.First().Resolve(),
+        > 1 => _damage.Elements.PickRandom().Resolve(),
+        _ => ElementType.Force
+    };
 
-    public ElementType DefensiveElement
+    public ElementType DefensiveElement => _defense.Elements.Count switch
     {
-        get
-        {
-            var ele = _defense.Elements.Count switch
-            {
-                1 => _damage.Elements.First(),
-                > 1 => _damage.Elements.PickRandom(),
-                _ => ElementType.Force
-            };
-            return ele switch
-            {
-                ElementType.RandomExpanded => (ElementType) Random.Shared.Next(1, 10),
-                ElementType.RandomTemuair => (ElementType) Random.Shared.Next(1, 7),
-                _ => ele
-            };
-        }
-    }
+        1 => _defense.Elements.First().Resolve(),
+        > 1 => _defense.Elements.PickRandom().Resolve(),
+        _ => ElementType.Force
+    };
 }

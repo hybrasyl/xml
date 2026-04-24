@@ -42,18 +42,12 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
     public List<CastableReactor> Reactors => Effects?.Reactors ?? new List<CastableReactor>();
     public byte CastableLevel { get; set; }
 
-    public ElementType Element
+    public ElementType Element => Elements.Count switch
     {
-        get
-        {
-            return Elements.Count switch
-            {
-                1 => Elements.First(),
-                > 1 => Elements.PickRandom(),
-                _ => ElementType.Force
-            };
-        }
-    }
+        1 => Elements.First().Resolve(),
+        > 1 => Elements.PickRandom().Resolve(),
+        _ => ElementType.Force
+    };
 
     public DateTime LastCast { get; set; }
 
