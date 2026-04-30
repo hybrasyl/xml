@@ -127,6 +127,7 @@
     <xs:attribute name="Y" type="xs:unsignedByte" use="required" />
     <xs:attribute name="IsEnabled" type="xs:boolean" use="optional" default="true" />
     <xs:attribute name="AllowCasting" type="xs:boolean" use="optional" default="true" />
+    <xs:attribute name="DynamicLighting" type="xs:boolean" use="optional" default="false" />
   </xs:complexType>
 
   <xs:complexType name="MapNpc">
