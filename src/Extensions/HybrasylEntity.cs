@@ -23,10 +23,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Bson;
 using Pluralize.NET;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -74,6 +77,17 @@ public partial class HybrasylEntity<T> : IIndexable where T : HybrasylEntity<T>
         return new List<string>();
     }
 
+    private static T DeserializeFromFile(string fileName)
+    {
+        // don't load as string first; just load via the deserializer; use StreamReader for utf-8
+        // lenience
+        using var fs = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read,
+            bufferSize: 4096, FileOptions.SequentialScan);
+        using var sr = new StreamReader(fs);
+        using var xr = XmlReader.Create(sr);
+        return (T) SerializerXml.Deserialize(xr);
+    }
+
     public static async Task<T> LoadFromFileAsync(string fileName)
     {
         await using var file = new FileStream(fileName, FileMode.Open, FileAccess.Read);
@@ -111,30 +125,42 @@ public partial class HybrasylEntity<T> : IIndexable where T : HybrasylEntity<T>
     // C#11 was supposed to support virtual statics; eventually this can be redone with that support
     public static void LoadAll(IWorldDataManager manager, string rootPath)
     {
-        var ret = new XmlLoadResult();
         var targetDir = rootPath ?? manager.RootPath;
         var subPath = Path.Join(targetDir, Pluralizer.Pluralize(typeof(T).Name).ToLower());
 
-        foreach (var xmlFile in GetXmlFiles(subPath))
+        var files = GetXmlFiles(subPath) ?? new List<string>();
+ 
+       _ = SerializerXml;
+
+        var errors = new ConcurrentDictionary<string, string>();
+        var successCount = 0;
+        var totalProcessed = 0;
+
+        Parallel.ForEach(files, xmlFile =>
         {
             try
             {
-                var entity = LoadFromFile(xmlFile);
+                var entity = DeserializeFromFile(xmlFile);
                 if (entity is not HybrasylEntity<T> hybrasylEntity)
-                    throw new InvalidOperationException("Unsupported type {typeof(T).Name}");
+                    throw new InvalidOperationException($"Unsupported type {typeof(T).Name}");
                 hybrasylEntity.LoadPath = xmlFile;
                 manager.Add(entity);
-
-                ret.SuccessCount++;
+                Interlocked.Increment(ref successCount);
             }
             catch (Exception ex)
             {
-                ret.Errors.Add(xmlFile, $"{ex.Message} {ex.InnerException?.Message}");
+                errors[xmlFile] = $"{ex.Message} {ex.InnerException?.Message}";
             }
 
-            ret.TotalProcessed++;
-        }
+            Interlocked.Increment(ref totalProcessed);
+        });
 
+        var ret = new XmlLoadResult
+        {
+            SuccessCount = successCount,
+            TotalProcessed = totalProcessed,
+            Errors = new Dictionary<string, string>(errors)
+        };
         manager.UpdateResult<T>(ret);
     }
 }

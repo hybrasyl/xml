@@ -22,6 +22,7 @@ using Hybrasyl.Xml.Objects;
 using Pluralize.NET;
 using Serilog;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -36,7 +37,8 @@ public class XmlDataManager : IWorldDataManager
 {
     private static readonly Pluralizer Pluralizer = new();
     private static readonly SHA256 _sha256 = SHA256.Create();
-    private readonly Dictionary<Type, dynamic> _dataStore = new();
+
+    private readonly ConcurrentDictionary<Type, dynamic> _dataStore = new();
     private readonly Dictionary<Type, MethodInfo> _loadableTypes = new();
     private readonly Dictionary<Type, MethodInfo> _processableTypes = new();
     private readonly Dictionary<Type, MethodInfo> _validatableTypes = new();
@@ -84,13 +86,8 @@ public class XmlDataManager : IWorldDataManager
         }
     }
 
-    public XmlDataStore<T> GetStore<T>() where T : HybrasylEntity<T>
-    {
-        if (_dataStore.TryGetValue(typeof(T), out var dataStore) && dataStore is XmlDataStore<T> cast)
-            return cast;
-        _dataStore.Add(typeof(T), new XmlDataStore<T>());
-        return _dataStore[typeof(T)] as XmlDataStore<T>;
-    }
+    public XmlDataStore<T> GetStore<T>() where T : HybrasylEntity<T> =>
+        (XmlDataStore<T>) _dataStore.GetOrAdd(typeof(T), _ => new XmlDataStore<T>());
 
     public T Get<T>(dynamic name) where T : HybrasylEntity<T> => GetStore<T>().Get(name);
     public T GetByIndex<T>(dynamic index) where T : HybrasylEntity<T> => GetStore<T>().GetByIndex(index);

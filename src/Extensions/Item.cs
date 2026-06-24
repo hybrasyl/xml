@@ -19,20 +19,22 @@
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace Hybrasyl.Xml.Objects;
 
 public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable<Item>
 {
-    [XmlIgnore] public static SHA256 sha = SHA256.Create();
-
     [XmlIgnore] public bool IsVariant { get; set; }
     [XmlIgnore] public Guid ParentGuid { get; set; }
     [XmlIgnore] public Guid Variant { get; set; }
@@ -41,11 +43,13 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
     public bool HasVariants => Properties.Variants != null &&
                                (Properties.Variants.Group?.Count > 0 || Properties.Variants.Name?.Count > 0);
 
+
     [XmlIgnore]
+    [JsonIgnore]
     [Obsolete("Use ParentGuid instead")]
     public Item ParentItem { get; set; }
 
-    [XmlIgnore] public Dictionary<string, List<Item>> Variants { get; set; }
+    [XmlIgnore][JsonIgnore] public Dictionary<string, List<Item>> Variants { get; set; }
 
     public IEnumerable<SlotRestriction> SlotRequirements =>
         (Properties.Restrictions?.SlotRestrictions ?? new List<SlotRestriction>()).Where(predicate: x =>
@@ -97,10 +101,11 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
 
     public static void ProcessAll(IWorldDataManager manager)
     {
-        var ret = new XmlProcessResult();
-        foreach (var item in manager
-                     .Find<Item>(condition: x => x.HasVariants)
-                     .ToList())
+        var errors = new ConcurrentDictionary<Guid, string>();
+        var additionalCount = 0;
+        var totalProcessed = 0;
+
+        Parallel.ForEach(manager.Find<Item>(condition: x => x.HasVariants).ToList(), item =>
         {
             foreach (var group in item.Properties.Variants.Group)
             {
@@ -108,7 +113,7 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
                 if (!manager.TryGetValue<VariantGroup>(group, out var toApply))
                 {
                     manager.FlagAsError(item, XmlError.ProcessingError, $"Variant group {group} does not exist");
-                    ret.Errors[item.Guid] = $"Variant group {group} does not exist";
+                    errors[item.Guid] = $"Variant group {group} does not exist";
                     continue;
                 }
 
@@ -122,19 +127,19 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
                     {
                         if (!string.IsNullOrWhiteSpace(variant.Error))
                         {
-                            ret.Errors[item.Guid] =
+                            errors[item.Guid] =
                                 $"{item.Name}: failed to apply variant within {toApply.Name}: {variant.Error}";
                             continue;
                         }
 
                         item.Variants[group].Add(variant.Variant);
                         manager.Add(variant.Variant);
-                        ret.AdditionalCount++;
+                        Interlocked.Increment(ref additionalCount);
                     }
                 }
                 catch (Exception ex)
                 {
-                    ret.Errors[item.Guid] = $"{item.Name}: failed to apply variant {toApply.Name}: {ex}";
+                    errors[item.Guid] = $"{item.Name}: failed to apply variant {toApply.Name}: {ex}";
                 }
             }
 
@@ -144,7 +149,7 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
                 if (!manager.TryGetValue<VariantGroup>(name.Group, out var group))
                 {
                     manager.FlagAsError(item, XmlError.ProcessingError, $"Variant group {name.Group} does not exist");
-                    ret.Errors[item.Guid] = $"Variant group {name.Group} does not exist";
+                    errors[item.Guid] = $"Variant group {name.Group} does not exist";
                     continue;
                 }
 
@@ -157,7 +162,7 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
                 {
                     manager.FlagAsError(item, XmlError.ProcessingError,
                         $"Variant group {name.Group}: variant {name.Value} does not exist");
-                    ret.Errors[item.Guid] = "Variant group {name.Group}: variant {name.Value} does not exist";
+                    errors[item.Guid] = $"Variant group {name.Group}: variant {name.Value} does not exist";
                     continue;
                 }
 
@@ -166,17 +171,23 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
                     var variant = toApply.ResolveVariant(item);
                     item.Variants[name.Group].Add(variant);
                     manager.Add(variant);
-                    ret.AdditionalCount++;
+                    Interlocked.Increment(ref additionalCount);
                 }
                 catch (Exception ex)
                 {
-                    ret.Errors[item.Guid] = $"{item.Name}: failed to apply variant {toApply.Name}: {ex}";
+                    errors[item.Guid] = $"{item.Name}: failed to apply variant {toApply.Name}: {ex}";
                 }
             }
 
-            ret.TotalProcessed++;
-        }
+            Interlocked.Increment(ref totalProcessed);
+        });
 
+        var ret = new XmlProcessResult
+        {
+            AdditionalCount = additionalCount,
+            TotalProcessed = totalProcessed,
+            Errors = new Dictionary<Guid, string>(errors)
+        };
         manager.UpdateResult<Item>(ret);
     }
 
@@ -186,7 +197,7 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
     public static string GenerateId(string name, Gender gender)
     {
         var rawhash = $"{name.Normalize().ToLower()}:{gender.ToString().Normalize()}";
-        var hash = sha.ComputeHash(Encoding.ASCII.GetBytes(rawhash));
+        var hash = SHA256.HashData(Encoding.ASCII.GetBytes(rawhash));
         return string.Concat(hash.Select(selector: b => b.ToString("x2")))[..8];
     }
 
