@@ -161,4 +161,61 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         Assert.NotNull(monster.Hostility.Players);
     }
 
+    // Clone() is a deep-copy-via-serialization (used by variant expansion and entity merges).
+    // These guard the System.Text.Json implementation against fidelity regressions: a clone
+    // must be a distinct, fully-independent object whose persisted form is identical to the
+    // original. Serialize() is the XmlSerializer path -- an *independent* serializer from the
+    // clone's JSON round-trip -- so equal XML output proves every persisted field survived.
+    private Item VariantBelt() =>
+        fixture.SyncManager.Find<Item>(condition: x => x.Name.Contains("Light Variant Single Belt"))
+            .First();
+
+    [Fact]
+    public void CloneProducesFaithfulDeepCopy()
+    {
+        var original = VariantBelt();
+
+        var clone = original.Clone<Item>();
+
+        Assert.NotSame(original, clone);
+        Assert.Equal(original.Guid, clone.Guid);
+        Assert.Equal(original.LoadPath, clone.LoadPath);
+        // Identity preserved + every persisted field intact => identical XML serialization.
+        Assert.Equal(original.Serialize(), clone.Serialize());
+    }
+
+    [Fact]
+    public void CloneIsDeepNotShared()
+    {
+        var original = VariantBelt();
+        Assert.NotNull(original.Properties.StatModifiers);
+
+        var clone = original.Clone<Item>();
+
+        // Nested object graph must be independently allocated, not shared by reference.
+        Assert.NotSame(original.Properties, clone.Properties);
+        Assert.NotSame(original.Properties.StatModifiers, clone.Properties.StatModifiers);
+
+        // Mutating the clone must not touch the original.
+        var originalElement = original.Properties.StatModifiers.BaseDefensiveElement;
+        clone.Properties.StatModifiers.BaseDefensiveElement = ElementType.Fire;
+        Assert.Equal(originalElement, original.Properties.StatModifiers.BaseDefensiveElement);
+        Assert.NotEqual(original.Properties.StatModifiers.BaseDefensiveElement,
+            clone.Properties.StatModifiers.BaseDefensiveElement);
+    }
+
+    [Fact]
+    public void CloneNewGuidAssignsFreshIdentity()
+    {
+        var original = VariantBelt();
+
+        var clone = original.Clone<Item>(newGuid: true);
+
+        Assert.NotEqual(original.Guid, clone.Guid);
+        // Identity aside, content is faithfully copied.
+        Assert.Equal(original.Name, clone.Name);
+        Assert.Equal(original.Properties.StatModifiers.BaseDefensiveElement,
+            clone.Properties.StatModifiers.BaseDefensiveElement);
+    }
+
 }

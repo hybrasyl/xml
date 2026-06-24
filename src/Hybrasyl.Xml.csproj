@@ -6,8 +6,8 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <RootNamespace>Hybrasyl.Xml</RootNamespace>
-    <PackageVersion>0.9.6</PackageVersion>
-    <Version>0.9.6</Version>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Version>1.0.0</Version>
     <BuildDocFx Condition="'$(Configuration)'=='Debug'">false</BuildDocFx>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Authors>ERISCO LLC</Authors>
@@ -34,8 +34,6 @@
     <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.3" />
     <PackageReference Include="Pluralize.NET" Version="1.0.2" />
     <PackageReference Include="Serilog" Version="4.3.0" />
     <PackageReference Include="Serilog.Sinks.TestCorrelator" Version="4.0.0" />

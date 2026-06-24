@@ -19,7 +19,7 @@
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

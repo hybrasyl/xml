@@ -19,14 +19,14 @@
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Bson;
 using Pluralize.NET;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Encodings.Web;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
@@ -36,6 +36,15 @@ namespace Hybrasyl.Xml.Objects;
 public partial class HybrasylEntity<T> : IIndexable where T : HybrasylEntity<T>
 {
     private static readonly Pluralizer Pluralizer = new();
+
+    // Options for the JSON round-trip used by Clone(). Relaxed escaping: this payload is an
+    // internal, in-memory deep-copy buffer (never persisted or transmitted), so the default
+    // HTML-safe escaping would only add work. Round-trip correctness is unaffected either way.
+    private static readonly JsonSerializerOptions CloneOptions = new()
+    {
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    };
+
     public Guid Guid { get; set; } = Guid.NewGuid();
     public string Filename => string.IsNullOrWhiteSpace(LoadPath) ? null : Path.GetFileName(LoadPath);
     public string LoadPath { get; set; }
@@ -47,15 +56,12 @@ public partial class HybrasylEntity<T> : IIndexable where T : HybrasylEntity<T>
 
     public T Clone<T>(bool newGuid = false) where T : HybrasylEntity<T>
     {
-        var ms = new MemoryStream();
-        var writer = new BsonDataWriter(ms);
-        var reader = new BsonDataReader(ms);
-        var serializer = new JsonSerializer();
-        serializer.Serialize(writer, this);
-        ms.Position = 0;
-        var obj = serializer.Deserialize<T>(reader);
-        ms.Close();
-        if (obj == null) return null;
+        // Deep-copy via a JSON round-trip. Serialize with the runtime type (GetType()) so
+        // derived members are captured -- System.Text.Json serializes by the *declared* type
+        // otherwise, and the declared type of `this` is the HybrasylEntity<T> base.
+        var bytes = JsonSerializer.SerializeToUtf8Bytes(this, GetType(), CloneOptions);
+        if (JsonSerializer.Deserialize(bytes, typeof(T), CloneOptions) is not T obj)
+            return null;
         obj.Guid = newGuid ? Guid.NewGuid() : Guid;
         obj.LoadPath = LoadPath;
         return obj;
