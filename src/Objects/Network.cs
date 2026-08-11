@@ -31,6 +31,7 @@ public partial class Network : HybrasylEntity<Network>
     private NetworkInfo _login;
     private NetworkInfo _world;
     private NetworkInfoSsl _grpc;
+    private TlsInfo _tls;
     #endregion
     
     public NetworkInfo Lobby
@@ -78,6 +79,18 @@ public partial class Network : HybrasylEntity<Network>
         set
         {
             _grpc = value;
+        }
+    }
+
+    public TlsInfo Tls
+    {
+        get
+        {
+            return _tls;
+        }
+        set
+        {
+            _tls = value;
         }
     }
 }
