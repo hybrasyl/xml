@@ -65,7 +65,7 @@
       <xs:simpleType>
         <xs:restriction base="xs:unsignedInt">
           <xs:minInclusive value="65546" />
-          <xs:maxInclusive value="104857600" />
+          <xs:maxInclusive value="8388608" />
         </xs:restriction>
       </xs:simpleType>
     </xs:attribute>
