@@ -22,6 +22,11 @@ namespace Hybrasyl.Xml.Objects;
 
 public partial class CreatureCastable : IEquatable<CreatureCastable>
 {
+    // xscgen emits no explicit parameterless constructor for this type;
+    // XmlSerializer requires one, and the parameterized constructor below
+    // would otherwise suppress the implicit default.
+    public CreatureCastable() { }
+
     public CreatureCastable(int interval, CreatureTargetPriority priority, string value)
     {
         Interval = interval;

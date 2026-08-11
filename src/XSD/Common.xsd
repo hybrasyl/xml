@@ -787,7 +787,9 @@
     <xs:attribute name="BehaviorSet" use="required" type="xs:string" />
     <xs:attribute name="MinDmg" type="xs:int" use="optional" default="0" />
     <xs:attribute name="MaxDmg" type="xs:int" use="optional" default="0" />
-    <xs:attribute name="AssailSound" type="xs:byte" />
+    <!-- Sound ids are 0-255; xs:byte (signed) was a schema error the previous
+         generator masked by mapping it to C# byte anyway. -->
+    <xs:attribute name="AssailSound" type="xs:unsignedByte" />
   </xs:complexType>
 
   <xs:complexType name="CreatureTypes">

@@ -33,7 +33,7 @@ public partial class Variant
         variantItem.ParentGuid = originalItem.Guid;
         variantItem.IsVariant = true;
 
-        if (variantItem.Properties.Flags.Count != 0)
+        if (variantItem.Properties.Flags != 0)
             variantItem.Properties.Flags = Properties.Flags;
 
         var newValue = originalItem.Properties.Physical.Value * Properties.Physical?.Value ?? 1;

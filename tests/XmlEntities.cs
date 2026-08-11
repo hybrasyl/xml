@@ -85,14 +85,14 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         var original = new CreatureBehaviorSet();
         var import = new CreatureBehaviorSet();
         original.StatAlloc = null;
-        import.StatAlloc = "Str Str Int Con Dex";
+        import.StatAlloc = [StatType.Str, StatType.Str, StatType.Int, StatType.Con, StatType.Dex];
         var merged = original & import;
         Assert.Equal(import.StatAlloc, merged.StatAlloc);
 
         original = new CreatureBehaviorSet();
         import = new CreatureBehaviorSet();
         import.StatAlloc = null;
-        original.StatAlloc = "Str Str Int Con Dex";
+        original.StatAlloc = [StatType.Str, StatType.Str, StatType.Int, StatType.Con, StatType.Dex];
         merged = import & original;
         Assert.Equal(original.StatAlloc, merged.StatAlloc);
     }
@@ -102,6 +102,7 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
     {
         var item = new Item();
         item.Name = "Test";
+        item.Properties = new ItemProperties();
         item.Properties.StatModifiers = new StatModifiers { BonusDmg = "0.005", BonusHit = "0.004", BonusInt = "2" };
         Assert.Equal("+2 Int\n+0.5% Dmg\n+0.4% Hit\n", item.Properties.StatModifiers.BonusString);
     }

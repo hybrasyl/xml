@@ -37,8 +37,8 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
     }
 
     // Helper functions to deal with xml vagaries
-    public List<AddStatus> AddStatuses => Effects.Statuses?.Add ?? new List<AddStatus>();
-    public List<RemoveStatus> RemoveStatuses => Effects.Statuses?.Remove ?? new List<RemoveStatus>();
+    public List<AddStatus> AddStatuses => Effects?.Statuses?.Add ?? new List<AddStatus>();
+    public List<RemoveStatus> RemoveStatuses => Effects?.Statuses?.Remove ?? new List<RemoveStatus>();
     public List<CastableReactor> Reactors => Effects?.Reactors ?? new List<CastableReactor>();
     public byte CastableLevel { get; set; }
 

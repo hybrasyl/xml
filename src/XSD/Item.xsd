@@ -212,7 +212,10 @@
       <xs:element name="Teleport" minOccurs="0" maxOccurs="1" type="hyb:ItemUseTeleport" />
       <xs:element name="Effect" minOccurs="0" maxOccurs="1" type="hyb:ItemUseEffect" />
       <xs:element name="Sound" minOccurs="0" maxOccurs="1" type="hyb:ItemUseSound" />
-      <xs:element name="Statuses" minOccurs="0" maxOccurs="0" type="hyb:Statuses"></xs:element>
+      <!-- Optional; maxOccurs was previously 0 (forbidding the element) but the
+           old generator ignored occurrence constraints, so world data and the
+           server have always used it. -->
+      <xs:element name="Statuses" minOccurs="0" maxOccurs="1" type="hyb:Statuses"></xs:element>
     </xs:sequence>
   </xs:complexType>
 

@@ -236,7 +236,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        return (StatAlloc ?? []).SequenceEqual(other.StatAlloc ?? []) && Equals(Castables, other.Castables) &&
+        return (StatAlloc ?? new()).SequenceEqual(other.StatAlloc ?? new()) && Equals(Castables, other.Castables) &&
                Equals(Behavior, other.Behavior) && Equals(Immunities, other.Immunities) && 
                Equals(StatModifiers, other.StatModifiers) && Name == other.Name;
     }

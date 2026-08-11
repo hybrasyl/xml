@@ -168,8 +168,11 @@
           <xs:attribute name="Mp" default="0" type="xs:unsignedInt" />
         </xs:complexType>
       </xs:element>
-      <!-- Prerequisites (other spells which must be learned first) -->
-      <xs:element name="Prerequisites" minOccurs="0" maxOccurs="0" type="hyb:LearnPrerequisites" />
+      <!-- Prerequisites (other spells which must be learned first). Optional;
+           maxOccurs was previously 0 (forbidding the element) but the old
+           generator ignored occurrence constraints, so world data and the
+           server have always used it. -->
+      <xs:element name="Prerequisites" minOccurs="0" maxOccurs="1" type="hyb:LearnPrerequisites" />
     </xs:sequence>
   </xs:complexType>
 

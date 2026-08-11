@@ -50,6 +50,7 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
     {
         Time ??= new Time();
         Time.Ages ??= new List<HybrasylAge>();
+        Constants ??= new ServerConstants();
         InitializeClientSettings();
         GenerateIndex();
     }
