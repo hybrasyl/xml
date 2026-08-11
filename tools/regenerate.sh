@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+# Regenerate src/Objects from src/XSD (HTOO-377).
+#
+# Requires: dotnet tool install -g dotnet-xscgen
+#
+# Generation is two steps: xscgen emits the model, then
+# patch-flags-enums.py applies the wire-format fixups XmlSerializer needs
+# but xscgen cannot express from the schema alone. The patch step is
+# strict -- if generator output drifts, it fails and writes nothing.
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+XSCGEN="${XSCGEN:-$HOME/.dotnet/tools/xscgen}"
+if ! command -v "$XSCGEN" >/dev/null 2>&1; then
+    echo "xscgen not found at $XSCGEN -- run: dotnet tool install -g dotnet-xscgen" >&2
+    exit 1
+fi
+
+NAMESPACE='http://www.hybrasyl.com/XML/Hybrasyl/2020-02=Hybrasyl.Xml.Objects'
+OUT="$(mktemp -d)"
+trap 'rm -rf "$OUT"' EXIT
+
+# Hybrasyl.xsd is excluded deliberately: it declares no types of its own, it
+# only xs:includes the other schemas. Passing it alongside them defines every
+# type twice, which xscgen reports by exiting 4 (ValidationError) while still
+# emitting correct output -- a nonzero exit we would have to ignore. The
+# outputs are byte-identical either way, so we take the clean exit instead.
+# shellcheck disable=SC2046  # deliberate word splitting over the schema list
+"$XSCGEN" $(ls src/XSD/*.xsd | grep -v '/Hybrasyl\.xsd$') \
+    -o "$OUT" \
+    -n "$NAMESPACE" \
+    --separateFiles \
+    --collectionType='System.Collections.Generic.List`1' \
+    --collectionSettersMode=Public \
+    --enumCollection
+
+cp "$OUT/Hybrasyl.Xml.Objects/"*.cs src/Objects/
+
+# xscgen records its own invocation in every file's header, including the
+# absolute -o path. Normalize it so regenerating on a different machine
+# produces no diff.
+sed -i 's| -o /[^ ]*| -o src/Objects|' src/Objects/*.cs
+
+python3 tools/patch-flags-enums.py
+
+echo "regenerate: done -- build and run the test suite before committing"

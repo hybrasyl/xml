@@ -34,14 +34,14 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         this.fixture = fixture;
     }
 
-    // xsd2code has a few oddities / bugs that result in the wrong type being used or 
-    // a type being a list when it is a singular object. These tests ensure nothing gets
-    // committed and pushed out to Nuget with those errors.
+    // Generator canaries: a schema or generator change can silently swap a type or
+    // turn a singular object into a list. These tests ensure nothing gets committed
+    // and pushed out to Nuget with those errors.
     [Fact]
     public void CreatureAssailSoundIsByte()
     {
-        // Occasionally xsd2code will make this an sbyte, for unknown reasons,
-        // so we test for that here
+        // The schema declared xs:byte (signed) until 2026-08; sound ids are 0-255,
+        // so a regression there resurfaces as sbyte.
         var f = new Creature();
         Assert.IsType<byte>(f.AssailSound);
     }
