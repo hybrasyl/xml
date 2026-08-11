@@ -31,8 +31,8 @@ public partial class Access
     {
         get
         {
-            if (!string.IsNullOrEmpty(Privileged) && _privilegedUsers.Count == 0)
-                foreach (var p in Privileged.Trim().Split(' '))
+            if (Privileged is { Count: > 0 } && _privilegedUsers.Count == 0)
+                foreach (var p in Privileged)
                 {
                     _privilegedUsers.Add(p.Trim().ToLower());
                     if (p.Trim().ToLower() == "*")
@@ -47,8 +47,8 @@ public partial class Access
     {
         get
         {
-            if (!string.IsNullOrEmpty(Reserved) && _reservedNames.Count == 0)
-                foreach (var p in Reserved.Trim().Split(' '))
+            if (Reserved is { Count: > 0 } && _reservedNames.Count == 0)
+                foreach (var p in Reserved)
                     _reservedNames.Add(p.Trim().ToLower());
             return _reservedNames;
         }
