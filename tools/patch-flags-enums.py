@@ -62,6 +62,16 @@ BRIDGE_SITES = {
     "Access.cs": [("Privileged", "string"), ("Reserved", "string")],
 }
 
+# Defaults-bearing children: the XSD default values on these types' members
+# carry game semantics (mastery uses, per-class level caps), and the server
+# reads them unguarded at 20+ sites. An absent element means "all defaults",
+# so the member is materialized. Data-record children deliberately are NOT
+# listed -- absent means null for those (see HTOO-377). ServerConfig's
+# equivalents (Constants/Formulas/ApiEndpoints) live in its Init() instead.
+INIT_SITES = {
+    "Castable.cs": [("MaxLevel", "MaxLevel"), ("Mastery", "CastableMastery")],
+}
+
 errors = []
 patched: dict[Path, str] = {}
 
@@ -203,6 +213,17 @@ for fname, members in BRIDGE_SITES.items():
             r"(namespace Hybrasyl\.Xml\.Objects\r?\n\{)",
             r"using System.Linq;\n\n\1",
             text, 1, f"{fname} using System.Linq",
+        )
+    patched[path] = text
+
+for fname, members in INIT_SITES.items():
+    path = OBJECTS / fname
+    text = patched.get(path, path.read_text())
+    for member, mtype in members:
+        text = sub_counted(
+            rf"public {mtype} {member} \{{ get; set; \}}",
+            f"public {mtype} {member} {{ get; set; }} = new {mtype}();",
+            text, 1, f"{fname}:{member} defaults init",
         )
     patched[path] = text
 

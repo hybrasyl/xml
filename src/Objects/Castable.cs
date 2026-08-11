@@ -168,7 +168,7 @@ namespace Hybrasyl.Xml.Objects
         }
         
         [System.Xml.Serialization.XmlElementAttribute("MaxLevel")]
-        public MaxLevel MaxLevel { get; set; }
+        public MaxLevel MaxLevel { get; set; } = new MaxLevel();
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.Generic.List<Requirement> _requirements;
@@ -238,7 +238,7 @@ namespace Hybrasyl.Xml.Objects
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlElementAttribute("Mastery")]
-        public CastableMastery Mastery { get; set; }
+        public CastableMastery Mastery { get; set; } = new CastableMastery();
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Icon")]
