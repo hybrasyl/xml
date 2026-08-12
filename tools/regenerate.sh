@@ -39,13 +39,12 @@ NAMESPACE='http://www.hybrasyl.com/XML/Hybrasyl/2020-02=Hybrasyl.Xml.Objects'
 OUT="$(mktemp -d)"
 trap 'rm -rf "$OUT"' EXIT
 
-# Hybrasyl.xsd is excluded deliberately: it declares no types of its own, it
-# only xs:includes the other schemas. Passing it alongside them defines every
-# type twice, which xscgen reports by exiting 4 (ValidationError) while still
-# emitting correct output -- a nonzero exit we would have to ignore. The
-# outputs are byte-identical either way, so we take the clean exit instead.
+# Every schema is passed individually, and there is deliberately no aggregate
+# schema that xs:includes the others: passing one alongside its own includes
+# defines every type twice, which xscgen reports by exiting 4 while still
+# emitting correct output -- a nonzero exit we would then have to ignore.
 # shellcheck disable=SC2046  # deliberate word splitting over the schema list
-"$XSCGEN" $(ls src/XSD/*.xsd | grep -v '/Hybrasyl\.xsd$') \
+"$XSCGEN" $(ls src/XSD/*.xsd) \
     -o "$OUT" \
     -n "$NAMESPACE" \
     --separateFiles \
