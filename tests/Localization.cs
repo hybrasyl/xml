@@ -27,7 +27,7 @@ public class LocalizationTests
     public LocalizationTests()
     {
         // Ceridwen ships a "default" localization file that we use for testing here
-        Locale = Localization.LoadFromFile(Path.Join(Settings.XmlTests.JsonSettings.WorldDataDirectory, "localizations",
+        Locale = Localization.LoadFromFile(Path.Join(Settings.XmlTests.WorldDataDirectory, "localizations",
             "en_us.xml"));
         Assert.NotNull(Locale);
     }

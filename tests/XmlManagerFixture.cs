@@ -26,7 +26,7 @@ public class XmlManagerFixture
 {
     public XmlManagerFixture()
     {
-        SyncManager = new XmlDataManager(Settings.XmlTests.JsonSettings.WorldDataDirectory);
+        SyncManager = new XmlDataManager(Settings.XmlTests.WorldDataDirectory);
         var syncWatch = new Stopwatch();
         syncWatch.Start();
         SyncManager.LoadData();
@@ -34,7 +34,7 @@ public class XmlManagerFixture
 
         Log.Information($"LoadData execution time: {syncWatch.ElapsedMilliseconds}ms");
 
-        AsyncManager = new XmlDataManager(Settings.XmlTests.JsonSettings.WorldDataDirectory);
+        AsyncManager = new XmlDataManager(Settings.XmlTests.WorldDataDirectory);
         var asyncWatch = new Stopwatch();
         asyncWatch.Start();
         var task = Task.Run(AsyncManager.LoadDataAsync);

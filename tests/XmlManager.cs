@@ -225,7 +225,7 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
     {
         Log.Information("-- Load Data: Contains Expected Data --");
         Log.Information("LoadData Test\n-------------");
-        Log.Information($"Directory used: {Settings.XmlTests.JsonSettings.WorldDataDirectory}");
+        Log.Information($"Directory used: {Settings.XmlTests.WorldDataDirectory}");
         Log.Information(
             $"Castables: {manager.Count<Castable>()} Items: {manager.Count<Item>()} NPCs: {manager.Count<Npc>()} Maps: {manager.Count<Map>()}");
         Log.Information(
