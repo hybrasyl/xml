@@ -16,7 +16,7 @@
 //
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using System.Xml.Serialization;
 
 namespace Hybrasyl.Xml.Objects;

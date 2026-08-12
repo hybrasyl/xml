@@ -8,8 +8,6 @@
     <RootNamespace>Hybrasyl.Xml</RootNamespace>
     <PackageVersion>1.0.0-alpha1</PackageVersion>
     <Version>1.0.0-alpha1</Version>
-    <PackageVersion>1.0.0</PackageVersion>
-    <Version>1.0.0</Version>
     <BuildDocFx Condition="'$(Configuration)'=='Debug'">false</BuildDocFx>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Authors>ERISCO LLC</Authors>
@@ -38,7 +36,6 @@
   <ItemGroup>
     <PackageReference Include="Pluralize.NET" Version="1.0.2" />
     <PackageReference Include="Serilog" Version="4.3.0" />
-    <PackageReference Include="Serilog.Sinks.TestCorrelator" Version="4.0.0" />
   </ItemGroup>
 
 </Project>

@@ -37,10 +37,10 @@ namespace Hybrasyl.Xml.Objects
         
         /// <summary>
         /// <para xml:lang="en">Minimum inclusive value: 65546.</para>
-        /// <para xml:lang="en">Maximum inclusive value: 104857600.</para>
+        /// <para xml:lang="en">Maximum inclusive value: 8388608.</para>
         /// </summary>
         [System.ComponentModel.DefaultValueAttribute(1048576u)]
-        [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(uint), "65546", "104857600")]
+        [System.ComponentModel.DataAnnotations.RangeAttribute(typeof(uint), "65546", "8388608")]
         [System.Xml.Serialization.XmlAttributeAttribute("MaxFrameSize")]
         public uint MaxFrameSize
         {
