@@ -22,7 +22,12 @@ namespace Hybrasyl.Xml.Objects;
 
 public partial class CreatureCastable : IEquatable<CreatureCastable>
 {
-    public CreatureCastable(int interval, CreatureTargetPriority priority, string value) : this()
+    // xscgen emits no explicit parameterless constructor for this type;
+    // XmlSerializer requires one, and the parameterized constructor below
+    // would otherwise suppress the implicit default.
+    public CreatureCastable() { }
+
+    public CreatureCastable(int interval, CreatureTargetPriority priority, string value)
     {
         Interval = interval;
         TargetPriority = priority;
@@ -33,8 +38,8 @@ public partial class CreatureCastable : IEquatable<CreatureCastable>
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        return _targetPriority == other._targetPriority && _healthPercentage == other._healthPercentage 
-                                                        && _useOnce == other._useOnce && _interval == other._interval && _value == other._value;
+        return TargetPriority == other.TargetPriority && HealthPercentage == other.HealthPercentage 
+                                                        && UseOnce == other.UseOnce && Interval == other.Interval && Value == other.Value;
     }
 
     public override bool Equals(object obj)
@@ -57,5 +62,5 @@ public partial class CreatureCastable : IEquatable<CreatureCastable>
     public static bool operator !=(CreatureCastable lhs, CreatureCastable rhs) => !(lhs == rhs);
 
 
-    public override int GetHashCode() => HashCode.Combine((int) _targetPriority, _healthPercentage, _useOnce, _interval, _value);
+    public override int GetHashCode() => HashCode.Combine((int) TargetPriority, HealthPercentage, UseOnce, Interval, Value);
 }

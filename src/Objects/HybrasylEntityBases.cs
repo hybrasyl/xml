@@ -1,0 +1,196 @@
+// This file is part of Project Hybrasyl.
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the Affero General Public License as published by
+// the Free Software Foundation, version 3.
+//
+// This program is distributed in the hope that it will be useful, but
+// without ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+// or FITNESS FOR A PARTICULAR PURPOSE. See the Affero General Public License
+// for more details.
+//
+// You should have received a copy of the Affero General Public License along
+// with this program. If not, see <http://www.gnu.org/licenses/>.
+//
+// (C) 2020-2026 ERISCO, LLC
+//
+// For contributors and individual authors please refer to CONTRIBUTORS.MD.
+
+// Declares the HybrasylEntity<T> base for every generated document type. C# permits the
+// base-class declaration in any single partial part, which is what lets the generated
+// files (dotnet-xscgen, which cannot inject bases) stay pristine. One line per type;
+// a new XSD type that needs the entity surface gets a line here.
+
+namespace Hybrasyl.Xml.Objects;
+
+public partial class Access : HybrasylEntity<Access> { }
+public partial class AddStatus : HybrasylEntity<AddStatus> { }
+public partial class Animation : HybrasylEntity<Animation> { }
+public partial class AnimationGroup : HybrasylEntity<AnimationGroup> { }
+public partial class ApiEndpoints : HybrasylEntity<ApiEndpoints> { }
+public partial class Appearance : HybrasylEntity<Appearance> { }
+public partial class BoardEffects : HybrasylEntity<BoardEffects> { }
+public partial class CastModifier : HybrasylEntity<CastModifier> { }
+public partial class CastModifierAdd : HybrasylEntity<CastModifierAdd> { }
+public partial class CastModifierReplace : HybrasylEntity<CastModifierReplace> { }
+public partial class CastModifierSubtract : HybrasylEntity<CastModifierSubtract> { }
+public partial class CastRestriction : HybrasylEntity<CastRestriction> { }
+public partial class Castable : HybrasylEntity<Castable> { }
+public partial class CastableConeIntent : HybrasylEntity<CastableConeIntent> { }
+public partial class CastableCrossIntent : HybrasylEntity<CastableCrossIntent> { }
+public partial class CastableDamage : HybrasylEntity<CastableDamage> { }
+public partial class CastableEffects : HybrasylEntity<CastableEffects> { }
+public partial class CastableEffectsSound : HybrasylEntity<CastableEffectsSound> { }
+public partial class CastableHeal : HybrasylEntity<CastableHeal> { }
+public partial class CastableIntent : HybrasylEntity<CastableIntent> { }
+public partial class CastableLineIntent : HybrasylEntity<CastableLineIntent> { }
+public partial class CastableMastery : HybrasylEntity<CastableMastery> { }
+public partial class CastableMotion : HybrasylEntity<CastableMotion> { }
+public partial class CastableReactor : HybrasylEntity<CastableReactor> { }
+public partial class CastableSquareIntent : HybrasylEntity<CastableSquareIntent> { }
+public partial class CastableTileIntent : HybrasylEntity<CastableTileIntent> { }
+public partial class Category : HybrasylEntity<Category> { }
+public partial class Chat : HybrasylEntity<Chat> { }
+public partial class ClassCastCost : HybrasylEntity<ClassCastCost> { }
+public partial class ClassCastCostStat : HybrasylEntity<ClassCastCostStat> { }
+public partial class ClassRequirement : HybrasylEntity<ClassRequirement> { }
+public partial class ClassRequirementAB : HybrasylEntity<ClassRequirementAB> { }
+public partial class ClassRequirementLevel : HybrasylEntity<ClassRequirementLevel> { }
+public partial class ClassRequirementPhysical : HybrasylEntity<ClassRequirementPhysical> { }
+public partial class ClientSetting : HybrasylEntity<ClientSetting> { }
+public partial class Conditions : HybrasylEntity<Conditions> { }
+public partial class Creature : HybrasylEntity<Creature> { }
+public partial class CreatureBehavior : HybrasylEntity<CreatureBehavior> { }
+public partial class CreatureBehaviorSet : HybrasylEntity<CreatureBehaviorSet> { }
+public partial class CreatureCastable : HybrasylEntity<CreatureCastable> { }
+public partial class CreatureCastables : HybrasylEntity<CreatureCastables> { }
+public partial class CreatureCastingSet : HybrasylEntity<CreatureCastingSet> { }
+public partial class CreatureCookie : HybrasylEntity<CreatureCookie> { }
+public partial class CreatureHostility : HybrasylEntity<CreatureHostility> { }
+public partial class CreatureHostilitySettings : HybrasylEntity<CreatureHostilitySettings> { }
+public partial class CreatureImmunity : HybrasylEntity<CreatureImmunity> { }
+public partial class DataStore : HybrasylEntity<DataStore> { }
+public partial class Death : HybrasylEntity<Death> { }
+public partial class DeathComa : HybrasylEntity<DeathComa> { }
+public partial class DeathLegendMark : HybrasylEntity<DeathLegendMark> { }
+public partial class DeathMap : HybrasylEntity<DeathMap> { }
+public partial class DeathPenalty : HybrasylEntity<DeathPenalty> { }
+public partial class Description : HybrasylEntity<Description> { }
+public partial class ElementTable : HybrasylEntity<ElementTable> { }
+public partial class ElementTableSourceElement : HybrasylEntity<ElementTableSourceElement> { }
+public partial class ElementTableTargetElement : HybrasylEntity<ElementTableTargetElement> { }
+public partial class ElementalModifier : HybrasylEntity<ElementalModifier> { }
+public partial class Equipment : HybrasylEntity<Equipment> { }
+public partial class EquipmentRestriction : HybrasylEntity<EquipmentRestriction> { }
+public partial class GlobalBoard : HybrasylEntity<GlobalBoard> { }
+public partial class GlobalBoardAccessList : HybrasylEntity<GlobalBoardAccessList> { }
+public partial class Handler : HybrasylEntity<Handler> { }
+public partial class Handlers : HybrasylEntity<Handlers> { }
+public partial class HybrasylAge : HybrasylEntity<HybrasylAge> { }
+public partial class Item : HybrasylEntity<Item> { }
+public partial class ItemDamage : HybrasylEntity<ItemDamage> { }
+public partial class ItemMotion : HybrasylEntity<ItemMotion> { }
+public partial class ItemProperties : HybrasylEntity<ItemProperties> { }
+public partial class ItemRestrictions : HybrasylEntity<ItemRestrictions> { }
+public partial class ItemSpecification : HybrasylEntity<ItemSpecification> { }
+public partial class ItemUseEffect : HybrasylEntity<ItemUseEffect> { }
+public partial class ItemUseSound : HybrasylEntity<ItemUseSound> { }
+public partial class ItemUseTeleport : HybrasylEntity<ItemUseTeleport> { }
+public partial class LearnPrerequisite : HybrasylEntity<LearnPrerequisite> { }
+public partial class LearnPrerequisites : HybrasylEntity<LearnPrerequisites> { }
+public partial class Localization : HybrasylEntity<Localization> { }
+public partial class LocalizedString : HybrasylEntity<LocalizedString> { }
+public partial class LogConfig : HybrasylEntity<LogConfig> { }
+public partial class LogGlobalConfig : HybrasylEntity<LogGlobalConfig> { }
+public partial class LootGold : HybrasylEntity<LootGold> { }
+public partial class LootImport : HybrasylEntity<LootImport> { }
+public partial class LootItem : HybrasylEntity<LootItem> { }
+public partial class LootList : HybrasylEntity<LootList> { }
+public partial class LootSet : HybrasylEntity<LootSet> { }
+public partial class LootTable : HybrasylEntity<LootTable> { }
+public partial class LootTableGold : HybrasylEntity<LootTableGold> { }
+public partial class LootTableItemList : HybrasylEntity<LootTableItemList> { }
+public partial class LootTableXp : HybrasylEntity<LootTableXp> { }
+public partial class Map : HybrasylEntity<Map> { }
+public partial class MapNpc : HybrasylEntity<MapNpc> { }
+public partial class MapSign : HybrasylEntity<MapSign> { }
+public partial class MaxLevel : HybrasylEntity<MaxLevel> { }
+public partial class MessageHandler : HybrasylEntity<MessageHandler> { }
+public partial class MessageHandlers : HybrasylEntity<MessageHandlers> { }
+public partial class MessagePlugin : HybrasylEntity<MessagePlugin> { }
+public partial class Messages : HybrasylEntity<Messages> { }
+public partial class MetricsEndpoint : HybrasylEntity<MetricsEndpoint> { }
+public partial class ModifierEffect : HybrasylEntity<ModifierEffect> { }
+public partial class ModifierEffectSound : HybrasylEntity<ModifierEffectSound> { }
+public partial class NamedVariant : HybrasylEntity<NamedVariant> { }
+public partial class Nation : HybrasylEntity<Nation> { }
+public partial class NationMap : HybrasylEntity<NationMap> { }
+public partial class Network : HybrasylEntity<Network> { }
+public partial class NetworkInfo : HybrasylEntity<NetworkInfo> { }
+public partial class NetworkInfoSsl : HybrasylEntity<NetworkInfoSsl> { }
+public partial class NewPlayer : HybrasylEntity<NewPlayer> { }
+public partial class Npc : HybrasylEntity<Npc> { }
+public partial class NpcAppearance : HybrasylEntity<NpcAppearance> { }
+public partial class NpcInventory : HybrasylEntity<NpcInventory> { }
+public partial class NpcInventoryItem : HybrasylEntity<NpcInventoryItem> { }
+public partial class NpcResponse : HybrasylEntity<NpcResponse> { }
+public partial class NpcRoleBank : HybrasylEntity<NpcRoleBank> { }
+public partial class NpcRoleList : HybrasylEntity<NpcRoleList> { }
+public partial class NpcRolePost : HybrasylEntity<NpcRolePost> { }
+public partial class NpcRolePostSurcharge : HybrasylEntity<NpcRolePostSurcharge> { }
+public partial class NpcRoleRepair : HybrasylEntity<NpcRoleRepair> { }
+public partial class NpcRoleTrainCastable : HybrasylEntity<NpcRoleTrainCastable> { }
+public partial class NpcRoleVend : HybrasylEntity<NpcRoleVend> { }
+public partial class NpcRoleVendItem : HybrasylEntity<NpcRoleVendItem> { }
+public partial class Physical : HybrasylEntity<Physical> { }
+public partial class PluginConfig : HybrasylEntity<PluginConfig> { }
+public partial class Proc : HybrasylEntity<Proc> { }
+public partial class Reactor : HybrasylEntity<Reactor> { }
+public partial class Recipe : HybrasylEntity<Recipe> { }
+public partial class RecipeDuration : HybrasylEntity<RecipeDuration> { }
+public partial class RecipeIngredient : HybrasylEntity<RecipeIngredient> { }
+public partial class RecipeIngredients : HybrasylEntity<RecipeIngredients> { }
+public partial class RecipeItem : HybrasylEntity<RecipeItem> { }
+public partial class RemoveStatus : HybrasylEntity<RemoveStatus> { }
+public partial class RestrictionsAb : HybrasylEntity<RestrictionsAb> { }
+public partial class RestrictionsLevel : HybrasylEntity<RestrictionsLevel> { }
+public partial class ServerConfig : HybrasylEntity<ServerConfig> { }
+public partial class ServerConstants : HybrasylEntity<ServerConstants> { }
+public partial class ServerFormulas : HybrasylEntity<ServerFormulas> { }
+public partial class ServerPlugins : HybrasylEntity<ServerPlugins> { }
+public partial class ServerStart : HybrasylEntity<ServerStart> { }
+public partial class SimpleQuantity : HybrasylEntity<SimpleQuantity> { }
+public partial class SlotRestriction : HybrasylEntity<SlotRestriction> { }
+public partial class Spawn : HybrasylEntity<Spawn> { }
+public partial class SpawnBase : HybrasylEntity<SpawnBase> { }
+public partial class SpawnCoordinate : HybrasylEntity<SpawnCoordinate> { }
+public partial class SpawnDamage : HybrasylEntity<SpawnDamage> { }
+public partial class SpawnDefense : HybrasylEntity<SpawnDefense> { }
+public partial class SpawnGroup : HybrasylEntity<SpawnGroup> { }
+public partial class SpawnPoint : HybrasylEntity<SpawnPoint> { }
+public partial class SpawnSpec : HybrasylEntity<SpawnSpec> { }
+public partial class SpellAnimations : HybrasylEntity<SpellAnimations> { }
+public partial class Stackable : HybrasylEntity<Stackable> { }
+public partial class StartMap : HybrasylEntity<StartMap> { }
+public partial class StatModifiers : HybrasylEntity<StatModifiers> { }
+public partial class Status : HybrasylEntity<Status> { }
+public partial class StatusAnimations : HybrasylEntity<StatusAnimations> { }
+public partial class StatusDamage : HybrasylEntity<StatusDamage> { }
+public partial class StatusEffects : HybrasylEntity<StatusEffects> { }
+public partial class StatusHeal : HybrasylEntity<StatusHeal> { }
+public partial class Statuses : HybrasylEntity<Statuses> { }
+public partial class TargetUrl : HybrasylEntity<TargetUrl> { }
+public partial class Time : HybrasylEntity<Time> { }
+public partial class TlsInfo : HybrasylEntity<TlsInfo> { }
+public partial class Use : HybrasylEntity<Use> { }
+public partial class Variant : HybrasylEntity<Variant> { }
+public partial class VariantGroup : HybrasylEntity<VariantGroup> { }
+public partial class VariantProperties : HybrasylEntity<VariantProperties> { }
+public partial class Variants : HybrasylEntity<Variants> { }
+public partial class Vendor : HybrasylEntity<Vendor> { }
+public partial class Warp : HybrasylEntity<Warp> { }
+public partial class WarpMapTarget : HybrasylEntity<WarpMapTarget> { }
+public partial class WarpRestrictions : HybrasylEntity<WarpRestrictions> { }
+public partial class WorldMap : HybrasylEntity<WorldMap> { }
+public partial class WorldMapPoint : HybrasylEntity<WorldMapPoint> { }
+public partial class WorldMapPointTarget : HybrasylEntity<WorldMapPointTarget> { }

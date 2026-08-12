@@ -21,7 +21,7 @@ using System.Xml.Serialization;
 
 namespace Hybrasyl.Xml.Objects;
 
-// For some reason xsd2code doesn't add this and it breaks spawngroup parsing
+// Neither generator emits XmlRoot here, and spawngroup parsing breaks without it.
 [XmlRoot(Namespace = "http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
 public partial class SpawnGroup : ILoadOnStart<SpawnGroup>
 {

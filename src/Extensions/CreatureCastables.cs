@@ -26,9 +26,9 @@ public partial class CreatureCastables : IEquatable<CreatureCastables>
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        return Equals(_castable, other._castable) && _auto == other._auto 
-                                                  && _skillCategories == other._skillCategories 
-                                                  && _spellCategories == other._spellCategories;
+        return Equals(Castable, other.Castable) && Auto == other.Auto 
+                                                  && SkillCategories == other.SkillCategories 
+                                                  && SpellCategories == other.SpellCategories;
     }
 
     public override bool Equals(object obj)
@@ -49,5 +49,5 @@ public partial class CreatureCastables : IEquatable<CreatureCastables>
 
     public static bool operator !=(CreatureCastables lhs, CreatureCastables rhs) => !(lhs == rhs);
 
-    public override int GetHashCode() => HashCode.Combine(_castable, _auto, _skillCategories, _spellCategories);
+    public override int GetHashCode() => HashCode.Combine(Castable, Auto, SkillCategories, SpellCategories);
 }

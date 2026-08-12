@@ -16,7 +16,7 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using Newtonsoft.Json;
+using System.Text.Json;
 using Serilog;
 
 namespace Hybrasyl.XmlTests;
@@ -36,7 +36,7 @@ public class Settings
             .CreateLogger();
 
         var json = File.ReadAllText("xmltest-settings.json");
-        JsonSettings = JsonConvert.DeserializeObject<JsonSettings>(json) ?? new JsonSettings();
+        JsonSettings = JsonSerializer.Deserialize<JsonSettings>(json) ?? new JsonSettings();
     }
 
     private static object _lock { get; } = new();

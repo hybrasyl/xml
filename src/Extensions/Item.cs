@@ -19,7 +19,7 @@
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -51,12 +51,14 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
 
     [XmlIgnore][JsonIgnore] public Dictionary<string, List<Item>> Variants { get; set; }
 
+    [JsonIgnore]
     public IEnumerable<SlotRestriction> SlotRequirements =>
-        (Properties.Restrictions?.SlotRestrictions ?? new List<SlotRestriction>()).Where(predicate: x =>
+        (Properties?.Restrictions?.SlotRestrictions ?? new List<SlotRestriction>()).Where(predicate: x =>
             x.Type == SlotRestrictionType.ItemRequired);
 
+    [JsonIgnore]
     public IEnumerable<SlotRestriction> SlotProhibits =>
-        (Properties.Restrictions?.SlotRestrictions ?? new List<SlotRestriction>()).Where(predicate: x =>
+        (Properties?.Restrictions?.SlotRestrictions ?? new List<SlotRestriction>()).Where(predicate: x =>
             x.Type == SlotRestrictionType.ItemProhibited);
 
     public string Id => GenerateId(Name, Gender);

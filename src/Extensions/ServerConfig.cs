@@ -50,6 +50,11 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
     {
         Time ??= new Time();
         Time.Ages ??= new List<HybrasylAge>();
+        // Absent config sections mean "all defaults": the XSD default values on
+        // these types' members carry the game's actual constants and formulas.
+        Constants ??= new ServerConstants();
+        Formulas ??= new ServerFormulas();
+        ApiEndpoints ??= new ApiEndpoints();
         InitializeClientSettings();
         GenerateIndex();
     }

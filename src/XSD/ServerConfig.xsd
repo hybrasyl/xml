@@ -53,6 +53,24 @@
     <xs:attribute name="Port" type="xs:unsignedShort" use="required" />
   </xs:complexType>
 
+  <xs:complexType name="TlsInfo">
+    <xs:sequence>
+      <xs:element name="ChainCertificateFile" type="xs:string" minOccurs="0" maxOccurs="1" />
+      <xs:element name="ServerCertificateFile" type="xs:string" minOccurs="1" maxOccurs="1" />
+      <xs:element name="ServerKeyFile" type="xs:string" minOccurs="1" maxOccurs="1" />
+    </xs:sequence>
+    <!-- Floor: a maximum retail frame (65538 bytes) plus the 8-byte extension envelope,
+         so an extension frame can always carry the original framing. -->
+    <xs:attribute name="MaxFrameSize" default="1048576">
+      <xs:simpleType>
+        <xs:restriction base="xs:unsignedInt">
+          <xs:minInclusive value="65546" />
+          <xs:maxInclusive value="8388608" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+
   <xs:complexType name="TargetUrl">
     <xs:attribute name="Url" type="xs:anyURI" />
   </xs:complexType>
@@ -67,6 +85,7 @@
       <xs:element name="Login" type="hyb:NetworkInfo" minOccurs="0" maxOccurs="1" />
       <xs:element name="World" type="hyb:NetworkInfo" minOccurs="0" maxOccurs="1" />
       <xs:element name="Grpc" type="hyb:NetworkInfoSsl" minOccurs="0" maxOccurs="1" />
+      <xs:element name="Tls" type="hyb:TlsInfo" minOccurs="0" maxOccurs="1" />
     </xs:sequence>
   </xs:complexType>
 

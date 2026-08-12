@@ -34,14 +34,14 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         this.fixture = fixture;
     }
 
-    // xsd2code has a few oddities / bugs that result in the wrong type being used or 
-    // a type being a list when it is a singular object. These tests ensure nothing gets
-    // committed and pushed out to Nuget with those errors.
+    // Generator canaries: a schema or generator change can silently swap a type or
+    // turn a singular object into a list. These tests ensure nothing gets committed
+    // and pushed out to Nuget with those errors.
     [Fact]
     public void CreatureAssailSoundIsByte()
     {
-        // Occasionally xsd2code will make this an sbyte, for unknown reasons,
-        // so we test for that here
+        // The schema declared xs:byte (signed) until 2026-08; sound ids are 0-255,
+        // so a regression there resurfaces as sbyte.
         var f = new Creature();
         Assert.IsType<byte>(f.AssailSound);
     }
@@ -85,14 +85,14 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         var original = new CreatureBehaviorSet();
         var import = new CreatureBehaviorSet();
         original.StatAlloc = null;
-        import.StatAlloc = "Str Str Int Con Dex";
+        import.StatAlloc = [StatType.Str, StatType.Str, StatType.Int, StatType.Con, StatType.Dex];
         var merged = original & import;
         Assert.Equal(import.StatAlloc, merged.StatAlloc);
 
         original = new CreatureBehaviorSet();
         import = new CreatureBehaviorSet();
         import.StatAlloc = null;
-        original.StatAlloc = "Str Str Int Con Dex";
+        original.StatAlloc = [StatType.Str, StatType.Str, StatType.Int, StatType.Con, StatType.Dex];
         merged = import & original;
         Assert.Equal(original.StatAlloc, merged.StatAlloc);
     }
@@ -102,6 +102,7 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
     {
         var item = new Item();
         item.Name = "Test";
+        item.Properties = new ItemProperties();
         item.Properties.StatModifiers = new StatModifiers { BonusDmg = "0.005", BonusHit = "0.004", BonusInt = "2" };
         Assert.Equal("+2 Int\n+0.5% Dmg\n+0.4% Hit\n", item.Properties.StatModifiers.BonusString);
     }
@@ -159,6 +160,63 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         var monster = fixture.SyncManager.Get<Creature>("Gabbaghoul");
         Assert.NotNull(monster.Hostility);
         Assert.NotNull(monster.Hostility.Players);
+    }
+
+    // Clone() is a deep-copy-via-serialization (used by variant expansion and entity merges).
+    // These guard the System.Text.Json implementation against fidelity regressions: a clone
+    // must be a distinct, fully-independent object whose persisted form is identical to the
+    // original. Serialize() is the XmlSerializer path -- an *independent* serializer from the
+    // clone's JSON round-trip -- so equal XML output proves every persisted field survived.
+    private Item VariantBelt() =>
+        fixture.SyncManager.Find<Item>(condition: x => x.Name.Contains("Light Variant Single Belt"))
+            .First();
+
+    [Fact]
+    public void CloneProducesFaithfulDeepCopy()
+    {
+        var original = VariantBelt();
+
+        var clone = original.Clone<Item>();
+
+        Assert.NotSame(original, clone);
+        Assert.Equal(original.Guid, clone.Guid);
+        Assert.Equal(original.LoadPath, clone.LoadPath);
+        // Identity preserved + every persisted field intact => identical XML serialization.
+        Assert.Equal(original.Serialize(), clone.Serialize());
+    }
+
+    [Fact]
+    public void CloneIsDeepNotShared()
+    {
+        var original = VariantBelt();
+        Assert.NotNull(original.Properties.StatModifiers);
+
+        var clone = original.Clone<Item>();
+
+        // Nested object graph must be independently allocated, not shared by reference.
+        Assert.NotSame(original.Properties, clone.Properties);
+        Assert.NotSame(original.Properties.StatModifiers, clone.Properties.StatModifiers);
+
+        // Mutating the clone must not touch the original.
+        var originalElement = original.Properties.StatModifiers.BaseDefensiveElement;
+        clone.Properties.StatModifiers.BaseDefensiveElement = ElementType.Fire;
+        Assert.Equal(originalElement, original.Properties.StatModifiers.BaseDefensiveElement);
+        Assert.NotEqual(original.Properties.StatModifiers.BaseDefensiveElement,
+            clone.Properties.StatModifiers.BaseDefensiveElement);
+    }
+
+    [Fact]
+    public void CloneNewGuidAssignsFreshIdentity()
+    {
+        var original = VariantBelt();
+
+        var clone = original.Clone<Item>(newGuid: true);
+
+        Assert.NotEqual(original.Guid, clone.Guid);
+        // Identity aside, content is faithfully copied.
+        Assert.Equal(original.Name, clone.Name);
+        Assert.Equal(original.Properties.StatModifiers.BaseDefensiveElement,
+            clone.Properties.StatModifiers.BaseDefensiveElement);
     }
 
 }

@@ -96,7 +96,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
         var newCbs = new CreatureBehaviorSet
         {
             Name = cbs1.Name,
-            StatAlloc = string.IsNullOrEmpty(cbs1.StatAlloc) ? cbs2.StatAlloc : cbs1.StatAlloc,
+            StatAlloc = cbs1.StatAlloc is { Count: > 0 } ? cbs1.StatAlloc : cbs2.StatAlloc,
             Behavior = new CreatureBehavior(),
             Castables = new CreatureCastables(),
             Import = cbs1.Import
@@ -236,9 +236,9 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
     {
         if (ReferenceEquals(null, other)) return false;
         if (ReferenceEquals(this, other)) return true;
-        return _statAlloc == other._statAlloc && Equals(_castables, other._castables) && 
-               Equals(_behavior, other._behavior) && Equals(_immunities, other._immunities) && 
-               Equals(_statModifiers, other._statModifiers) && _name == other._name;
+        return (StatAlloc ?? new()).SequenceEqual(other.StatAlloc ?? new()) && Equals(Castables, other.Castables) &&
+               Equals(Behavior, other.Behavior) && Equals(Immunities, other.Immunities) && 
+               Equals(StatModifiers, other.StatModifiers) && Name == other.Name;
     }
 
     public override bool Equals(object obj)
@@ -260,7 +260,8 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
     public static bool operator !=(CreatureBehaviorSet lhs, CreatureBehaviorSet rhs) => !(lhs == rhs);
 
-    public override int GetHashCode() => HashCode.Combine(_statAlloc, _castables, _behavior, _immunities, _statModifiers, _name);
+    // StatAlloc hashes by count so equal sequences share a hash (SequenceEqual in Equals).
+    public override int GetHashCode() => HashCode.Combine(StatAlloc?.Count, Castables, Behavior, Immunities, StatModifiers, Name);
 
 
 }

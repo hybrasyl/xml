@@ -30,10 +30,10 @@ public partial class Spawn
     {
         get
         {
-            var ele = _damage.Elements.Count switch
+            var ele = Damage.Elements.Count switch
             {
-                1 => _damage.Elements.First(),
-                > 1 => _damage.Elements.PickRandom(),
+                1 => Damage.Elements.First(),
+                > 1 => Damage.Elements.PickRandom(),
                 _ => ElementType.None
             };
             return ele switch
@@ -49,10 +49,10 @@ public partial class Spawn
     {
         get
         {
-            var ele = _defense.Elements.Count switch
+            var ele = Defense.Elements.Count switch
             {
-                1 => _damage.Elements.First(),
-                > 1 => _damage.Elements.PickRandom(),
+                1 => Damage.Elements.First(),
+                > 1 => Damage.Elements.PickRandom(),
                 _ => ElementType.None
             };
             return ele switch

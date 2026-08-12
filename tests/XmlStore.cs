@@ -433,8 +433,8 @@ public class XmlStoreTests
     [Fact]
     public void CheckCreatureAssailSoundIsByte()
     {
-        // Occasionally xsd2code will make this an sbyte, for unknown reasons,
-        // so we test for that hre
+        // The schema declared xs:byte (signed) until 2026-08; sound ids are 0-255,
+        // so a regression there resurfaces as sbyte.
         var f = new Creature();
         Assert.IsType<byte>(f.AssailSound);
     }
