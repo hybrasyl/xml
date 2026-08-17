@@ -19,7 +19,6 @@
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -79,5 +78,5 @@ public interface IWorldDataManager
 
     public IEnumerable<T> FindByCategory<T>(string category) where T : HybrasylEntity<T>, ICategorizable;
 
-    public void LogResult(ILogger logger);
+    public IEnumerable<XmlResultSummary> GetResultSummaries();
 }

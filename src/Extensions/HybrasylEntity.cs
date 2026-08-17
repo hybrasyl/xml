@@ -19,7 +19,6 @@
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;
-using Pluralize.NET;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -35,8 +34,6 @@ namespace Hybrasyl.Xml.Objects;
 
 public partial class HybrasylEntity<T> : IIndexable where T : HybrasylEntity<T>
 {
-    private static readonly Pluralizer Pluralizer = new();
-
     // Options for the JSON round-trip used by Clone(). Relaxed escaping: this payload is an
     // internal, in-memory deep-copy buffer (never persisted or transmitted), so the default
     // HTML-safe escaping would only add work. Round-trip correctness is unaffected either way.
@@ -132,7 +129,7 @@ public partial class HybrasylEntity<T> : IIndexable where T : HybrasylEntity<T>
     public static void LoadAll(IWorldDataManager manager, string rootPath)
     {
         var targetDir = rootPath ?? manager.RootPath;
-        var subPath = Path.Join(targetDir, Pluralizer.Pluralize(typeof(T).Name).ToLower());
+        var subPath = Path.Join(targetDir, WorldDataDirectory.NameFor<T>());
 
         var files = GetXmlFiles(subPath) ?? new List<string>();
  
