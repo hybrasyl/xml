@@ -32,9 +32,9 @@ namespace Hybrasyl.Xml.Objects
         public CreatureImmunityType Type { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private MessageType _messageType = Hybrasyl.Xml.Objects.MessageType.Say;
+        private MessageType _messageType = Hybrasyl.Xml.Enums.MessageType.Say;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.MessageType.Say)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.MessageType.Say)]
         [System.Xml.Serialization.XmlAttributeAttribute("MessageType")]
         public MessageType MessageType
         {

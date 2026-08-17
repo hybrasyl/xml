@@ -19,8 +19,6 @@
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Objects;
-using Pluralize.NET;
-using Serilog;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -35,7 +33,6 @@ namespace Hybrasyl.Xml.Manager;
 
 public class XmlDataManager : IWorldDataManager
 {
-    private static readonly Pluralizer Pluralizer = new();
     private static readonly SHA256 _sha256 = SHA256.Create();
 
     private readonly ConcurrentDictionary<Type, dynamic> _dataStore = new();
@@ -229,59 +226,55 @@ public class XmlDataManager : IWorldDataManager
         IsReady = true;
     }
 
-    public void LogResult(ILogger log)
+    /// <summary>
+    ///     The outcome of each startup pass, per type, for a caller to report however it
+    ///     reports. Guid-keyed errors are resolved to filenames here, since the mapping is
+    ///     the manager's to make.
+    /// </summary>
+    public IEnumerable<XmlResultSummary> GetResultSummaries()
     {
-        foreach (var kvp in _loadableTypes)
-        {
-            var method = typeof(XmlDataManager).GetMethods()
-                .FirstOrDefault(predicate: x => x.Name == "GetLoadResult");
-            if (method == null) continue;
-            var genMethod = method.MakeGenericMethod(kvp.Key);
-            var value = genMethod.Invoke(this, null);
-            if (value is not ILoadResult loadResult) continue;
-            log.Information("{Type}: Loaded {processed}, with {error} error(s) ({success} successfully loaded)",
-                kvp.Key.Name, loadResult.TotalProcessed, loadResult.ErrorCount, loadResult.SuccessCount);
-            if (loadResult.ErrorCount <= 0) continue;
-            log.Error("{Type}: Load errors follow", kvp.Key.Name);
-            foreach (var err in loadResult.Errors)
-                log.Error("  {filename}: {error}", err.Key, err.Value);
-        }
+        foreach (var summary in Summarize<ILoadResult>(_loadableTypes, "GetLoadResult",
+                     (type, result) => new XmlResultSummary(XmlResultStage.Load, type.Name,
+                         result.TotalProcessed, result.ErrorCount,
+                         [.. result.Errors], SuccessCount: result.SuccessCount)))
+            yield return summary;
 
-        foreach (var kvp in _processableTypes)
-        {
-            var method = typeof(XmlDataManager).GetMethods()
-                .FirstOrDefault(predicate: x => x.Name == "GetProcessResult");
-            if (method == null) continue;
-            var genMethod = method.MakeGenericMethod(kvp.Key);
-            var value = genMethod.Invoke(this, null);
-            if (value is not IProcessResult loadResult) continue;
-            log.Information(
-                "{Type}: Processing: {processed} processed with {error} error(s) ({Additional} additional {Type}(s) from processing)",
-                kvp.Key.Name, loadResult.TotalProcessed, loadResult.ErrorCount, loadResult.AdditionalCount,
-                kvp.Key.Name);
-            if (loadResult.ErrorCount <= 0) continue;
-            log.Error("{Type}: Processing errors follow", kvp.Key.Name);
-            foreach (var err in loadResult.Errors)
-                log.Error("  {guid}: {error}", GetFilenameByGuidDynamic(err.Key, kvp.Key), err.Value);
-        }
+        foreach (var summary in Summarize<IProcessResult>(_processableTypes, "GetProcessResult",
+                     (type, result) => new XmlResultSummary(XmlResultStage.Process, type.Name,
+                         result.TotalProcessed, result.ErrorCount, ResolveErrors(result.Errors, type),
+                         AdditionalCount: result.AdditionalCount)))
+            yield return summary;
 
-        foreach (var kvp in _validatableTypes)
+        foreach (var summary in Summarize<IValidationResult>(_validatableTypes, "GetProcessResult",
+                     (type, result) => new XmlResultSummary(XmlResultStage.Validation, type.Name,
+                         result.TotalProcessed, result.ErrorCount, ResolveErrors(result.Errors, type))))
+            yield return summary;
+    }
+
+    private IEnumerable<XmlResultSummary> Summarize<TResult>(
+        Dictionary<Type, MethodInfo> types,
+        string accessorName,
+        Func<Type, TResult, XmlResultSummary> project)
+    {
+        var accessor = typeof(XmlDataManager).GetMethods()
+            .FirstOrDefault(predicate: x => x.Name == accessorName);
+
+        if (accessor == null)
+            yield break;
+
+        foreach (var kvp in types)
         {
-            var method = typeof(XmlDataManager).GetMethods()
-                .FirstOrDefault(predicate: x => x.Name == "GetProcessResult");
-            if (method == null) continue;
-            var genMethod = method.MakeGenericMethod(kvp.Key);
-            var value = genMethod.Invoke(this, null);
-            if (value is not IValidationResult loadResult) continue;
-            log.Information("{Type}: Validation: {processed} validated with {error} error(s)",
-                kvp.Key.Name, loadResult.TotalProcessed, loadResult.ErrorCount);
-            if (loadResult.ErrorCount <= 0) continue;
-            log.Error("{Type}: Validation errors follow", kvp.Key.Name);
-            foreach (var err in loadResult.Errors)
-                log.Error("  {guid}: {error}", GetFilenameByGuidDynamic(err.Key, kvp.Key), err.Value);
+            if (accessor.MakeGenericMethod(kvp.Key).Invoke(this, null) is TResult result)
+                yield return project(kvp.Key, result);
         }
     }
 
+    private List<KeyValuePair<string, string>> ResolveErrors(
+        Dictionary<Guid, string> errors, Type type) =>
+    [
+        .. errors.Select(selector: e =>
+            new KeyValuePair<string, string>(GetFilenameByGuidDynamic(e.Key, type), e.Value))
+    ];
 
     public void LoadAll<T>() where T : HybrasylEntity<T>, ILoadOnStart<T> => T.LoadAll(this);
 

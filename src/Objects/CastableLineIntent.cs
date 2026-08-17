@@ -27,12 +27,12 @@ namespace Hybrasyl.Xml.Objects
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Direction")]
-        public Hybrasyl.Xml.Objects.IntentDirection Direction { get; set; }
+        public Hybrasyl.Xml.Enums.IntentDirection Direction { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private VisualEffectType _visualEffect = Hybrasyl.Xml.Objects.VisualEffectType.Targets;
+        private VisualEffectType _visualEffect = Hybrasyl.Xml.Enums.VisualEffectType.Targets;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.VisualEffectType.Targets)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.VisualEffectType.Targets)]
         [System.Xml.Serialization.XmlAttributeAttribute("VisualEffect")]
         public VisualEffectType VisualEffect
         {

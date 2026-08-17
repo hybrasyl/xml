@@ -387,14 +387,25 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
     }
 
     [Fact]
-    public void LogErrors()
+    public void ResultSummariesCoverEveryStage()
     {
-        using var ctx = TestCorrelator.CreateContext();
-        fixture.SyncManager.LogResult(Log.Logger);
-        var events = TestCorrelator.GetLogEventsFromCurrentContext();
-        // TODO: improve coverage
-        Assert.NotNull(events);
-        Assert.NotEmpty(events);
+        var summaries = fixture.SyncManager.GetResultSummaries().ToList();
+
+        Assert.NotEmpty(summaries);
+        Assert.Contains(summaries, s => s.Stage == XmlResultStage.Load);
+        Assert.All(summaries, s => Assert.False(string.IsNullOrWhiteSpace(s.TypeName)));
+        Assert.All(summaries, s => Assert.Equal(s.ErrorCount, s.Errors.Count));
+
+        // SuccessCount belongs to Load and AdditionalCount to Process; null elsewhere is what
+        // keeps "none" distinguishable from "not applicable".
+        Assert.All(summaries.Where(s => s.Stage == XmlResultStage.Load),
+            s => Assert.NotNull(s.SuccessCount));
+        Assert.All(summaries.Where(s => s.Stage != XmlResultStage.Load),
+            s => Assert.Null(s.SuccessCount));
+        Assert.All(summaries.Where(s => s.Stage == XmlResultStage.Process),
+            s => Assert.NotNull(s.AdditionalCount));
+        Assert.All(summaries.Where(s => s.Stage != XmlResultStage.Process),
+            s => Assert.Null(s.AdditionalCount));
     }
 
     [Fact]

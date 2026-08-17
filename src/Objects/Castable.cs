@@ -63,8 +63,8 @@ namespace Hybrasyl.Xml.Objects
             this._intents = new System.Collections.Generic.List<CastableIntent>();
             this._requirements = new System.Collections.Generic.List<Requirement>();
             this._restrictions = new System.Collections.Generic.List<EquipmentRestriction>();
-            this._elements = new System.Collections.Generic.List<Hybrasyl.Xml.Objects.ElementType>();
-            this._class = new System.Collections.Generic.List<Hybrasyl.Xml.Objects.Class>();
+            this._elements = new System.Collections.Generic.List<Hybrasyl.Xml.Enums.ElementType>();
+            this._class = new System.Collections.Generic.List<Hybrasyl.Xml.Enums.Class>();
         }
         
         /// <summary>
@@ -249,10 +249,10 @@ namespace Hybrasyl.Xml.Objects
         public Book Book { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.Generic.List<Hybrasyl.Xml.Objects.ElementType> _elements;
+        private System.Collections.Generic.List<Hybrasyl.Xml.Enums.ElementType> _elements;
         
         [System.Xml.Serialization.XmlAttributeAttribute("Elements")]
-        public System.Collections.Generic.List<Hybrasyl.Xml.Objects.ElementType> Elements
+        public System.Collections.Generic.List<Hybrasyl.Xml.Enums.ElementType> Elements
         {
             get
             {
@@ -295,10 +295,10 @@ namespace Hybrasyl.Xml.Objects
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.Generic.List<Hybrasyl.Xml.Objects.Class> _class;
+        private System.Collections.Generic.List<Hybrasyl.Xml.Enums.Class> _class;
         
         [System.Xml.Serialization.XmlAttributeAttribute("Class")]
-        public System.Collections.Generic.List<Hybrasyl.Xml.Objects.Class> Class
+        public System.Collections.Generic.List<Hybrasyl.Xml.Enums.Class> Class
         {
             get
             {

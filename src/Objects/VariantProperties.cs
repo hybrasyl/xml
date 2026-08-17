@@ -61,7 +61,7 @@ namespace Hybrasyl.Xml.Objects
         public VariantProperties()
         {
             this._flags = default(ItemFlags);
-            this._tags = new System.Collections.Generic.List<Hybrasyl.Xml.Objects.ItemTag>();
+            this._tags = new System.Collections.Generic.List<Hybrasyl.Xml.Enums.ItemTag>();
         }
         
         [System.Xml.Serialization.XmlElementAttribute("Physical")]
@@ -86,10 +86,10 @@ namespace Hybrasyl.Xml.Objects
         public Hybrasyl.Xml.Objects.StatModifiers StatModifiers { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.Generic.List<Hybrasyl.Xml.Objects.ItemTag> _tags;
+        private System.Collections.Generic.List<Hybrasyl.Xml.Enums.ItemTag> _tags;
         
         [System.Xml.Serialization.XmlAttributeAttribute("Tags")]
-        public System.Collections.Generic.List<Hybrasyl.Xml.Objects.ItemTag> Tags
+        public System.Collections.Generic.List<Hybrasyl.Xml.Enums.ItemTag> Tags
         {
             get
             {

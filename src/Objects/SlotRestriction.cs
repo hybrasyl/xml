@@ -33,11 +33,11 @@ namespace Hybrasyl.Xml.Objects
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Type")]
-        public Hybrasyl.Xml.Objects.SlotRestrictionType Type { get; set; }
+        public Hybrasyl.Xml.Enums.SlotRestrictionType Type { get; set; }
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Slot")]
-        public Hybrasyl.Xml.Objects.EquipmentSlot Slot { get; set; }
+        public Hybrasyl.Xml.Enums.EquipmentSlot Slot { get; set; }
         
         /// <summary>
         /// <para xml:lang="en">Minimum length: 1.</para>

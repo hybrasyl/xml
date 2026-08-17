@@ -23,10 +23,10 @@ namespace Hybrasyl.Xml.Objects
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Slot")]
-        public Hybrasyl.Xml.Objects.EquipmentSlot Slot { get; set; }
+        public Hybrasyl.Xml.Enums.EquipmentSlot Slot { get; set; }
         
         [System.Xml.Serialization.XmlAttributeAttribute("WeaponType")]
-        public Hybrasyl.Xml.Objects.WeaponType WeaponType { get; set; }
+        public Hybrasyl.Xml.Enums.WeaponType WeaponType { get; set; }
         
         /// <summary>
         /// <para xml:lang="en">Gets or sets a value indicating whether the WeaponType property is specified.</para>

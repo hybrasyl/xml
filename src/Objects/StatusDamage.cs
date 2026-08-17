@@ -55,7 +55,7 @@ namespace Hybrasyl.Xml.Objects
         public string Formula { get; set; }
         
         [System.Xml.Serialization.XmlAttributeAttribute("Type")]
-        public Hybrasyl.Xml.Objects.DamageType Type { get; set; }
+        public Hybrasyl.Xml.Enums.DamageType Type { get; set; }
         
         /// <summary>
         /// <para xml:lang="en">Gets or sets a value indicating whether the Type property is specified.</para>
@@ -64,7 +64,7 @@ namespace Hybrasyl.Xml.Objects
         public bool TypeSpecified { get; set; }
         
         [System.Xml.Serialization.XmlAttributeAttribute("Element")]
-        public Hybrasyl.Xml.Objects.ElementType Element { get; set; }
+        public Hybrasyl.Xml.Enums.ElementType Element { get; set; }
         
         /// <summary>
         /// <para xml:lang="en">Gets or sets a value indicating whether the Element property is specified.</para>

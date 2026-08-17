@@ -32,11 +32,11 @@ namespace Hybrasyl.Xml.Objects
         public string Value { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private Hybrasyl.Xml.Objects.WeaponType _weaponType = Hybrasyl.Xml.Objects.WeaponType.None;
+        private Hybrasyl.Xml.Enums.WeaponType _weaponType = Hybrasyl.Xml.Enums.WeaponType.None;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.WeaponType.None)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.WeaponType.None)]
         [System.Xml.Serialization.XmlAttributeAttribute("WeaponType")]
-        public Hybrasyl.Xml.Objects.WeaponType WeaponType
+        public Hybrasyl.Xml.Enums.WeaponType WeaponType
         {
             get
             {
@@ -50,7 +50,7 @@ namespace Hybrasyl.Xml.Objects
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Slot")]
-        public Hybrasyl.Xml.Objects.EquipmentSlot Slot { get; set; }
+        public Hybrasyl.Xml.Enums.EquipmentSlot Slot { get; set; }
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("RestrictionType")]

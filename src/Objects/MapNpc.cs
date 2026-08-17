@@ -49,11 +49,11 @@ namespace Hybrasyl.Xml.Objects
         public bool YSpecified { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private Hybrasyl.Xml.Objects.Direction _direction = Hybrasyl.Xml.Objects.Direction.North;
+        private Hybrasyl.Xml.Enums.Direction _direction = Hybrasyl.Xml.Enums.Direction.North;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.Direction.North)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.Direction.North)]
         [System.Xml.Serialization.XmlAttributeAttribute("Direction")]
-        public Hybrasyl.Xml.Objects.Direction Direction
+        public Hybrasyl.Xml.Enums.Direction Direction
         {
             get
             {

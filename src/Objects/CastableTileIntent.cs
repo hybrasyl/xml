@@ -22,11 +22,11 @@ namespace Hybrasyl.Xml.Objects
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private Hybrasyl.Xml.Objects.IntentDirection _direction = Hybrasyl.Xml.Objects.IntentDirection.None;
+        private Hybrasyl.Xml.Enums.IntentDirection _direction = Hybrasyl.Xml.Enums.IntentDirection.None;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.IntentDirection.None)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.IntentDirection.None)]
         [System.Xml.Serialization.XmlAttributeAttribute("Direction")]
-        public Hybrasyl.Xml.Objects.IntentDirection Direction
+        public Hybrasyl.Xml.Enums.IntentDirection Direction
         {
             get
             {
@@ -73,9 +73,9 @@ namespace Hybrasyl.Xml.Objects
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private VisualEffectType _visualEffect = Hybrasyl.Xml.Objects.VisualEffectType.Targets;
+        private VisualEffectType _visualEffect = Hybrasyl.Xml.Enums.VisualEffectType.Targets;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.VisualEffectType.Targets)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.VisualEffectType.Targets)]
         [System.Xml.Serialization.XmlAttributeAttribute("VisualEffect")]
         public VisualEffectType VisualEffect
         {

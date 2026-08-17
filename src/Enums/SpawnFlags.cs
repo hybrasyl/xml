@@ -24,7 +24,7 @@
 // xscgen does not synthesize; tools/patch-flags-enums.py repoints the
 // generated members here after each regeneration. Keep members and
 // values in sync with the corresponding simpleType in src/XSD/.
-namespace Hybrasyl.Xml.Objects
+namespace Hybrasyl.Xml.Enums
 {
 using System;
 using System.Diagnostics;
