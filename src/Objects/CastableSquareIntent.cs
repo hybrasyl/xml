@@ -30,9 +30,9 @@ namespace Hybrasyl.Xml.Objects
         public byte Side { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private VisualEffectType _visualEffect = Hybrasyl.Xml.Objects.VisualEffectType.Targets;
+        private VisualEffectType _visualEffect = Hybrasyl.Xml.Enums.VisualEffectType.Targets;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.VisualEffectType.Targets)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.VisualEffectType.Targets)]
         [System.Xml.Serialization.XmlAttributeAttribute("VisualEffect")]
         public VisualEffectType VisualEffect
         {

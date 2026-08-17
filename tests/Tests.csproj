@@ -29,6 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Using Include="Hybrasyl.Xml.Enums" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\tools\enum-values.json" CopyToOutputDirectory="PreserveNewest" Link="enum-values.json" />
   </ItemGroup>
 

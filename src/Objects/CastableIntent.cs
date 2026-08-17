@@ -63,7 +63,7 @@ namespace Hybrasyl.Xml.Objects
             this._square = new System.Collections.Generic.List<CastableSquareIntent>();
             this._tile = new System.Collections.Generic.List<CastableTileIntent>();
             this._cone = new System.Collections.Generic.List<CastableConeIntent>();
-            this._flags = new System.Collections.Generic.List<Hybrasyl.Xml.Objects.IntentFlags>();
+            this._flags = new System.Collections.Generic.List<Hybrasyl.Xml.Enums.IntentFlags>();
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
@@ -183,11 +183,11 @@ namespace Hybrasyl.Xml.Objects
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private Hybrasyl.Xml.Objects.SpellUseType _useType = Hybrasyl.Xml.Objects.SpellUseType.NoTarget;
+        private Hybrasyl.Xml.Enums.SpellUseType _useType = Hybrasyl.Xml.Enums.SpellUseType.NoTarget;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.SpellUseType.NoTarget)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.SpellUseType.NoTarget)]
         [System.Xml.Serialization.XmlAttributeAttribute("UseType")]
-        public Hybrasyl.Xml.Objects.SpellUseType UseType
+        public Hybrasyl.Xml.Enums.SpellUseType UseType
         {
             get
             {
@@ -200,10 +200,10 @@ namespace Hybrasyl.Xml.Objects
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.Generic.List<Hybrasyl.Xml.Objects.IntentFlags> _flags;
+        private System.Collections.Generic.List<Hybrasyl.Xml.Enums.IntentFlags> _flags;
         
         [System.Xml.Serialization.XmlAttributeAttribute("Flags")]
-        public System.Collections.Generic.List<Hybrasyl.Xml.Objects.IntentFlags> Flags
+        public System.Collections.Generic.List<Hybrasyl.Xml.Enums.IntentFlags> Flags
         {
             get
             {

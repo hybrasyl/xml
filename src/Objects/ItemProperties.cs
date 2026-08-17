@@ -65,7 +65,7 @@ namespace Hybrasyl.Xml.Objects
             this._flags = default(ItemFlags);
             this._motions = new System.Collections.Generic.List<ItemMotion>();
             this._procs = new System.Collections.Generic.List<Hybrasyl.Xml.Objects.Proc>();
-            this._tags = new System.Collections.Generic.List<Hybrasyl.Xml.Objects.ItemTag>();
+            this._tags = new System.Collections.Generic.List<Hybrasyl.Xml.Enums.ItemTag>();
         }
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
@@ -216,10 +216,10 @@ namespace Hybrasyl.Xml.Objects
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.Generic.List<Hybrasyl.Xml.Objects.ItemTag> _tags;
+        private System.Collections.Generic.List<Hybrasyl.Xml.Enums.ItemTag> _tags;
         
         [System.Xml.Serialization.XmlAttributeAttribute("Tags")]
-        public System.Collections.Generic.List<Hybrasyl.Xml.Objects.ItemTag> Tags
+        public System.Collections.Generic.List<Hybrasyl.Xml.Enums.ItemTag> Tags
         {
             get
             {

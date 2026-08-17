@@ -28,11 +28,11 @@ namespace Hybrasyl.Xml.Objects
         public RestrictionsAb Ab { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private Hybrasyl.Xml.Objects.Class _class = Hybrasyl.Xml.Objects.Class.Peasant;
+        private Hybrasyl.Xml.Enums.Class _class = Hybrasyl.Xml.Enums.Class.Peasant;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.Class.Peasant)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.Class.Peasant)]
         [System.Xml.Serialization.XmlElementAttribute("Class")]
-        public Hybrasyl.Xml.Objects.Class Class
+        public Hybrasyl.Xml.Enums.Class Class
         {
             get
             {
@@ -45,11 +45,11 @@ namespace Hybrasyl.Xml.Objects
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private Hybrasyl.Xml.Objects.Gender _gender = Hybrasyl.Xml.Objects.Gender.Neutral;
+        private Hybrasyl.Xml.Enums.Gender _gender = Hybrasyl.Xml.Enums.Gender.Neutral;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.Gender.Neutral)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.Gender.Neutral)]
         [System.Xml.Serialization.XmlElementAttribute("Gender")]
-        public Hybrasyl.Xml.Objects.Gender Gender
+        public Hybrasyl.Xml.Enums.Gender Gender
         {
             get
             {

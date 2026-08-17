@@ -92,7 +92,7 @@ namespace Hybrasyl.Xml.Objects
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Type")]
-        public Hybrasyl.Xml.Objects.MessageType Type { get; set; }
+        public Hybrasyl.Xml.Enums.MessageType Type { get; set; }
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Passthrough")]

@@ -28,10 +28,10 @@ namespace Hybrasyl.Xml.Objects
         public string MaxDmg { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.Generic.List<Hybrasyl.Xml.Objects.ElementType> _elements;
+        private System.Collections.Generic.List<Hybrasyl.Xml.Enums.ElementType> _elements;
         
         [System.Xml.Serialization.XmlAttributeAttribute("Elements")]
-        public System.Collections.Generic.List<Hybrasyl.Xml.Objects.ElementType> Elements
+        public System.Collections.Generic.List<Hybrasyl.Xml.Enums.ElementType> Elements
         {
             get
             {
@@ -61,7 +61,7 @@ namespace Hybrasyl.Xml.Objects
         /// </summary>
         public SpawnDamage()
         {
-            this._elements = new System.Collections.Generic.List<Hybrasyl.Xml.Objects.ElementType>();
+            this._elements = new System.Collections.Generic.List<Hybrasyl.Xml.Enums.ElementType>();
         }
     }
 }

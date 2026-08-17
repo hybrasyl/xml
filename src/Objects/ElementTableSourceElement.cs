@@ -47,7 +47,7 @@ namespace Hybrasyl.Xml.Objects
         }
         
         [System.Xml.Serialization.XmlAttributeAttribute("Element")]
-        public Hybrasyl.Xml.Objects.ElementType Element { get; set; }
+        public Hybrasyl.Xml.Enums.ElementType Element { get; set; }
         
         /// <summary>
         /// <para xml:lang="en">Gets or sets a value indicating whether the Element property is specified.</para>

@@ -44,11 +44,11 @@ namespace Hybrasyl.Xml.Objects
         public bool DisplaySpriteSpecified { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private Hybrasyl.Xml.Objects.ItemBodyStyle _bodyStyle = Hybrasyl.Xml.Objects.ItemBodyStyle.Transparent;
+        private Hybrasyl.Xml.Enums.ItemBodyStyle _bodyStyle = Hybrasyl.Xml.Enums.ItemBodyStyle.Transparent;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.ItemBodyStyle.Transparent)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.ItemBodyStyle.Transparent)]
         [System.Xml.Serialization.XmlAttributeAttribute("BodyStyle")]
-        public Hybrasyl.Xml.Objects.ItemBodyStyle BodyStyle
+        public Hybrasyl.Xml.Enums.ItemBodyStyle BodyStyle
         {
             get
             {
@@ -61,11 +61,11 @@ namespace Hybrasyl.Xml.Objects
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private Hybrasyl.Xml.Objects.ItemColor _color = Hybrasyl.Xml.Objects.ItemColor.None;
+        private Hybrasyl.Xml.Enums.ItemColor _color = Hybrasyl.Xml.Enums.ItemColor.None;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.ItemColor.None)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.ItemColor.None)]
         [System.Xml.Serialization.XmlAttributeAttribute("Color")]
-        public Hybrasyl.Xml.Objects.ItemColor Color
+        public Hybrasyl.Xml.Enums.ItemColor Color
         {
             get
             {

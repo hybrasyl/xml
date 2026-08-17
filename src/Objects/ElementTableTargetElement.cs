@@ -22,11 +22,11 @@ namespace Hybrasyl.Xml.Objects
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private Hybrasyl.Xml.Objects.ElementType _element = Hybrasyl.Xml.Objects.ElementType.None;
+        private Hybrasyl.Xml.Enums.ElementType _element = Hybrasyl.Xml.Enums.ElementType.None;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.ElementType.None)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.ElementType.None)]
         [System.Xml.Serialization.XmlAttributeAttribute("Element")]
-        public Hybrasyl.Xml.Objects.ElementType Element
+        public Hybrasyl.Xml.Enums.ElementType Element
         {
             get
             {

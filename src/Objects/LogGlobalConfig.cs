@@ -93,9 +93,9 @@ namespace Hybrasyl.Xml.Objects
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private LogLevel _minimumLevel = Hybrasyl.Xml.Objects.LogLevel.Info;
+        private LogLevel _minimumLevel = Hybrasyl.Xml.Enums.LogLevel.Info;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.LogLevel.Info)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.LogLevel.Info)]
         [System.Xml.Serialization.XmlAttributeAttribute("MinimumLevel")]
         public LogLevel MinimumLevel
         {

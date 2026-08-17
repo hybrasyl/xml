@@ -83,9 +83,9 @@ namespace Hybrasyl.Xml.Objects
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private CreatureTargetPriority _targetPriority = Hybrasyl.Xml.Objects.CreatureTargetPriority.HighThreat;
+        private CreatureTargetPriority _targetPriority = Hybrasyl.Xml.Enums.CreatureTargetPriority.HighThreat;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.CreatureTargetPriority.HighThreat)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.CreatureTargetPriority.HighThreat)]
         [System.Xml.Serialization.XmlAttributeAttribute("TargetPriority")]
         public CreatureTargetPriority TargetPriority
         {

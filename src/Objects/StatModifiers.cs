@@ -120,9 +120,9 @@ namespace Hybrasyl.Xml.Objects
         public string BaseInboundDamageToMp { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private ElementType _baseOffensiveElement = Hybrasyl.Xml.Objects.ElementType.None;
+        private ElementType _baseOffensiveElement = Hybrasyl.Xml.Enums.ElementType.None;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.ElementType.None)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.ElementType.None)]
         [System.Xml.Serialization.XmlAttributeAttribute("BaseOffensiveElement")]
         public ElementType BaseOffensiveElement
         {
@@ -137,9 +137,9 @@ namespace Hybrasyl.Xml.Objects
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private ElementType _baseDefensiveElement = Hybrasyl.Xml.Objects.ElementType.None;
+        private ElementType _baseDefensiveElement = Hybrasyl.Xml.Enums.ElementType.None;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.ElementType.None)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.ElementType.None)]
         [System.Xml.Serialization.XmlAttributeAttribute("BaseDefensiveElement")]
         public ElementType BaseDefensiveElement
         {
@@ -157,9 +157,9 @@ namespace Hybrasyl.Xml.Objects
         public string BaseExtraFaith { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private ElementType _offensiveElementOverride = Hybrasyl.Xml.Objects.ElementType.None;
+        private ElementType _offensiveElementOverride = Hybrasyl.Xml.Enums.ElementType.None;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.ElementType.None)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.ElementType.None)]
         [System.Xml.Serialization.XmlAttributeAttribute("OffensiveElementOverride")]
         public ElementType OffensiveElementOverride
         {
@@ -174,9 +174,9 @@ namespace Hybrasyl.Xml.Objects
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private ElementType _defensiveElementOverride = Hybrasyl.Xml.Objects.ElementType.None;
+        private ElementType _defensiveElementOverride = Hybrasyl.Xml.Enums.ElementType.None;
         
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Objects.ElementType.None)]
+        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.ElementType.None)]
         [System.Xml.Serialization.XmlAttributeAttribute("DefensiveElementOverride")]
         public ElementType DefensiveElementOverride
         {

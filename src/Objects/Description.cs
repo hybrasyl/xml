@@ -32,10 +32,10 @@ namespace Hybrasyl.Xml.Objects
         public string Value { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.Generic.List<Hybrasyl.Xml.Objects.Class> _class;
+        private System.Collections.Generic.List<Hybrasyl.Xml.Enums.Class> _class;
         
         [System.Xml.Serialization.XmlAttributeAttribute("Class")]
-        public System.Collections.Generic.List<Hybrasyl.Xml.Objects.Class> Class
+        public System.Collections.Generic.List<Hybrasyl.Xml.Enums.Class> Class
         {
             get
             {
@@ -65,7 +65,7 @@ namespace Hybrasyl.Xml.Objects
         /// </summary>
         public Description()
         {
-            this._class = new System.Collections.Generic.List<Hybrasyl.Xml.Objects.Class>();
+            this._class = new System.Collections.Generic.List<Hybrasyl.Xml.Enums.Class>();
         }
     }
 }

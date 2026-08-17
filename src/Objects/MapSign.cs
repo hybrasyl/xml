@@ -62,7 +62,7 @@ namespace Hybrasyl.Xml.Objects
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Type")]
-        public Hybrasyl.Xml.Objects.BoardType Type { get; set; }
+        public Hybrasyl.Xml.Enums.BoardType Type { get; set; }
         
         /// <summary>
         /// <para xml:lang="en">Minimum length: 1.</para>
