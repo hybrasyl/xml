@@ -19,18 +19,18 @@ namespace Hybrasyl.Xml.Objects
     public enum LogLevel
     {
         
-        All,
+        All = 0,
         
-        Debug,
+        Debug = 1,
         
-        Info,
+        Info = 2,
         
-        Warn,
+        Warn = 3,
         
-        Error,
+        Error = 4,
         
-        Fatal,
+        Fatal = 5,
         
-        None,
+        None = 6,
     }
 }

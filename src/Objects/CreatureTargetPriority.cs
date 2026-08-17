@@ -19,42 +19,42 @@ namespace Hybrasyl.Xml.Objects
     public enum CreatureTargetPriority
     {
         
-        None,
+        None = 0,
         
-        Self,
+        Self = 1,
         
-        AllAllies,
+        AllAllies = 2,
         
-        RandomAlly,
+        RandomAlly = 3,
         
-        Attacker,
+        Attacker = 4,
         
-        HighThreat,
+        HighThreat = 5,
         
-        LowThreat,
+        LowThreat = 6,
         
-        AttackingCaster,
+        AttackingCaster = 7,
         
-        AttackingHealer,
+        AttackingHealer = 8,
         
-        RandomAttacker,
+        RandomAttacker = 9,
         
-        AttackingGroup,
+        AttackingGroup = 10,
         
-        AllyWithLowestHp,
+        AllyWithLowestHp = 11,
         
-        AllyWithLowestMp,
+        AllyWithLowestMp = 12,
         
-        AllyWithHighestHp,
+        AllyWithHighestHp = 13,
         
-        AllyWithHighestMp,
+        AllyWithHighestMp = 14,
         
-        AllyWithLessThanMaxHp,
+        AllyWithLessThanMaxHp = 15,
         
-        AllyWithLessThanMaxMp,
+        AllyWithLessThanMaxMp = 16,
         
-        AllyWithStatusConditions,
+        AllyWithStatusConditions = 17,
         
-        AllyWithNoStatusConditions,
+        AllyWithNoStatusConditions = 18,
     }
 }

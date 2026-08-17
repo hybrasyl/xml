@@ -19,14 +19,14 @@ namespace Hybrasyl.Xml.Objects
     public enum RotationType
     {
         
-        Offense,
+        Offense = 0,
         
-        Defense,
+        Defense = 1,
         
-        OnDeath,
+        OnDeath = 2,
         
-        NearDeath,
+        NearDeath = 3,
         
-        Assail,
+        Assail = 4,
     }
 }

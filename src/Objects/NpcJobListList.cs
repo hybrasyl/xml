@@ -19,14 +19,14 @@ namespace Hybrasyl.Xml.Objects
     public enum NpcJobListList
     {
         
-        Vend,
+        Vend = 0,
         
-        Bank,
+        Bank = 1,
         
-        Train,
+        Train = 2,
         
-        Repair,
+        Repair = 3,
         
-        Post,
+        Post = 4,
     }
 }

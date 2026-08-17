@@ -19,12 +19,12 @@ namespace Hybrasyl.Xml.Objects
     public enum RestrictionType
     {
         
-        Equipped,
+        Equipped = 0,
         
-        NotEquipped,
+        NotEquipped = 1,
         
-        InInventory,
+        InInventory = 2,
         
-        NotInInventory,
+        NotInInventory = 3,
     }
 }

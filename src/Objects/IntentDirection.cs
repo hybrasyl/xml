@@ -19,14 +19,14 @@ namespace Hybrasyl.Xml.Objects
     public enum IntentDirection
     {
         
-        None,
+        None = 0,
         
-        Front,
+        Front = 1,
         
-        Back,
+        Back = 2,
         
-        Left,
+        Left = 3,
         
-        Right,
+        Right = 4,
     }
 }

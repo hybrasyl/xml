@@ -19,46 +19,46 @@ namespace Hybrasyl.Xml.Objects
     public enum ItemTag
     {
         
-        Junk,
+        Junk = 0,
         
-        Common,
+        Common = 1,
         
-        Reagent,
+        Reagent = 2,
         
-        Magic,
+        Magic = 3,
         
-        Rare,
+        Rare = 4,
         
-        Masterwork,
+        Masterwork = 5,
         
-        Legendary,
+        Legendary = 6,
         
-        Artifact,
+        Artifact = 7,
         
-        Religious,
+        Religious = 8,
         
-        Social,
+        Social = 9,
         
-        Academic,
+        Academic = 10,
         
-        Quest,
+        Quest = 11,
         
-        Political,
+        Political = 12,
         
-        Currency,
+        Currency = 13,
         
-        Peasantware,
+        Peasantware = 14,
         
-        Armor,
+        Armor = 15,
         
-        Weapon,
+        Weapon = 16,
         
-        Contraption,
+        Contraption = 17,
         
-        Food,
+        Food = 18,
         
-        Tool,
+        Tool = 19,
         
-        Adornment,
+        Adornment = 20,
     }
 }

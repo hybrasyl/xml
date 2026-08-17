@@ -19,148 +19,148 @@ namespace Hybrasyl.Xml.Objects
     public enum ItemColor
     {
         
-        None,
+        None = 0,
         
-        Black,
+        Black = 1,
         
-        Red,
+        Red = 2,
         
-        Auburn,
+        Auburn = 3,
         
-        Butter,
+        Butter = 4,
         
-        Aqua,
+        Aqua = 5,
         
-        Blue,
+        Blue = 6,
         
-        Plum,
+        Plum = 7,
         
-        Forest,
+        Forest = 8,
         
-        Green,
+        Green = 9,
         
-        Sienna,
+        Sienna = 10,
         
-        Brown,
+        Brown = 11,
         
-        Charcoal,
+        Charcoal = 12,
         
-        Navy,
+        Navy = 13,
         
-        Acorn,
+        Acorn = 14,
         
-        White,
+        White = 15,
         
-        Pink,
+        Pink = 16,
         
-        Honeydew,
+        Honeydew = 17,
         
-        Orange,
+        Orange = 18,
         
-        Platinum,
+        Platinum = 19,
         
-        Midnight,
+        Midnight = 20,
         
-        Orchid,
+        Orchid = 21,
         
-        Lavender,
+        Lavender = 22,
         
-        Fuschia,
+        Fuschia = 23,
         
-        Cerise,
+        Cerise = 24,
         
-        Ocean,
+        Ocean = 25,
         
-        HotPink,
+        HotPink = 26,
         
-        Seafoam,
+        Seafoam = 27,
         
-        Amethyst,
+        Amethyst = 28,
         
-        Peach,
+        Peach = 29,
         
-        Sky,
+        Sky = 30,
         
-        Lime,
+        Lime = 31,
         
-        Jade,
+        Jade = 32,
         
-        Honey,
+        Honey = 33,
         
-        Cobalt,
+        Cobalt = 34,
         
-        Cocoa,
+        Cocoa = 35,
         
-        Wine,
+        Wine = 36,
         
-        Kelp,
+        Kelp = 37,
         
-        Wine2,
+        Wine2 = 38,
         
-        Teal,
+        Teal = 39,
         
-        Copper,
+        Copper = 40,
         
-        Curry,
+        Curry = 41,
         
-        Moss,
+        Moss = 42,
         
-        Grass,
+        Grass = 43,
         
-        Lapis,
+        Lapis = 44,
         
-        Maroon,
+        Maroon = 45,
         
-        TiNfOiL,
+        TiNfOiL = 46,
         
-        Aquamarine,
+        Aquamarine = 47,
         
-        Leaf,
+        Leaf = 48,
         
-        Purple,
+        Purple = 49,
         
-        Scarlet,
+        Scarlet = 50,
         
-        Lemon,
+        Lemon = 51,
         
-        Puce,
+        Puce = 52,
         
-        Coral,
+        Coral = 53,
         
-        Crimson,
+        Crimson = 54,
         
-        Gold,
+        Gold = 55,
         
-        Silver,
+        Silver = 56,
         
-        Fire,
+        Fire = 57,
         
-        Stormy,
+        Stormy = 58,
         
-        Cherry,
+        Cherry = 59,
         
-        Mint,
+        Mint = 60,
         
-        Cerulean,
+        Cerulean = 61,
         
-        Twilight,
+        Twilight = 62,
         
-        Quartz,
+        Quartz = 63,
         
-        Turquoise,
+        Turquoise = 64,
         
-        Peridot,
+        Peridot = 65,
         
-        Nebula,
+        Nebula = 66,
         
-        Bubblegum,
+        Bubblegum = 67,
         
-        Cyan,
+        Cyan = 68,
         
-        Sable,
+        Sable = 69,
         
-        Mauve,
+        Mauve = 70,
         
-        Dusk,
+        Dusk = 71,
     }
 }

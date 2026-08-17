@@ -19,14 +19,14 @@ namespace Hybrasyl.Xml.Objects
     public enum ProcEventType
     {
         
-        OnUse,
+        OnUse = 0,
         
-        OnCast,
+        OnCast = 1,
         
-        OnHit,
+        OnHit = 2,
         
-        OnDeath,
+        OnDeath = 3,
         
-        OnSpawn,
+        OnSpawn = 4,
     }
 }

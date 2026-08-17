@@ -19,10 +19,10 @@ namespace Hybrasyl.Xml.Objects
     public enum NpcRepairType
     {
         
-        Armor,
+        Armor = 0,
         
-        Weapon,
+        Weapon = 1,
         
-        All,
+        All = 2,
     }
 }

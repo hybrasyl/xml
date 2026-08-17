@@ -19,10 +19,10 @@ namespace Hybrasyl.Xml.Objects
     public enum IntentType
     {
         
-        Hostile,
+        Hostile = 0,
         
-        Passive,
+        Passive = 1,
         
-        Neutral,
+        Neutral = 2,
     }
 }

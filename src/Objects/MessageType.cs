@@ -19,23 +19,23 @@ namespace Hybrasyl.Xml.Objects
     public enum MessageType
     {
         
-        Mail,
+        Mail = 0,
         
-        BoardMessage,
+        BoardMessage = 1,
         
-        Say,
+        Say = 2,
         
-        Shout,
+        Shout = 3,
         
-        Whisper,
+        Whisper = 4,
         
-        GuildChat,
+        GuildChat = 5,
         
-        GroupChat,
+        GroupChat = 6,
         
-        RegionalChat,
+        RegionalChat = 7,
         
         [System.Xml.Serialization.XmlEnumAttribute("GMChat")]
-        GmChat,
+        GmChat = 8,
     }
 }

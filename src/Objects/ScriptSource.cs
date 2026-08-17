@@ -19,8 +19,8 @@ namespace Hybrasyl.Xml.Objects
     public enum ScriptSource
     {
         
-        Target,
+        Target = 0,
         
-        Caster,
+        Caster = 1,
     }
 }

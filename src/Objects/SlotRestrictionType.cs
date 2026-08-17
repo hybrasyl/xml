@@ -19,8 +19,8 @@ namespace Hybrasyl.Xml.Objects
     public enum SlotRestrictionType
     {
         
-        ItemRequired,
+        ItemRequired = 0,
         
-        ItemProhibited,
+        ItemProhibited = 1,
     }
 }

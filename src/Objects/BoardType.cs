@@ -19,8 +19,8 @@ namespace Hybrasyl.Xml.Objects
     public enum BoardType
     {
         
-        Messageboard,
+        Messageboard = 0,
         
-        Sign,
+        Sign = 1,
     }
 }

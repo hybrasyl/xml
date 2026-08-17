@@ -19,14 +19,14 @@ namespace Hybrasyl.Xml.Objects
     public enum StatType
     {
         
-        Str,
+        Str = 0,
         
-        Int,
+        Int = 1,
         
-        Con,
+        Con = 2,
         
-        Wis,
+        Wis = 3,
         
-        Dex,
+        Dex = 4,
     }
 }

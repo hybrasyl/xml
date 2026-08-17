@@ -19,12 +19,12 @@ namespace Hybrasyl.Xml.Objects
     public enum MasteryModifier
     {
         
-        Damage,
+        Damage = 0,
         
-        Heal,
+        Heal = 1,
         
-        MissRate,
+        MissRate = 2,
         
-        FailRate,
+        FailRate = 3,
     }
 }

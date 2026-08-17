@@ -19,14 +19,14 @@ namespace Hybrasyl.Xml.Objects
     public enum ItemBodyStyle
     {
         
-        Transparent,
+        Transparent = 0,
         
-        Male,
+        Male = 1,
         
-        MaleBlack,
+        MaleBlack = 2,
         
-        MaleRed,
+        MaleRed = 3,
         
-        Female,
+        Female = 4,
     }
 }

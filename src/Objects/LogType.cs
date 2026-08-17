@@ -19,18 +19,18 @@ namespace Hybrasyl.Xml.Objects
     public enum LogType
     {
         
-        General,
+        General = 0,
         
-        Scripting,
+        Scripting = 1,
         
-        GmActivity,
+        GmActivity = 2,
         
-        UserActivity,
+        UserActivity = 3,
         
-        Spawn,
+        Spawn = 4,
         
-        Packet,
+        Packet = 5,
         
-        WorldData,
+        WorldData = 6,
     }
 }

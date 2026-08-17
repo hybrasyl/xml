@@ -19,14 +19,14 @@ namespace Hybrasyl.Xml.Objects
     public enum CreatureImmunityType
     {
         
-        Element,
+        Element = 0,
         
-        Castable,
+        Castable = 1,
         
-        Status,
+        Status = 2,
         
-        StatusCategory,
+        StatusCategory = 3,
         
-        CastableCategory,
+        CastableCategory = 4,
     }
 }

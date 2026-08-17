@@ -19,18 +19,18 @@ namespace Hybrasyl.Xml.Objects
     public enum Class
     {
         
-        Peasant,
+        Peasant = 0,
         
-        Warrior,
+        Warrior = 1,
         
-        Rogue,
+        Rogue = 2,
         
-        Wizard,
+        Wizard = 3,
         
-        Priest,
+        Priest = 4,
         
-        Monk,
+        Monk = 5,
         
-        None,
+        None = 6,
     }
 }

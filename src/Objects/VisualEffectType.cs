@@ -19,10 +19,10 @@ namespace Hybrasyl.Xml.Objects
     public enum VisualEffectType
     {
         
-        Targets,
+        Targets = 0,
         
-        AllTiles,
+        AllTiles = 1,
         
-        Caster,
+        Caster = 2,
     }
 }

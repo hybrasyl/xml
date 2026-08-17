@@ -19,16 +19,16 @@ namespace Hybrasyl.Xml.Objects
     public enum Book
     {
         
-        PrimarySkill,
+        PrimarySkill = 0,
         
-        SecondarySkill,
+        SecondarySkill = 1,
         
-        UtilitySkill,
+        UtilitySkill = 2,
         
-        PrimarySpell,
+        PrimarySpell = 3,
         
-        SecondarySpell,
+        SecondarySpell = 4,
         
-        UtilitySpell,
+        UtilitySpell = 5,
     }
 }

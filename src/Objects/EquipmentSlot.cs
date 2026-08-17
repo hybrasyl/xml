@@ -19,46 +19,46 @@ namespace Hybrasyl.Xml.Objects
     public enum EquipmentSlot
     {
         
-        None,
+        None = 0,
         
-        Weapon,
+        Weapon = 1,
         
-        Armor,
+        Armor = 2,
         
-        Shield,
+        Shield = 3,
         
-        Helmet,
+        Helmet = 4,
         
-        Earring,
+        Earring = 5,
         
-        Necklace,
+        Necklace = 6,
         
-        LeftHand,
+        LeftHand = 7,
         
-        RightHand,
+        RightHand = 8,
         
-        LeftArm,
+        LeftArm = 9,
         
-        RightArm,
+        RightArm = 10,
         
-        Waist,
+        Waist = 11,
         
-        Leg,
+        Leg = 12,
         
-        Foot,
+        Foot = 13,
         
-        FirstAcc,
+        FirstAcc = 14,
         
-        Trousers,
+        Trousers = 15,
         
-        Coat,
+        Coat = 16,
         
-        SecondAcc,
+        SecondAcc = 17,
         
-        ThirdAcc,
+        ThirdAcc = 18,
         
-        Gauntlet,
+        Gauntlet = 19,
         
-        Ring,
+        Ring = 20,
     }
 }

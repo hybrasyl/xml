@@ -19,16 +19,16 @@ namespace Hybrasyl.Xml.Objects
     public enum WeaponType
     {
         
-        OneHand,
+        OneHand = 0,
         
-        TwoHand,
+        TwoHand = 1,
         
-        Dagger,
+        Dagger = 2,
         
-        Staff,
+        Staff = 3,
         
-        Claw,
+        Claw = 4,
         
-        None,
+        None = 5,
     }
 }

@@ -19,8 +19,8 @@ namespace Hybrasyl.Xml.Objects
     public enum ElementalModifierType
     {
         
-        Augment,
+        Augment = 0,
         
-        Resistance,
+        Resistance = 1,
     }
 }

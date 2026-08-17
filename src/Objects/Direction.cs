@@ -19,12 +19,12 @@ namespace Hybrasyl.Xml.Objects
     public enum Direction
     {
         
-        North,
+        North = 0,
         
-        East,
+        East = 1,
         
-        South,
+        South = 2,
         
-        West,
+        West = 3,
     }
 }

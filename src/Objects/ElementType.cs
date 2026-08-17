@@ -19,34 +19,34 @@ namespace Hybrasyl.Xml.Objects
     public enum ElementType
     {
         
-        None,
+        None = 0,
         
-        Fire,
+        Fire = 1,
         
-        Water,
+        Water = 2,
         
-        Wind,
+        Wind = 3,
         
-        Earth,
+        Earth = 4,
         
-        Light,
+        Light = 5,
         
-        Dark,
+        Dark = 6,
         
-        Wood,
+        Wood = 7,
         
-        Metal,
+        Metal = 8,
         
-        Undead,
+        Undead = 9,
         
-        RandomTemuair,
+        RandomTemuair = 10,
         
-        RandomExpanded,
+        RandomExpanded = 11,
         
-        Necklace,
+        Necklace = 12,
         
-        Belt,
+        Belt = 13,
         
-        Current,
+        Current = 14,
     }
 }

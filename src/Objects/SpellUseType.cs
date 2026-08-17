@@ -19,20 +19,20 @@ namespace Hybrasyl.Xml.Objects
     public enum SpellUseType
     {
         
-        Unusable,
+        Unusable = 0,
         
-        Prompt,
+        Prompt = 1,
         
-        Target,
+        Target = 2,
         
-        FourDigit,
+        FourDigit = 3,
         
-        ThreeDigit,
+        ThreeDigit = 4,
         
-        NoTarget,
+        NoTarget = 5,
         
-        TwoDigit,
+        TwoDigit = 6,
         
-        OneDigit,
+        OneDigit = 7,
     }
 }

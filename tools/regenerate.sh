@@ -61,4 +61,9 @@ sed -i 's| -o /[^ ]*| -o src/Objects|' src/Objects/*.cs
 
 python3 tools/patch-flags-enums.py
 
+# Restore each enum member's allocated value. xscgen emits none, so a member's
+# number would otherwise be its position in the XSD -- and several of these
+# enums are cast to a byte and put on the wire.
+python3 tools/pin-enum-values.py
+
 echo "regenerate: done -- build and run the test suite before committing"

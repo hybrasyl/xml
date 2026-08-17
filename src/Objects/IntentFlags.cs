@@ -19,14 +19,14 @@ namespace Hybrasyl.Xml.Objects
     public enum IntentFlags
     {
         
-        Hostile,
+        Hostile = 0,
         
-        Friendly,
+        Friendly = 1,
         
-        Pvp,
+        Pvp = 2,
         
-        Group,
+        Group = 3,
         
-        Self,
+        Self = 4,
     }
 }

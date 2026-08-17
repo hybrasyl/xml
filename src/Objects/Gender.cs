@@ -19,10 +19,10 @@ namespace Hybrasyl.Xml.Objects
     public enum Gender
     {
         
-        Neutral,
+        Neutral = 0,
         
-        Male,
+        Male = 1,
         
-        Female,
+        Female = 2,
     }
 }

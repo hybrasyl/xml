@@ -1,0 +1,340 @@
+{
+  "BoardType": {
+    "Messageboard": 0,
+    "Sign": 1
+  },
+  "Book": {
+    "PrimarySkill": 0,
+    "PrimarySpell": 3,
+    "SecondarySkill": 1,
+    "SecondarySpell": 4,
+    "UtilitySkill": 2,
+    "UtilitySpell": 5
+  },
+  "Class": {
+    "Monk": 5,
+    "None": 6,
+    "Peasant": 0,
+    "Priest": 4,
+    "Rogue": 2,
+    "Warrior": 1,
+    "Wizard": 3
+  },
+  "CreatureImmunityType": {
+    "Castable": 1,
+    "CastableCategory": 4,
+    "Element": 0,
+    "Status": 2,
+    "StatusCategory": 3
+  },
+  "CreatureTargetPriority": {
+    "AllAllies": 2,
+    "AllyWithHighestHp": 13,
+    "AllyWithHighestMp": 14,
+    "AllyWithLessThanMaxHp": 15,
+    "AllyWithLessThanMaxMp": 16,
+    "AllyWithLowestHp": 11,
+    "AllyWithLowestMp": 12,
+    "AllyWithNoStatusConditions": 18,
+    "AllyWithStatusConditions": 17,
+    "Attacker": 4,
+    "AttackingCaster": 7,
+    "AttackingGroup": 10,
+    "AttackingHealer": 8,
+    "HighThreat": 5,
+    "LowThreat": 6,
+    "None": 0,
+    "RandomAlly": 3,
+    "RandomAttacker": 9,
+    "Self": 1
+  },
+  "DamageType": {
+    "Direct": 0,
+    "Elemental": 3,
+    "Magical": 2,
+    "Physical": 1
+  },
+  "Direction": {
+    "East": 1,
+    "North": 0,
+    "South": 2,
+    "West": 3
+  },
+  "ElementType": {
+    "Belt": 13,
+    "Current": 14,
+    "Dark": 6,
+    "Earth": 4,
+    "Fire": 1,
+    "Light": 5,
+    "Metal": 8,
+    "Necklace": 12,
+    "None": 0,
+    "RandomExpanded": 11,
+    "RandomTemuair": 10,
+    "Undead": 9,
+    "Water": 2,
+    "Wind": 3,
+    "Wood": 7
+  },
+  "ElementalModifierType": {
+    "Augment": 0,
+    "Resistance": 1
+  },
+  "EquipmentSlot": {
+    "Armor": 2,
+    "Coat": 16,
+    "Earring": 5,
+    "FirstAcc": 14,
+    "Foot": 13,
+    "Gauntlet": 19,
+    "Helmet": 4,
+    "LeftArm": 9,
+    "LeftHand": 7,
+    "Leg": 12,
+    "Necklace": 6,
+    "None": 0,
+    "RightArm": 10,
+    "RightHand": 8,
+    "Ring": 20,
+    "SecondAcc": 17,
+    "Shield": 3,
+    "ThirdAcc": 18,
+    "Trousers": 15,
+    "Waist": 11,
+    "Weapon": 1
+  },
+  "Gender": {
+    "Female": 2,
+    "Male": 1,
+    "Neutral": 0
+  },
+  "IntentDirection": {
+    "Back": 2,
+    "Front": 1,
+    "Left": 3,
+    "None": 0,
+    "Right": 4
+  },
+  "IntentFlags": {
+    "Friendly": 1,
+    "Group": 3,
+    "Hostile": 0,
+    "Pvp": 2,
+    "Self": 4
+  },
+  "IntentType": {
+    "Hostile": 0,
+    "Neutral": 2,
+    "Passive": 1
+  },
+  "ItemBodyStyle": {
+    "Female": 4,
+    "Male": 1,
+    "MaleBlack": 2,
+    "MaleRed": 3,
+    "Transparent": 0
+  },
+  "ItemColor": {
+    "Acorn": 14,
+    "Amethyst": 28,
+    "Aqua": 5,
+    "Aquamarine": 47,
+    "Auburn": 3,
+    "Black": 1,
+    "Blue": 6,
+    "Brown": 11,
+    "Bubblegum": 67,
+    "Butter": 4,
+    "Cerise": 24,
+    "Cerulean": 61,
+    "Charcoal": 12,
+    "Cherry": 59,
+    "Cobalt": 34,
+    "Cocoa": 35,
+    "Copper": 40,
+    "Coral": 53,
+    "Crimson": 54,
+    "Curry": 41,
+    "Cyan": 68,
+    "Dusk": 71,
+    "Fire": 57,
+    "Forest": 8,
+    "Fuschia": 23,
+    "Gold": 55,
+    "Grass": 43,
+    "Green": 9,
+    "Honey": 33,
+    "Honeydew": 17,
+    "HotPink": 26,
+    "Jade": 32,
+    "Kelp": 37,
+    "Lapis": 44,
+    "Lavender": 22,
+    "Leaf": 48,
+    "Lemon": 51,
+    "Lime": 31,
+    "Maroon": 45,
+    "Mauve": 70,
+    "Midnight": 20,
+    "Mint": 60,
+    "Moss": 42,
+    "Navy": 13,
+    "Nebula": 66,
+    "None": 0,
+    "Ocean": 25,
+    "Orange": 18,
+    "Orchid": 21,
+    "Peach": 29,
+    "Peridot": 65,
+    "Pink": 16,
+    "Platinum": 19,
+    "Plum": 7,
+    "Puce": 52,
+    "Purple": 49,
+    "Quartz": 63,
+    "Red": 2,
+    "Sable": 69,
+    "Scarlet": 50,
+    "Seafoam": 27,
+    "Sienna": 10,
+    "Silver": 56,
+    "Sky": 30,
+    "Stormy": 58,
+    "Teal": 39,
+    "TiNfOiL": 46,
+    "Turquoise": 64,
+    "Twilight": 62,
+    "White": 15,
+    "Wine": 36,
+    "Wine2": 38
+  },
+  "ItemTag": {
+    "Academic": 10,
+    "Adornment": 20,
+    "Armor": 15,
+    "Artifact": 7,
+    "Common": 1,
+    "Contraption": 17,
+    "Currency": 13,
+    "Food": 18,
+    "Junk": 0,
+    "Legendary": 6,
+    "Magic": 3,
+    "Masterwork": 5,
+    "Peasantware": 14,
+    "Political": 12,
+    "Quest": 11,
+    "Rare": 4,
+    "Reagent": 2,
+    "Religious": 8,
+    "Social": 9,
+    "Tool": 19,
+    "Weapon": 16
+  },
+  "LogLevel": {
+    "All": 0,
+    "Debug": 1,
+    "Error": 4,
+    "Fatal": 5,
+    "Info": 2,
+    "None": 6,
+    "Warn": 3
+  },
+  "LogType": {
+    "General": 0,
+    "GmActivity": 2,
+    "Packet": 5,
+    "Scripting": 1,
+    "Spawn": 4,
+    "UserActivity": 3,
+    "WorldData": 6
+  },
+  "MasteryModifier": {
+    "Damage": 0,
+    "FailRate": 3,
+    "Heal": 1,
+    "MissRate": 2
+  },
+  "MessageType": {
+    "BoardMessage": 1,
+    "GmChat": 8,
+    "GroupChat": 6,
+    "GuildChat": 5,
+    "Mail": 0,
+    "RegionalChat": 7,
+    "Say": 2,
+    "Shout": 3,
+    "Whisper": 4
+  },
+  "NpcJobListList": {
+    "Bank": 1,
+    "Post": 4,
+    "Repair": 3,
+    "Train": 2,
+    "Vend": 0
+  },
+  "NpcRepairType": {
+    "All": 2,
+    "Armor": 0,
+    "Weapon": 1
+  },
+  "ProcEventType": {
+    "OnCast": 1,
+    "OnDeath": 3,
+    "OnHit": 2,
+    "OnSpawn": 4,
+    "OnUse": 0
+  },
+  "RestrictionType": {
+    "Equipped": 0,
+    "InInventory": 2,
+    "NotEquipped": 1,
+    "NotInInventory": 3
+  },
+  "RotationType": {
+    "Assail": 4,
+    "Defense": 1,
+    "NearDeath": 3,
+    "Offense": 0,
+    "OnDeath": 2
+  },
+  "ScriptSource": {
+    "Caster": 1,
+    "Target": 0
+  },
+  "SlotRestrictionType": {
+    "ItemProhibited": 1,
+    "ItemRequired": 0
+  },
+  "SpellUseType": {
+    "FourDigit": 3,
+    "NoTarget": 5,
+    "OneDigit": 7,
+    "Prompt": 1,
+    "Target": 2,
+    "ThreeDigit": 4,
+    "TwoDigit": 6,
+    "Unusable": 0
+  },
+  "StatType": {
+    "Con": 2,
+    "Dex": 4,
+    "Int": 1,
+    "Str": 0,
+    "Wis": 3
+  },
+  "VisualEffectType": {
+    "AllTiles": 1,
+    "Caster": 2,
+    "Targets": 0
+  },
+  "WeaponType": {
+    "Claw": 4,
+    "Dagger": 2,
+    "None": 5,
+    "OneHand": 0,
+    "Staff": 3,
+    "TwoHand": 1
+  }
+}

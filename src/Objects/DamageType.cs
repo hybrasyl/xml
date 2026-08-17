@@ -19,12 +19,12 @@ namespace Hybrasyl.Xml.Objects
     public enum DamageType
     {
         
-        Direct,
+        Direct = 0,
         
-        Physical,
+        Physical = 1,
         
-        Magical,
+        Magical = 2,
         
-        Elemental,
+        Elemental = 3,
     }
 }
