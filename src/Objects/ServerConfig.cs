@@ -77,6 +77,7 @@ namespace Hybrasyl.Xml.Objects
         {
             this._boards = new System.Collections.Generic.List<GlobalBoard>();
             this._clientSettings = new System.Collections.Generic.List<ClientSetting>();
+            this._experienceScaling = new System.Collections.Generic.List<ExperienceScalingStep>();
         }
         
         [System.Xml.Serialization.XmlElementAttribute("Time")]
@@ -134,6 +135,36 @@ namespace Hybrasyl.Xml.Objects
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlElementAttribute("Formulas")]
         public ServerFormulas Formulas { get; set; }
+        
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        private System.Collections.Generic.List<ExperienceScalingStep> _experienceScaling;
+        
+        [System.Xml.Serialization.XmlArrayAttribute("ExperienceScaling")]
+        [System.Xml.Serialization.XmlArrayItemAttribute("Step", Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
+        public System.Collections.Generic.List<ExperienceScalingStep> ExperienceScaling
+        {
+            get
+            {
+                return _experienceScaling;
+            }
+            set
+            {
+                _experienceScaling = value;
+            }
+        }
+        
+        /// <summary>
+        /// <para xml:lang="en">Gets a value indicating whether the ExperienceScaling collection is empty.</para>
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ExperienceScalingSpecified
+        {
+            get
+            {
+                return ((this.ExperienceScaling != null) 
+                            && (this.ExperienceScaling.Count != 0));
+            }
+        }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private string _name = "default";

@@ -34,7 +34,36 @@ public partial class ServerConfig : ILoadOnStart<ServerConfig>
         { 2, ("group", "Allow Grouping") }
     };
 
+    /// <summary>
+    ///     The experience scale used when the config defines no steps. The level difference is
+    ///     the player's level minus the monster's.
+    /// </summary>
+    public static IReadOnlyList<ExperienceScalingStep> HybrasylExperienceScaling { get; } =
+        new List<ExperienceScalingStep>
+        {
+            ExperienceScalingStep.Create(6, null, fixedAmount: 1),
+            ExperienceScalingStep.Create(5, 5, 40),
+            ExperienceScalingStep.Create(4, 4, 80),
+            ExperienceScalingStep.Create(-4, -4, 105),
+            ExperienceScalingStep.Create(-5, -5, 110),
+            ExperienceScalingStep.Create(-6, -6, 115),
+            ExperienceScalingStep.Create(null, -7, 120)
+        };
+
     public override string PrimaryKey => Name;
+
+    /// <summary>
+    ///     Scale a kill's experience by the first step covering the level difference, or give it
+    ///     unchanged if no step does.
+    /// </summary>
+    /// <param name="experience">The experience the kill is worth.</param>
+    /// <param name="levelDifference">The player's level minus the monster's.</param>
+    public uint ScaleExperience(uint experience, int levelDifference)
+    {
+        var steps = ExperienceScalingSpecified ? ExperienceScaling : HybrasylExperienceScaling;
+        return steps.FirstOrDefault(predicate: step => step.Covers(levelDifference))?.Apply(experience) ??
+               experience;
+    }
 
     [XmlIgnoreAttribute] public Dictionary<byte, ClientSetting> SettingsNumberIndex { get; set; }
 

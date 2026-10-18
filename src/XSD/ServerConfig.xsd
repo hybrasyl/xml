@@ -251,11 +251,32 @@
       <xs:element name="ClientSettings" type="hyb:ClientSettings" minOccurs="0" maxOccurs="1" />
       <xs:element name="Constants" type="hyb:ServerConstants" minOccurs="1" maxOccurs="1" />
       <xs:element name="Formulas" type="hyb:ServerFormulas" minOccurs="1" maxOccurs="1"/>
+      <!-- How a kill's experience scales with the player's level minus the monster's level.
+           With no steps, the Hybrasyl scale applies (ServerConfig.HybrasylExperienceScaling). -->
+      <xs:element name="ExperienceScaling" type="hyb:ExperienceScaling" minOccurs="0" maxOccurs="1" />
     </xs:sequence>
     <xs:attribute name="Name" type="xs:string" default="default" />
     <xs:attribute name="ElementTable" type="xs:string" default="default" />
     <xs:attribute name="Locale" default="en_us" type="xs:string" />
     <xs:attribute name="Environment" default="dev" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="ExperienceScaling">
+    <xs:sequence>
+      <!-- The first step whose range covers the level difference applies. A difference no
+           step covers gives 100%. -->
+      <xs:element name="Step" type="hyb:ExperienceScalingStep" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ExperienceScalingStep">
+    <!-- The level difference range, inclusive. An absent bound is open. -->
+    <xs:attribute name="Min" type="xs:int" use="optional" />
+    <xs:attribute name="Max" type="xs:int" use="optional" />
+    <!-- The experience given, as a percentage of the reward, rounded up. -->
+    <xs:attribute name="Percent" type="xs:decimal" default="100" />
+    <!-- A fixed amount of experience, in place of Percent. -->
+    <xs:attribute name="Fixed" type="xs:unsignedInt" use="optional" />
   </xs:complexType>
 
   <xs:complexType name="ServerFormulas">
