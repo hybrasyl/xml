@@ -34,6 +34,7 @@
 
   <ItemGroup>
     <None Include="..\tools\enum-values.json" CopyToOutputDirectory="PreserveNewest" Link="enum-values.json" />
+    <None Include="..\src\XSD\*.xsd" CopyToOutputDirectory="PreserveNewest" LinkBase="XSD" />
   </ItemGroup>
 
   <ItemGroup>

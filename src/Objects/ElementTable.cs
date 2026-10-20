@@ -63,5 +63,22 @@ namespace Hybrasyl.Xml.Objects
                 _name = value;
             }
         }
+        
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        private double _defaultMultiplier = 1D;
+        
+        [System.ComponentModel.DefaultValueAttribute(1D)]
+        [System.Xml.Serialization.XmlAttributeAttribute("DefaultMultiplier")]
+        public double DefaultMultiplier
+        {
+            get
+            {
+                return _defaultMultiplier;
+            }
+            set
+            {
+                _defaultMultiplier = value;
+            }
+        }
     }
 }
