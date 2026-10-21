@@ -34,11 +34,6 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
     private readonly XmlManagerFixture fixture;
     private readonly ITestOutputHelper output;
 
-    // This can't be known easily because of variants / etc
-    // TODO: update to go through actual xml and calculate variants / creature types
-    private readonly int VariantItems = 176;
-    private readonly int VariantCreatures = 25;
-
     public XmlManagerTests(ITestOutputHelper output, XmlManagerFixture fixture)
     {
         this.output = output;
@@ -234,32 +229,22 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
             $"Statuses: {manager.Count<Status>()} World Maps: {manager.Count<WorldMap>()} Spawngroups: {manager.Count<SpawnGroup>()} Behavior Sets: {manager.Count<CreatureBehaviorSet>()}");
         Log.Information(
             $"Element Tables: {manager.Count<ElementTable>()} Server Configs: {manager.Count<ServerConfig>()} Localization Files: {manager.Count<Localization>()}");
-        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "castables"), "*.xml").Length,
-            manager.Count<Castable>());
-        Assert.Equal(VariantItems, manager.Count<Item>());
-        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "npcs"), "*.xml").Length, manager.Count<Npc>());
-        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "maps"), "*.xml").Length, manager.Count<Map>());
-        Assert.Equal(VariantCreatures, manager.Count<Creature>());
-        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "variantgroups"), "*.xml").Length,
-            manager.Count<VariantGroup>());
-        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "lootsets"), "*.xml").Length,
-            manager.Count<LootSet>());
-        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "nations"), "*.xml").Length,
-            manager.Count<Nation>());
-        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "statuses"), "*.xml").Length,
-            manager.Count<Status>());
-        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "worldmaps"), "*.xml").Length,
-            manager.Count<WorldMap>());
-        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "spawngroups"), "*.xml").Length,
-            manager.Count<SpawnGroup>());
-        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "creaturebehaviorsets"), "*.xml").Length,
-            manager.Count<CreatureBehaviorSet>());
-        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "elementtables"), "*.xml").Length,
-            manager.Count<ElementTable>());
-        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "serverconfigs"), "*.xml").Length,
-            manager.Count<ServerConfig>());
-        Assert.Equal(Directory.GetFiles(Path.Join(manager.RootPath, "localizations"), "*.xml").Length,
-            manager.Count<Localization>());
+        var root = manager.RootPath;
+        Assert.Equal(WorldDataCounts.Files(root, "castables"), manager.Count<Castable>());
+        Assert.Equal(WorldDataCounts.Items(root), manager.Count<Item>());
+        Assert.Equal(WorldDataCounts.Files(root, "npcs"), manager.Count<Npc>());
+        Assert.Equal(WorldDataCounts.Files(root, "maps"), manager.Count<Map>());
+        Assert.Equal(WorldDataCounts.Creatures(root), manager.Count<Creature>());
+        Assert.Equal(WorldDataCounts.Files(root, "variantgroups"), manager.Count<VariantGroup>());
+        Assert.Equal(WorldDataCounts.Files(root, "lootsets"), manager.Count<LootSet>());
+        Assert.Equal(WorldDataCounts.Files(root, "nations"), manager.Count<Nation>());
+        Assert.Equal(WorldDataCounts.Files(root, "statuses"), manager.Count<Status>());
+        Assert.Equal(WorldDataCounts.Files(root, "worldmaps"), manager.Count<WorldMap>());
+        Assert.Equal(WorldDataCounts.Files(root, "spawngroups"), manager.Count<SpawnGroup>());
+        Assert.Equal(WorldDataCounts.Files(root, "creaturebehaviorsets"), manager.Count<CreatureBehaviorSet>());
+        Assert.Equal(WorldDataCounts.Files(root, "elementtables"), manager.Count<ElementTable>());
+        Assert.Equal(WorldDataCounts.Files(root, "serverconfigs"), manager.Count<ServerConfig>());
+        Assert.Equal(WorldDataCounts.Files(root, "localizations"), manager.Count<Localization>());
     }
 
     [Fact]
@@ -364,16 +349,13 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
     [Fact]
     public void GetTotal()
     {
-        var count = 0;
-        // This could probably be improved, but for now it is what it is
-        foreach (var type in xmlFileDirectories)
-        {
-            var files = Directory.GetFiles(Path.Join(fixture.SyncManager.RootPath, type), "*.xml").Length;
-            count += files;
-        }
+        var root = fixture.SyncManager.RootPath;
+        // Items and creatures expand from templates; every other directory loads one entity per file.
+        var count = xmlFileDirectories.Where(predicate: type => type is not ("items" or "creatures"))
+            .Sum(selector: type => WorldDataCounts.Files(root, type));
 
-        count += VariantCreatures;
-        count += VariantItems; 
+        count += WorldDataCounts.Items(root) + WorldDataCounts.Creatures(root);
+        count += WorldDataCounts.Variants(root); // variants are stored individually as well as in their groups
         count += fixture.SyncManager.Count<WorldMapPoint>(); // worldmap points are stored for indexing purposes
         Assert.Equal(count, fixture.SyncManager.Total);
     }
