@@ -70,21 +70,17 @@ public partial class Variant
                 (ushort)(originalItem.Properties.Damage.SmallMin * Properties.Damage.SmallMin);
         }
 
-        if (Properties.StatModifiers?.BaseDefensiveElement != null)
-            variantItem.Properties.StatModifiers.BaseDefensiveElement =
-                Properties.StatModifiers.BaseDefensiveElement;
-        else
-            variantItem.Properties.StatModifiers.BaseDefensiveElement =
-                originalItem.Properties.StatModifiers?.BaseDefensiveElement ?? ElementType.None;
-
-        if (Properties.StatModifiers?.BaseOffensiveElement != null)
-            variantItem.Properties.StatModifiers.BaseOffensiveElement =
-                Properties.StatModifiers.BaseOffensiveElement;
-        else
-            variantItem.Properties.StatModifiers.BaseDefensiveElement =
-                Properties.StatModifiers?.BaseOffensiveElement ?? ElementType.None;
+        variantItem.Properties.StatModifiers.BaseDefensiveElement = VariantOrBase(
+            Properties.StatModifiers?.BaseDefensiveElement, originalItem.Properties.StatModifiers?.BaseDefensiveElement);
+        variantItem.Properties.StatModifiers.BaseOffensiveElement = VariantOrBase(
+            Properties.StatModifiers?.BaseOffensiveElement, originalItem.Properties.StatModifiers?.BaseOffensiveElement);
 
         variantItem.Properties?.Tags?.AddRange(Properties?.Tags ?? new List<ItemTag>());
         return variantItem;
     }
+
+    // The generated element properties have no Specified flag, so None is the only way to tell an
+    // element the variant leaves unset; an unset element is inherited from the base item.
+    private static ElementType VariantOrBase(ElementType? fromVariant, ElementType? fromBase) =>
+        fromVariant is { } element and not ElementType.None ? element : fromBase ?? ElementType.None;
 }
