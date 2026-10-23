@@ -53,10 +53,24 @@ public class VariantResolution
 
     private static string TagsAttribute(string tags) => tags == "" ? "" : $" Tags=\"{tags}\"";
 
-    private const string Belt = """
-        <Physical Value="100" Weight="3" Durability="10" />
-        <Equipment Slot="Waist" />
-        """;
+    private const string Physical = """<Physical Value="100" Weight="3" Durability="10" />""";
+    private const string Belt = $"""{Physical}<Equipment Slot="Waist" />""";
+    private const string Weapon = $"""{Physical}<Equipment Slot="Weapon" />""";
+
+    [Theory]
+    [InlineData("""<StatModifiers BonusHp="5" />""", ElementType.Fire, ElementType.Water)]
+    [InlineData("", ElementType.Fire, ElementType.Water)]
+    [InlineData("""<StatModifiers BaseDefensiveElement="Earth" />""", ElementType.Earth, ElementType.Water)]
+    public void ResolveVariant_KeepsBaseElements_UnlessTheVariantSetsItsOwn(string variantProperties,
+        ElementType defensive, ElementType offensive)
+    {
+        var belt = MakeItem($"""{Belt}<StatModifiers BaseDefensiveElement="Fire" BaseOffensiveElement="Water" />""");
+
+        var resolved = Resolve(belt, variantProperties);
+
+        Assert.Equal(defensive, resolved.Properties.StatModifiers.BaseDefensiveElement);
+        Assert.Equal(offensive, resolved.Properties.StatModifiers.BaseOffensiveElement);
+    }
 
     [Fact]
     public void ResolveVariant_KeepsBasePhysical_WhenTheVariantHasNoPhysical()
@@ -81,11 +95,7 @@ public class VariantResolution
     [Fact]
     public void ResolveVariant_ScalesAllFourDamageValues()
     {
-        var sword = MakeItem("""
-            <Physical Value="100" Weight="3" Durability="10" />
-            <Equipment Slot="Weapon" />
-            <Damage LargeMin="10" LargeMax="20" SmallMin="30" SmallMax="40" />
-            """);
+        var sword = MakeItem($"""{Weapon}<Damage LargeMin="10" LargeMax="20" SmallMin="30" SmallMax="40" />""");
 
         var resolved = Resolve(sword, """<Damage LargeMin="2" LargeMax="2" SmallMin="2" SmallMax="2" />""");
 
@@ -93,6 +103,32 @@ public class VariantResolution
         Assert.Equal(40f, resolved.Properties.Damage.LargeMax);
         Assert.Equal(60f, resolved.Properties.Damage.SmallMin);
         Assert.Equal(80f, resolved.Properties.Damage.SmallMax);
+    }
+
+    [Fact]
+    public void ResolveVariant_ClampsScaledDamage_ToUshortMax()
+    {
+        var sword = MakeItem($"""{Weapon}<Damage LargeMin="40000" LargeMax="40000" SmallMin="1" SmallMax="1" />""");
+
+        var resolved = Resolve(sword, """<Damage LargeMin="2" LargeMax="2" SmallMin="1" SmallMax="1" />""");
+
+        Assert.Equal(ushort.MaxValue, resolved.Properties.Damage.LargeMax);
+    }
+
+    [Fact]
+    public void ResolveVariant_SkipsDamage_WhenTheBaseWeaponHasNone()
+    {
+        var resolved = Resolve(MakeItem(Weapon), """<Damage LargeMin="2" LargeMax="2" SmallMin="2" SmallMax="2" />""");
+
+        Assert.Null(resolved.Properties.Damage);
+    }
+
+    [Fact]
+    public void ResolveVariant_ResolvesAnItemWithNoEquipment()
+    {
+        var resolved = Resolve(MakeItem(Physical), """<Physical Value="2" />""");
+
+        Assert.Equal(200f, resolved.Properties.Physical.Value);
     }
 
     [Fact]
@@ -131,11 +167,20 @@ public class VariantResolution
     }
 
     [Fact]
-    public void ResolveVariant_AddsTheVariantsLevel_WhenTheBaseHasNoRestrictions()
+    public void ResolveVariant_RaisesLevelOne_WhenTheBaseHasNoRestrictions()
     {
         var resolved = Resolve(MakeItem(Belt), """<Restrictions><Level Min="2" /></Restrictions>""");
 
-        Assert.Equal(2, resolved.Properties.Restrictions.Level.Min);
+        Assert.Equal(3, resolved.Properties.Restrictions.Level.Min);
+    }
+
+    [Fact]
+    public void ResolveVariant_RaisesLevelOne_WhenTheBaseLevelHasNoMin()
+    {
+        var resolved = Resolve(MakeItem($"""{Belt}<Restrictions><Level Max="99" /></Restrictions>"""),
+            """<Restrictions><Level Min="2" /></Restrictions>""");
+
+        Assert.Equal(3, resolved.Properties.Restrictions.Level.Min);
     }
 
     [Fact]
