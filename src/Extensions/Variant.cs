@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -33,12 +34,11 @@ public partial class Variant
         variantItem.ParentGuid = originalItem.Guid;
         variantItem.IsVariant = true;
 
-        if (variantItem.Properties.Flags != 0)
-            variantItem.Properties.Flags = Properties.Flags;
+        variantItem.Properties.Flags |= Properties.Flags;
 
-        var newValue = originalItem.Properties.Physical.Value * Properties.Physical?.Value ?? 1;
-        var newDura = originalItem.Properties.Physical.Durability * Properties.Physical?.Durability ?? 1;
-        var newWeight = originalItem.Properties.Physical.Weight * Properties.Physical?.Weight ?? 1;
+        var newValue = originalItem.Properties.Physical.Value * (Properties.Physical?.Value ?? 1);
+        var newDura = originalItem.Properties.Physical.Durability * (Properties.Physical?.Durability ?? 1);
+        var newWeight = originalItem.Properties.Physical.Weight * (Properties.Physical?.Weight ?? 1);
 
         variantItem.Properties.StatModifiers ??= new StatModifiers();
 
@@ -46,11 +46,13 @@ public partial class Variant
         variantItem.Properties.Physical.Durability = newDura > ushort.MaxValue ? ushort.MaxValue : newDura;
         variantItem.Properties.Physical.Weight = newWeight > ushort.MaxValue ? ushort.MaxValue : newWeight;
 
-        // ensure boot hiding is carried to variants
-        variantItem.Properties.Appearance.HideBoots = originalItem.Properties.Appearance.HideBoots;
         if (Properties.Restrictions?.Level != null)
+        {
+            variantItem.Properties.Restrictions ??= new ItemRestrictions();
+            variantItem.Properties.Restrictions.Level ??= new RestrictionsLevel();
             variantItem.Properties.Restrictions.Level.Min = (byte)Math.Min(99,
                 variantItem.Properties.Restrictions.Level.Min + Properties.Restrictions.Level.Min);
+        }
 
         if (Properties.Appearance != null)
             variantItem.Properties.Appearance.Color = Properties.Appearance.Color;
@@ -66,8 +68,8 @@ public partial class Variant
                 (ushort)(originalItem.Properties.Damage.LargeMax * Properties.Damage.LargeMax);
             variantItem.Properties.Damage.SmallMin =
                 (ushort)(originalItem.Properties.Damage.SmallMin * Properties.Damage.SmallMin);
-            variantItem.Properties.Damage.SmallMin =
-                (ushort)(originalItem.Properties.Damage.SmallMin * Properties.Damage.SmallMin);
+            variantItem.Properties.Damage.SmallMax =
+                (ushort)(originalItem.Properties.Damage.SmallMax * Properties.Damage.SmallMax);
         }
 
         variantItem.Properties.StatModifiers.BaseDefensiveElement = VariantOrBase(
@@ -75,7 +77,8 @@ public partial class Variant
         variantItem.Properties.StatModifiers.BaseOffensiveElement = VariantOrBase(
             Properties.StatModifiers?.BaseOffensiveElement, originalItem.Properties.StatModifiers?.BaseOffensiveElement);
 
-        variantItem.Properties?.Tags?.AddRange(Properties?.Tags ?? new List<ItemTag>());
+        variantItem.Properties.Tags ??= new List<ItemTag>();
+        variantItem.Properties.Tags.AddRange((Properties.Tags ?? []).Except(variantItem.Properties.Tags).ToList());
         return variantItem;
     }
 
