@@ -384,6 +384,46 @@ public class ElementTableTests
     }
 
     [Fact]
+    public void ValidateRejectsDuplicateElementIds()
+    {
+        var table = Sample();
+        table.Elements.Add(new ElementTableElement { Key = "Void", Id = 1 });
+        Assert.Single(table.Validate());
+    }
+
+    [Fact]
+    public void ValidateRejectsElementWithoutKey()
+    {
+        var table = Sample();
+        table.Elements.Add(new ElementTableElement { Key = null, Id = 33 });
+        Assert.Single(table.Validate());
+    }
+
+    [Fact]
+    public void ValidateRejectsDuplicateGroupKeys()
+    {
+        var table = Sample();
+        table.Groups.Add(new ElementTableGroup { Key = "cardinal", Members = ["Fire"] });
+        Assert.Single(table.Validate());
+    }
+
+    [Fact]
+    public void ValidateRejectsDuplicateSourceRows()
+    {
+        var table = Sample();
+        table.Source.Add(new ElementTableSourceElement { Element = "fire" });
+        Assert.Single(table.Validate());
+    }
+
+    [Fact]
+    public void ValidateRejectsDuplicateTargetsInOneRow()
+    {
+        var table = Sample();
+        table.Source[0].Target.Add(new ElementTableTargetElement { Element = "wind" });
+        Assert.Single(table.Validate());
+    }
+
+    [Fact]
     public void ValidateRejectsWireValuesOutOfRange()
     {
         var table = Sample();

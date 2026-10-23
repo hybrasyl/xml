@@ -74,6 +74,14 @@ public class SpawnElementTests
     }
 
     [Fact]
+    public void ElementIsPickedFromSeveral()
+    {
+        string[] elements = ["Fire", "Water", "Wind"];
+        var spawn = new Spawn { Damage = new SpawnDamage { Elements = [..elements] } };
+        Assert.Contains(spawn.OffensiveElement, elements);
+    }
+
+    [Fact]
     public void SelectorIsReturnedUnresolved()
     {
         // The package does not know the active element table, so the server resolves a selector.
