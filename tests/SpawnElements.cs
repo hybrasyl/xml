@@ -44,7 +44,6 @@ public class SpawnElementTests
     [Fact]
     public void DefensiveElementReadsDefenseList()
     {
-        // Until HXML-25, DefensiveElement counted Defense.Elements and then read Damage.Elements.
         var spawn = MakeSpawn(ElementType.Fire, ElementType.Water);
         Assert.Equal(ElementType.Fire, spawn.OffensiveElement);
         Assert.Equal(ElementType.Water, spawn.DefensiveElement);

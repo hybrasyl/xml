@@ -46,13 +46,8 @@ namespace Hybrasyl.Xml.Objects
             this._target = new System.Collections.Generic.List<ElementTableTargetElement>();
         }
         
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Element")]
         public Hybrasyl.Xml.Enums.ElementType Element { get; set; }
-        
-        /// <summary>
-        /// <para xml:lang="en">Gets or sets a value indicating whether the Element property is specified.</para>
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ElementSpecified { get; set; }
     }
 }

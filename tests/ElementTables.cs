@@ -65,7 +65,6 @@ public class ElementTableTests
     [Fact]
     public void SparseTableIsValid()
     {
-        // The schema required exactly 9 Source rows of exactly 9 Targets until HXML-24 (HXML-21 #4).
         Assert.Empty(Validate(Table(FireRow)));
     }
 
@@ -92,6 +91,15 @@ public class ElementTableTests
         Assert.NotEmpty(Validate(Table(
             "<Source Element=\"Fire\"><Target Element=\"Wind\" Multiplier=\"1.5\" />" +
             "<Target Element=\"Wind\" Multiplier=\"0.5\" /></Source>")));
+    }
+
+    [Fact]
+    public void SourceWithoutElementIsInvalid()
+    {
+        // Without a value, the unique check skips the row, so two unnamed rows would both pass.
+        var unnamed = "<Source><Target Element=\"Wind\" Multiplier=\"1.5\" /></Source>";
+        Assert.NotEmpty(Validate(Table(unnamed)));
+        Assert.NotEmpty(Validate(Table(unnamed + unnamed)));
     }
 
     [Fact]
