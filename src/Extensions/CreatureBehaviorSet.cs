@@ -152,14 +152,6 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
     // Helper functions to determine immunities
 
-    public bool ImmuneToElement(ElementType type, out CreatureImmunity immunity)
-    {
-        immunity = Immunities?.FirstOrDefault(predicate: x =>
-            x.Type == CreatureImmunityType.Element &&
-            string.Equals(x.Value, type.ToString(), StringComparison.CurrentCultureIgnoreCase));
-        return immunity != null;
-    }
-
     public bool ImmuneToElement(string type, out CreatureImmunity immunity)
     {
         immunity = Immunities?.FirstOrDefault(predicate: x =>

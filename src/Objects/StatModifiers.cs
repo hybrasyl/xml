@@ -119,76 +119,36 @@ namespace Hybrasyl.Xml.Objects
         [System.Xml.Serialization.XmlAttributeAttribute("BaseInboundDamageToMp")]
         public string BaseInboundDamageToMp { get; set; }
         
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private ElementType _baseOffensiveElement = Hybrasyl.Xml.Enums.ElementType.None;
-        
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.ElementType.None)]
+        /// <summary>
+        /// <para xml:lang="en">Pattern: [A-Za-z][A-Za-z0-9]*.</para>
+        /// </summary>
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("[A-Za-z][A-Za-z0-9]*")]
         [System.Xml.Serialization.XmlAttributeAttribute("BaseOffensiveElement")]
-        public ElementType BaseOffensiveElement
-        {
-            get
-            {
-                return _baseOffensiveElement;
-            }
-            set
-            {
-                _baseOffensiveElement = value;
-            }
-        }
+        public string BaseOffensiveElement { get; set; }
         
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private ElementType _baseDefensiveElement = Hybrasyl.Xml.Enums.ElementType.None;
-        
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.ElementType.None)]
+        /// <summary>
+        /// <para xml:lang="en">Pattern: [A-Za-z][A-Za-z0-9]*.</para>
+        /// </summary>
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("[A-Za-z][A-Za-z0-9]*")]
         [System.Xml.Serialization.XmlAttributeAttribute("BaseDefensiveElement")]
-        public ElementType BaseDefensiveElement
-        {
-            get
-            {
-                return _baseDefensiveElement;
-            }
-            set
-            {
-                _baseDefensiveElement = value;
-            }
-        }
+        public string BaseDefensiveElement { get; set; }
         
         [System.Xml.Serialization.XmlAttributeAttribute("BaseExtraFaith")]
         public string BaseExtraFaith { get; set; }
         
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private ElementType _offensiveElementOverride = Hybrasyl.Xml.Enums.ElementType.None;
-        
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.ElementType.None)]
+        /// <summary>
+        /// <para xml:lang="en">Pattern: [A-Za-z][A-Za-z0-9]*.</para>
+        /// </summary>
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("[A-Za-z][A-Za-z0-9]*")]
         [System.Xml.Serialization.XmlAttributeAttribute("OffensiveElementOverride")]
-        public ElementType OffensiveElementOverride
-        {
-            get
-            {
-                return _offensiveElementOverride;
-            }
-            set
-            {
-                _offensiveElementOverride = value;
-            }
-        }
+        public string OffensiveElementOverride { get; set; }
         
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private ElementType _defensiveElementOverride = Hybrasyl.Xml.Enums.ElementType.None;
-        
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.ElementType.None)]
+        /// <summary>
+        /// <para xml:lang="en">Pattern: [A-Za-z][A-Za-z0-9]*.</para>
+        /// </summary>
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("[A-Za-z][A-Za-z0-9]*")]
         [System.Xml.Serialization.XmlAttributeAttribute("DefensiveElementOverride")]
-        public ElementType DefensiveElementOverride
-        {
-            get
-            {
-                return _defensiveElementOverride;
-            }
-            set
-            {
-                _defensiveElementOverride = value;
-            }
-        }
+        public string DefensiveElementOverride { get; set; }
         
         [System.Xml.Serialization.XmlAttributeAttribute("BaseInboundDamageModifier")]
         public string BaseInboundDamageModifier { get; set; }

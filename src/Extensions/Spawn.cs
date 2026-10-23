@@ -16,7 +16,6 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
@@ -27,24 +26,17 @@ public partial class Spawn
 {
     [XmlIgnore] public SpawnStatus Status { get; set; }
 
-    public ElementType OffensiveElement => PickElement(Damage?.Elements);
+    /// <summary>One selector from the damage list, or null. Resolve it with <see cref="ElementTable.TryResolve" />.</summary>
+    public string OffensiveElement => PickElement(Damage?.Elements);
 
-    public ElementType DefensiveElement => PickElement(Defense?.Elements);
+    /// <summary>One selector from the defense list, or null. Resolve it with <see cref="ElementTable.TryResolve" />.</summary>
+    public string DefensiveElement => PickElement(Defense?.Elements);
 
     // A spawn can have <Defense> without <Damage>, or the reverse, so each list can be null.
-    private static ElementType PickElement(List<ElementType> elements)
+    private static string PickElement(List<string> elements) => elements?.Count switch
     {
-        var ele = elements?.Count switch
-        {
-            1 => elements.First(),
-            > 1 => elements.PickRandom(),
-            _ => ElementType.None
-        };
-        return ele switch
-        {
-            ElementType.RandomExpanded => (ElementType) Random.Shared.Next(1, 10),
-            ElementType.RandomTemuair => (ElementType) Random.Shared.Next(1, 7),
-            _ => ele
-        };
-    }
+        1 => elements.First(),
+        > 1 => elements.PickRandom(),
+        _ => null
+    };
 }

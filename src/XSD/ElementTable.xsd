@@ -26,21 +26,68 @@
     </xs:documentation>
   </xs:annotation>
 
+  <!-- One element. Key is the name that content uses, and it never changes. Id is the value on
+       the modern wire (255 means "not set"). RetailId is the value that retail clients get. They
+       index a 10-entry name table with it and do not check the range, so it stays 0 to 9. -->
+  <xs:complexType name="ElementTableElement">
+    <xs:attribute name="Key" type="hyb:ElementKey" use="required" />
+    <xs:attribute name="Id" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:unsignedByte">
+          <xs:maxInclusive value="254" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="RetailId" default="0">
+      <xs:simpleType>
+        <xs:restriction base="xs:unsignedByte">
+          <xs:maxInclusive value="9" />
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="Name" type="xs:string" />
+    <xs:attribute name="Default" type="xs:boolean" default="false" />
+    <xs:attribute name="Ivernic" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="ElementTableElements">
+    <xs:sequence>
+      <xs:element name="Element" type="hyb:ElementTableElement" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- A named set of elements. Content picks a random member with Random:<Key>. -->
+  <xs:complexType name="ElementTableGroup">
+    <xs:attribute name="Key" type="hyb:ElementKey" use="required" />
+    <xs:attribute name="Members" type="hyb:ElementKeyList" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="ElementTableGroups">
+    <xs:sequence>
+      <xs:element name="Group" type="hyb:ElementTableGroup" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
   <xs:complexType name="ElementTableTargetElement">
-    <xs:attribute name="Element" type="hyb:ElementType" default="None" />
+    <xs:attribute name="Element" type="hyb:ElementKey" use="required" />
     <xs:attribute name="Multiplier" type="xs:double" />
   </xs:complexType>
 
+  <!-- DefaultMultiplier applies to each pair in this row that has no Target entry. -->
   <xs:complexType name="ElementTableSourceElement">
     <xs:sequence>
-      <xs:element name="Target" type="hyb:ElementTableTargetElement" minOccurs="1" maxOccurs="unbounded" />
+      <xs:element name="Target" type="hyb:ElementTableTargetElement" minOccurs="0" maxOccurs="unbounded" />
     </xs:sequence>
-    <xs:attribute name="Element" type="hyb:ElementType" use="required" />
+    <xs:attribute name="Element" type="hyb:ElementKey" use="required" />
+    <xs:attribute name="DefaultMultiplier" type="xs:double" />
   </xs:complexType>
 
-  <!-- A table declares only the pairs it needs. A pair that is not declared uses DefaultMultiplier. -->
+  <!-- A table declares only the pairs it needs. A pair uses the Target multiplier, then the
+       DefaultMultiplier of its Source row, then the DefaultMultiplier of the table. -->
   <xs:complexType name="ElementTable">
     <xs:sequence>
+      <xs:element name="Elements" type="hyb:ElementTableElements" />
+      <xs:element name="Groups" type="hyb:ElementTableGroups" minOccurs="0" />
       <xs:element name="Source" type="hyb:ElementTableSourceElement" minOccurs="1" maxOccurs="unbounded">
         <xs:unique name="ElementTableUniqueTarget">
           <xs:selector xpath="hyb:Target" />
@@ -53,9 +100,29 @@
   </xs:complexType>
 
   <xs:element name="ElementTable" type="hyb:ElementTable">
+    <xs:key name="ElementTableElementKey">
+      <xs:selector xpath="hyb:Elements/hyb:Element" />
+      <xs:field xpath="@Key" />
+    </xs:key>
+    <xs:unique name="ElementTableElementId">
+      <xs:selector xpath="hyb:Elements/hyb:Element" />
+      <xs:field xpath="@Id" />
+    </xs:unique>
+    <xs:unique name="ElementTableGroupKey">
+      <xs:selector xpath="hyb:Groups/hyb:Group" />
+      <xs:field xpath="@Key" />
+    </xs:unique>
     <xs:unique name="ElementTableUniqueSource">
       <xs:selector xpath="hyb:Source" />
       <xs:field xpath="@Element" />
     </xs:unique>
+    <xs:keyref name="ElementTableSourceRef" refer="hyb:ElementTableElementKey">
+      <xs:selector xpath="hyb:Source" />
+      <xs:field xpath="@Element" />
+    </xs:keyref>
+    <xs:keyref name="ElementTableTargetRef" refer="hyb:ElementTableElementKey">
+      <xs:selector xpath="hyb:Source/hyb:Target" />
+      <xs:field xpath="@Element" />
+    </xs:keyref>
   </xs:element>
 </xs:schema>

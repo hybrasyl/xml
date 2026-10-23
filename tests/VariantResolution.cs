@@ -58,11 +58,11 @@ public class VariantResolution
     private const string Weapon = $"""{Physical}<Equipment Slot="Weapon" />""";
 
     [Theory]
-    [InlineData("""<StatModifiers BonusHp="5" />""", ElementType.Fire, ElementType.Water)]
-    [InlineData("", ElementType.Fire, ElementType.Water)]
-    [InlineData("""<StatModifiers BaseDefensiveElement="Earth" />""", ElementType.Earth, ElementType.Water)]
+    [InlineData("""<StatModifiers BonusHp="5" />""", "Fire", "Water")]
+    [InlineData("", "Fire", "Water")]
+    [InlineData("""<StatModifiers BaseDefensiveElement="Earth" />""", "Earth", "Water")]
     public void ResolveVariant_KeepsBaseElements_UnlessTheVariantSetsItsOwn(string variantProperties,
-        ElementType defensive, ElementType offensive)
+        string defensive, string offensive)
     {
         var belt = MakeItem($"""{Belt}<StatModifiers BaseDefensiveElement="Fire" BaseOffensiveElement="Water" />""");
 

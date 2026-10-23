@@ -86,7 +86,6 @@ public class ImmunitiesTests(ITestOutputHelper output, XmlManagerFixture fixture
         var elementalImmune = Fixture.SyncManager.Get<CreatureBehaviorSet>("ElementImmune");
         Assert.NotNull(elementalImmune);
         Assert.True(elementalImmune.ImmuneToElement("Fire", out _));
-        Assert.True(elementalImmune.ImmuneToElement(ElementType.Fire, out _));
     }
 
     [Fact]

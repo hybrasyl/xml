@@ -69,19 +69,21 @@ public partial class StatModifiers
     }
 
 
-    public double GetElementalAugment(ElementType element)
+    public double GetElementalAugment(string element)
     {
         if (ElementalModifiers == null) return 1.0;
         var augment = ElementalModifiers
-            .FirstOrDefault(predicate: x => x.Type == ElementalModifierType.Augment && x.Element == element);
+            .FirstOrDefault(predicate: x => x.Type == ElementalModifierType.Augment &&
+                                            string.Equals(x.Element, element, StringComparison.OrdinalIgnoreCase));
         return augment?.Modifier ?? 1.0;
     }
 
-    public double GetElementalResistance(ElementType element)
+    public double GetElementalResistance(string element)
     {
         if (ElementalModifiers == null) return 1.0;
         var augment = ElementalModifiers
-            .FirstOrDefault(predicate: x => x.Type == ElementalModifierType.Resistance && x.Element == element);
+            .FirstOrDefault(predicate: x => x.Type == ElementalModifierType.Resistance &&
+                                            string.Equals(x.Element, element, StringComparison.OrdinalIgnoreCase));
         return augment?.Modifier ?? 1.0;
     }
 

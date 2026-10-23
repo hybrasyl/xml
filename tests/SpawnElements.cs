@@ -23,19 +23,19 @@ namespace Hybrasyl.XmlTests;
 
 public class SpawnElementTests
 {
-    private static Spawn MakeSpawn(ElementType? damage, ElementType? defense)
+    private static Spawn MakeSpawn(string damage, string defense)
     {
         var spawn = new Spawn();
-        if (damage is { } d)
+        if (damage != null)
         {
             spawn.Damage = new SpawnDamage();
-            spawn.Damage.Elements.Add(d);
+            spawn.Damage.Elements.Add(damage);
         }
 
-        if (defense is { } f)
+        if (defense != null)
         {
             spawn.Defense = new SpawnDefense();
-            spawn.Defense.Elements.Add(f);
+            spawn.Defense.Elements.Add(defense);
         }
 
         return spawn;
@@ -44,32 +44,41 @@ public class SpawnElementTests
     [Fact]
     public void DefensiveElementReadsDefenseList()
     {
-        var spawn = MakeSpawn(ElementType.Fire, ElementType.Water);
-        Assert.Equal(ElementType.Fire, spawn.OffensiveElement);
-        Assert.Equal(ElementType.Water, spawn.DefensiveElement);
+        var spawn = MakeSpawn("Fire", "Water");
+        Assert.Equal("Fire", spawn.OffensiveElement);
+        Assert.Equal("Water", spawn.DefensiveElement);
     }
 
     [Fact]
     public void DefenseWithoutDamageDoesNotThrow()
     {
-        var spawn = MakeSpawn(null, ElementType.Earth);
-        Assert.Equal(ElementType.Earth, spawn.DefensiveElement);
-        Assert.Equal(ElementType.None, spawn.OffensiveElement);
+        var spawn = MakeSpawn(null, "Earth");
+        Assert.Equal("Earth", spawn.DefensiveElement);
+        Assert.Null(spawn.OffensiveElement);
     }
 
     [Fact]
     public void DamageWithoutDefenseDoesNotThrow()
     {
-        var spawn = MakeSpawn(ElementType.Wind, null);
-        Assert.Equal(ElementType.Wind, spawn.OffensiveElement);
-        Assert.Equal(ElementType.None, spawn.DefensiveElement);
+        var spawn = MakeSpawn("Wind", null);
+        Assert.Equal("Wind", spawn.OffensiveElement);
+        Assert.Null(spawn.DefensiveElement);
     }
 
     [Fact]
-    public void EmptyElementListsGiveNone()
+    public void EmptyElementListsGiveNull()
     {
         var spawn = new Spawn { Damage = new SpawnDamage(), Defense = new SpawnDefense() };
-        Assert.Equal(ElementType.None, spawn.OffensiveElement);
-        Assert.Equal(ElementType.None, spawn.DefensiveElement);
+        Assert.Null(spawn.OffensiveElement);
+        Assert.Null(spawn.DefensiveElement);
+    }
+
+    [Fact]
+    public void SelectorIsReturnedUnresolved()
+    {
+        // The package does not know the active element table, so the server resolves a selector.
+        var spawn = MakeSpawn("Random:Cardinal", "Current");
+        Assert.Equal("Random:Cardinal", spawn.OffensiveElement);
+        Assert.Equal("Current", spawn.DefensiveElement);
     }
 }
