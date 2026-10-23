@@ -73,9 +73,10 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
     public static void ValidateAll(IWorldDataManager manager)
     {
-        var ret = new XmlProcessResult();
+        var ret = new XmlValidationResult();
         foreach (var cbs in manager.Values<CreatureBehaviorSet>())
         {
+            ret.TotalProcessed++;
             if (cbs.Castables?.Castable == null)
                 ret.Errors.Add(cbs.Guid, "Creature behavior set has no castables");
         }
