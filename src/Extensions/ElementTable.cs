@@ -16,6 +16,7 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using System.Linq;
 using Hybrasyl.Xml.Interfaces;
 
 namespace Hybrasyl.Xml.Objects;
@@ -26,4 +27,19 @@ public partial class ElementTable : ILoadOnStart<ElementTable>
 
     public new static void LoadAll(IWorldDataManager manager, string path = null) =>
         HybrasylEntity<ElementTable>.LoadAll(manager, path);
+
+    /// <summary>
+    ///     Get the damage multiplier for an attack of element <paramref name="source" /> against a defender of
+    ///     element <paramref name="target" />.
+    /// </summary>
+    /// <remarks>
+    ///     A table declares only the pairs it needs. A pair with no Source row, no Target entry, or a Target entry
+    ///     without a Multiplier uses <see cref="DefaultMultiplier" />.
+    /// </remarks>
+    public double GetMultiplier(ElementType source, ElementType target)
+    {
+        var entry = Source.FirstOrDefault(s => s.Element == source)?.Target
+            .FirstOrDefault(t => t.Element == target);
+        return entry is { MultiplierSpecified: true } ? entry.Multiplier : DefaultMultiplier;
+    }
 }

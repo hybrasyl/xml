@@ -17,6 +17,7 @@
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 
@@ -26,41 +27,24 @@ public partial class Spawn
 {
     [XmlIgnore] public SpawnStatus Status { get; set; }
 
-    public ElementType OffensiveElement
-    {
-        get
-        {
-            var ele = Damage.Elements.Count switch
-            {
-                1 => Damage.Elements.First(),
-                > 1 => Damage.Elements.PickRandom(),
-                _ => ElementType.None
-            };
-            return ele switch
-            {
-                ElementType.RandomExpanded => (ElementType) Random.Shared.Next(1, 10),
-                ElementType.RandomTemuair => (ElementType) Random.Shared.Next(1, 7),
-                _ => ele
-            };
-        }
-    }
+    public ElementType OffensiveElement => PickElement(Damage?.Elements);
 
-    public ElementType DefensiveElement
+    public ElementType DefensiveElement => PickElement(Defense?.Elements);
+
+    // A spawn can have <Defense> without <Damage>, or the reverse, so each list can be null.
+    private static ElementType PickElement(List<ElementType> elements)
     {
-        get
+        var ele = elements?.Count switch
         {
-            var ele = Defense.Elements.Count switch
-            {
-                1 => Damage.Elements.First(),
-                > 1 => Damage.Elements.PickRandom(),
-                _ => ElementType.None
-            };
-            return ele switch
-            {
-                ElementType.RandomExpanded => (ElementType) Random.Shared.Next(1, 10),
-                ElementType.RandomTemuair => (ElementType) Random.Shared.Next(1, 7),
-                _ => ele
-            };
-        }
+            1 => elements.First(),
+            > 1 => elements.PickRandom(),
+            _ => ElementType.None
+        };
+        return ele switch
+        {
+            ElementType.RandomExpanded => (ElementType) Random.Shared.Next(1, 10),
+            ElementType.RandomTemuair => (ElementType) Random.Shared.Next(1, 7),
+            _ => ele
+        };
     }
 }

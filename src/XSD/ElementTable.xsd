@@ -33,17 +33,29 @@
 
   <xs:complexType name="ElementTableSourceElement">
     <xs:sequence>
-      <xs:element name="Target" type="hyb:ElementTableTargetElement" minOccurs="9" maxOccurs="9" />
+      <xs:element name="Target" type="hyb:ElementTableTargetElement" minOccurs="1" maxOccurs="unbounded" />
     </xs:sequence>
-    <xs:attribute name="Element" type="hyb:ElementType" />
+    <xs:attribute name="Element" type="hyb:ElementType" use="required" />
   </xs:complexType>
 
+  <!-- A table declares only the pairs it needs. A pair that is not declared uses DefaultMultiplier. -->
   <xs:complexType name="ElementTable">
     <xs:sequence>
-      <xs:element name="Source" type="hyb:ElementTableSourceElement" minOccurs="9" maxOccurs="9" />
+      <xs:element name="Source" type="hyb:ElementTableSourceElement" minOccurs="1" maxOccurs="unbounded">
+        <xs:unique name="ElementTableUniqueTarget">
+          <xs:selector xpath="hyb:Target" />
+          <xs:field xpath="@Element" />
+        </xs:unique>
+      </xs:element>
     </xs:sequence>
     <xs:attribute name="Name" default="default" />
+    <xs:attribute name="DefaultMultiplier" type="xs:double" default="1" />
   </xs:complexType>
 
-  <xs:element name="ElementTable" type="hyb:ElementTable" />
+  <xs:element name="ElementTable" type="hyb:ElementTable">
+    <xs:unique name="ElementTableUniqueSource">
+      <xs:selector xpath="hyb:Source" />
+      <xs:field xpath="@Element" />
+    </xs:unique>
+  </xs:element>
 </xs:schema>
