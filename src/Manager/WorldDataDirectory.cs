@@ -40,6 +40,10 @@ public static class WorldDataDirectory
 
         var lower = typeName.ToLowerInvariant();
 
+        // A word whose plural is the same word.
+        if (lower == "species")
+            return lower;
+
         // Sibilants take -es; a consonant before a final -y turns it into -ies. Every other
         // entity name in this model is regular.
         if (lower.EndsWith("s") || lower.EndsWith("x") || lower.EndsWith("z")

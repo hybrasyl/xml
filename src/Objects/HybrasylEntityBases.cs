@@ -169,6 +169,7 @@ public partial class SpawnDefense : HybrasylEntity<SpawnDefense> { }
 public partial class SpawnGroup : HybrasylEntity<SpawnGroup> { }
 public partial class SpawnPoint : HybrasylEntity<SpawnPoint> { }
 public partial class SpawnSpec : HybrasylEntity<SpawnSpec> { }
+public partial class Species : HybrasylEntity<Species> { }
 public partial class SpellAnimations : HybrasylEntity<SpellAnimations> { }
 public partial class Stackable : HybrasylEntity<Stackable> { }
 public partial class StartMap : HybrasylEntity<StartMap> { }
