@@ -305,9 +305,9 @@
   },
   "SpeciesPlayerOption": {
     "ByBranch": 3,
-    "Locked": 2,
-    "Starter": 0,
-    "Unlockable": 1
+    "Locked": 0,
+    "Starter": 1,
+    "Unlockable": 2
   },
   "SpellUseType": {
     "FourDigit": 3,

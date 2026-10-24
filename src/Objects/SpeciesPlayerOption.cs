@@ -19,11 +19,11 @@ namespace Hybrasyl.Xml.Enums
     public enum SpeciesPlayerOption
     {
         
-        Starter = 0,
+        Locked = 0,
         
-        Unlockable = 1,
+        Starter = 1,
         
-        Locked = 2,
+        Unlockable = 2,
         
         ByBranch = 3,
     }

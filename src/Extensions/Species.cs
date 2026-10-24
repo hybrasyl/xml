@@ -36,7 +36,7 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
 
     public override string PrimaryKey => Key;
 
-    public override List<string> SecondaryKeys => Key == null ? [] : [Key.ToLower()];
+    public override List<string> SecondaryKeys => Key == null ? [] : [Key.ToLowerInvariant()];
 
     public bool IsBranch => !string.IsNullOrEmpty(BranchOf);
 
@@ -54,7 +54,7 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
 
     /// <summary>The parent of a branch, or null when the species is not a branch or the parent is not loaded.</summary>
     public Species GetParent(IWorldDataManager manager) =>
-        IsBranch && manager.TryGetValueByIndex(BranchOf.ToLower(), out Species parent) ? parent : null;
+        IsBranch && manager.TryGetValueByIndex(BranchOf.ToLowerInvariant(), out Species parent) ? parent : null;
 
     /// <summary>The affinity element key. A branch without its own affinity takes its parent's.</summary>
     public string GetAffinity(IWorldDataManager manager) =>
@@ -65,14 +65,20 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
         string.IsNullOrEmpty(Resistance) ? GetParent(manager)?.Resistance : Resistance;
 
     /// <summary>
-    ///     Run <see cref="Validate(IWorldDataManager)" /> on each species, and check the rules across species: unique
-    ///     species ids, and body ids that are unique across all species. The manager runs it at load.
+    ///     Run <see cref="Validate(IWorldDataManager)" /> on each species, and check the rules across species: keys that
+    ///     differ only in case, unique species ids, and body ids that are unique across all species. The manager runs
+    ///     it at load.
     /// </summary>
     public static void ValidateAll(IWorldDataManager manager)
     {
         var result = new XmlValidationResult();
         var all = manager.Values<Species>().ToList();
         var errors = all.ToDictionary(s => s.Guid, s => s.Validate(manager));
+
+        // Two keys that differ only in case have one lower-case index key, so a lookup finds either species.
+        foreach (var key in all.Select(s => s.Key).Duplicates(KeyComparer))
+        foreach (var species in all.Where(s => KeyComparer.Equals(s.Key, key)))
+            errors[species.Guid].Add($"Species key {species.Key} differs from another key only in case.");
 
         foreach (var group in all.GroupBy(s => s.Id).Where(g => g.Count() > 1))
         foreach (var species in group)
@@ -103,22 +109,25 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
         var errors = new List<string>();
         var bodies = Bodies ?? [];
 
+        if (Names == null)
+            errors.Add("The species has no Names.");
         if (bodies.Count == 0 && PlayerOption is SpeciesPlayerOption.Starter or SpeciesPlayerOption.Unlockable)
             errors.Add($"A {PlayerOption} species has no bodies.");
         if (bodies.Count > 0 && bodies.Count(b => b.Default) != 1)
             errors.Add($"Exactly one body must have Default=\"true\". This species has {bodies.Count(b => b.Default)}.");
         foreach (var body in bodies.Where(b => string.IsNullOrEmpty(b.Key)))
             errors.Add($"Body id {body.Id} has no key.");
-        foreach (var group in bodies.Where(b => !string.IsNullOrEmpty(b.Key)).GroupBy(b => b.Key, KeyComparer)
-                     .Where(g => g.Count() > 1))
-            errors.Add($"Body key {group.Key} is not unique.");
-        foreach (var group in bodies.GroupBy(b => b.Id).Where(g => g.Count() > 1))
-            errors.Add($"Body id {group.Key} is not unique.");
+        foreach (var key in bodies.Select(b => b.Key).Duplicates(KeyComparer))
+            errors.Add($"Body key {key} is not unique.");
+        foreach (var id in bodies.Select(b => b.Id).Duplicates())
+            errors.Add($"Body id {id} is not unique.");
         foreach (var body in bodies.Where(b => b.RetailSkinColor > 9))
             errors.Add($"Body {body.Key} has RetailSkinColor {body.RetailSkinColor}. The maximum is 9.");
 
         if (IsBranch)
         {
+            if (PlayerOption == SpeciesPlayerOption.ByBranch)
+                errors.Add("A branch cannot be ByBranch, because a branch cannot have branches.");
             var parent = GetParent(manager);
             if (parent == null)
                 errors.Add($"BranchOf names {BranchOf}, which is not a loaded species.");
@@ -145,6 +154,7 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
     /// <returns>One message for each problem. An empty list means the species is correct.</returns>
     public List<string> Validate(ElementTable table)
     {
+        ArgumentNullException.ThrowIfNull(table);
         var errors = new List<string>();
         if (!string.IsNullOrEmpty(Affinity) && !table.TryGetElement(Affinity, out _))
             errors.Add($"Affinity {Affinity} is not an element of table {table.Name}.");

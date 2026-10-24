@@ -30,4 +30,14 @@ public static class EnumerableExtension
     {
         return source.OrderBy(keySelector: x => Guid.NewGuid());
     }
+
+    /// <summary>
+    ///     Each value that occurs more than once. A null or empty value is not a duplicate here: the caller reports
+    ///     a missing value on its own.
+    /// </summary>
+    internal static IEnumerable<T> Duplicates<T>(this IEnumerable<T> values, IEqualityComparer<T> comparer = null) =>
+        values.Where(v => v is not (null or ""))
+            .GroupBy(v => v, comparer)
+            .Where(g => g.Count() > 1)
+            .Select(g => g.Key);
 }

@@ -45,7 +45,7 @@ public static class WorldDataDirectory
             return lower;
 
         // Sibilants take -es; a consonant before a final -y turns it into -ies. Every other
-        // entity name in this model is regular.
+        // entity name in this model, apart from the invariant plural above, is regular.
         if (lower.EndsWith("s") || lower.EndsWith("x") || lower.EndsWith("z")
             || lower.EndsWith("ch") || lower.EndsWith("sh"))
             return lower + "es";

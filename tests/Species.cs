@@ -16,6 +16,7 @@
 //
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using System;
 using System.IO;
 using System.Linq;
 using Hybrasyl.Xml.Manager;
@@ -166,15 +167,33 @@ public class SpeciesTests
     [InlineData("Origin=\"Aosda\" PlayerOption=\"Starter\" BranchOf=\"Gnome\"", Names + GnollBodies)]
     [InlineData("Origin=\"Aosda\" PlayerOption=\"Starter\" BranchOf=\"Vosk\"", Names + GnollBodies)]
     [InlineData("Origin=\"Aosda\" PlayerOption=\"Starter\" BranchOf=\"Dwarf\"", Names + GnollBodies)]
+    [InlineData("Origin=\"Aosda\" PlayerOption=\"ByBranch\" BranchOf=\"Kobold\"", Names)]
+    [InlineData(Playable, GnollBodies)]
     public void ValidateRejectsOneProblem(string attributes, string body)
     {
         // A playable species with no bodies (two options), no affinity, no resistance, no default body, two default
-        // bodies, and a parent that is not loaded, that is a branch, or that is not ByBranch.
+        // bodies, a parent that is not loaded, that is a branch, or that is not ByBranch, a branch that is ByBranch,
+        // and no names.
         var manager = Catalog(Dwarf, Kobold, Vosk, Make("Gnoll", 9, attributes, body));
         manager.TryGetValue("Gnoll", out Species gnoll);
 
         Assert.Single(gnoll.Validate(manager));
         Assert.Equal(1, ValidateAll(manager));
+    }
+
+    [Fact]
+    public void ValidateAllRejectsKeysThatDifferOnlyInCase()
+    {
+        var manager = Catalog(Dwarf, Make("DWARF", 9, body: Names + GnollBodies));
+        Assert.Equal(2, ValidateAll(manager));
+    }
+
+    [Fact]
+    public void SpeciesWithoutPlayerOptionIsLocked()
+    {
+        // The loader does not check files against the schema (HXML-35), so a missing option must not be playable.
+        var species = Species.Deserialize(Make(attributes: "Origin=\"Aosda\" Affinity=\"Wind\" Resistance=\"Wind\""));
+        Assert.Equal(SpeciesPlayerOption.Locked, species.PlayerOption);
     }
 
     [Fact]
@@ -214,6 +233,7 @@ public class SpeciesTests
         Assert.Empty(Species.Deserialize(Dwarf).Validate(table));
         Assert.Empty(Species.Deserialize(Vosk).Validate(table));
         Assert.Equal(2, Species.Deserialize(Make(attributes: "Origin=\"Aosda\" PlayerOption=\"Starter\" Affinity=\"Storm\" Resistance=\"Wood\"")).Validate(table).Count);
+        Assert.Throws<ArgumentNullException>(() => Species.Deserialize(Dwarf).Validate((ElementTable) null));
     }
 
     // Loading

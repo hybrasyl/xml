@@ -26,11 +26,9 @@
     </xs:documentation>
   </xs:annotation>
 
-  <!-- A species or body key. Saves store it, so it never changes. -->
+  <!-- A species or body key. Saves store it, so it never changes. It has the same form as an element key. -->
   <xs:simpleType name="SpeciesKey">
-    <xs:restriction base="xs:token">
-      <xs:pattern value="[A-Za-z][A-Za-z0-9]*" />
-    </xs:restriction>
+    <xs:restriction base="hyb:ElementKey" />
   </xs:simpleType>
 
   <!-- The origin class of a species (lore data). -->
@@ -42,14 +40,15 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <!-- Locked has the value 0, so a species that the loader reads without this attribute is not playable. -->
   <xs:simpleType name="SpeciesPlayerOption">
     <xs:restriction base="xs:token">
+      <!-- A player cannot pick it. -->
+      <xs:enumeration value="Locked" />
       <!-- A player can pick it when they make a character. -->
       <xs:enumeration value="Starter" />
       <!-- A player can pick it after they unlock it. -->
       <xs:enumeration value="Unlockable" />
-      <!-- A player cannot pick it. -->
-      <xs:enumeration value="Locked" />
       <!-- A parent species: a player picks one of its branches, not the parent. -->
       <xs:enumeration value="ByBranch" />
     </xs:restriction>
