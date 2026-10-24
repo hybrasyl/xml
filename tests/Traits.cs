@@ -197,14 +197,35 @@ public class TraitTests
     [InlineData("<ConflictsWith><Trait>Courtier</Trait></ConflictsWith>")]
     [InlineData("<ConflictsWith><Trait>Dockworker</Trait></ConflictsWith>")]
     [InlineData("<ExclusiveGroup Policy=\"Replace\" />")]
+    [InlineData("<ExclusiveGroup> Background </ExclusiveGroup>")]
     public void ValidateRejectsWhatTheSchemaOrCatalogForbids(string body)
     {
-        // An unknown trait, the trait itself, and a group with no name.
+        // An unknown trait, the trait itself, a group with no name, and a group name with spaces at the ends.
         var manager = Catalog(Named("Dockworker", body));
         Assert.Single(manager.Values<Trait>().Single().Validate(manager));
 
         manager.ValidateAll<Trait>();
         Assert.Equal(1, manager.GetValidationResult<Trait>().ErrorCount);
+    }
+
+    [Theory]
+    [InlineData("")] // empty
+    [InlineData(" ")] // blank
+    [InlineData(" Dockworker ")] // a space at each end
+    public void ValidateRejectsABadName(string name)
+    {
+        var manager = Catalog(Named(name));
+        Assert.Single(manager.Values<Trait>().Single().Validate(manager));
+    }
+
+    [Fact]
+    public void ValidateRejectsAConflictNamedTwice()
+    {
+        // The schema rejects it in a file, but the loader does not check files against the schema (HXML-35).
+        var manager = Catalog(Named("Dockworker", "<ConflictsWith><Trait>Scribe</Trait><Trait>Scribe</Trait></ConflictsWith>"),
+            Named("Scribe"));
+        manager.TryGetValue("Dockworker", out Trait dockworker);
+        Assert.Single(dockworker.Validate(manager));
     }
 
     // Loading

@@ -17,6 +17,7 @@
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
 using System.Collections.Generic;
+using System.Linq;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;
 
@@ -54,9 +55,14 @@ public partial class Trait : ILoadOnStart<Trait>, IAdditionalValidation<Trait>
     public List<string> Validate(IWorldDataManager manager)
     {
         var errors = new List<string>();
-        if (ExclusiveGroup != null && string.IsNullOrEmpty(ExclusiveGroup.Value))
-            errors.Add("ExclusiveGroup has no name.");
-        foreach (var name in ConflictsWith ?? [])
+        var conflicts = ConflictsWith ?? [];
+        if (IsBadName(Name))
+            errors.Add("Name is empty, or it has a space at the start or the end.");
+        if (ExclusiveGroup != null && IsBadName(ExclusiveGroup.Value))
+            errors.Add("ExclusiveGroup has no name, or its name has a space at the start or the end.");
+        foreach (var name in conflicts.GroupBy(n => n).Where(g => g.Count() > 1).Select(g => g.Key))
+            errors.Add($"ConflictsWith names {name} more than once.");
+        foreach (var name in conflicts.Distinct())
         {
             if (name == Name)
                 errors.Add("ConflictsWith names the trait itself.");
@@ -66,4 +72,8 @@ public partial class Trait : ILoadOnStart<Trait>, IAdditionalValidation<Trait>
 
         return errors;
     }
+
+    // Names are keys, and the loader does not trim them, so " Dockworker " is a different key from "Dockworker".
+    // Validate rejects such a name instead of trimming it, because a change to a saved key must be explicit.
+    private static bool IsBadName(string name) => string.IsNullOrWhiteSpace(name) || name.Trim() != name;
 }
