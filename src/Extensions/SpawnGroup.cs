@@ -21,12 +21,11 @@ using System.Xml.Serialization;
 
 namespace Hybrasyl.Xml.Objects;
 
-// Neither generator emits XmlRoot here, and spawngroup parsing breaks without it.
-[XmlRoot(Namespace = "http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
 public partial class SpawnGroup : ILoadOnStart<SpawnGroup>
 {
     public override string PrimaryKey => Name;
-    public ushort MapId { get; set; }
+    // The server sets the map when it loads the spawn groups. Spawns.xsd has no MapId.
+    [XmlIgnore] public ushort MapId { get; set; }
 
     [XmlIgnore] public SpawnStatus Status { get; set; }
 

@@ -18,6 +18,7 @@ namespace Hybrasyl.Xml.Objects
     [System.Xml.Serialization.XmlTypeAttribute("SpawnGroup", Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlRootAttribute("SpawnGroup", Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
     public partial class SpawnGroup
     {
         
