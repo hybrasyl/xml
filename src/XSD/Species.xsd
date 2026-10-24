@@ -99,7 +99,7 @@
     <xs:attribute name="Id" type="xs:unsignedByte" use="required" />
     <xs:attribute name="Origin" type="hyb:SpeciesOrigin" use="required" />
     <xs:attribute name="PlayerOption" type="hyb:SpeciesPlayerOption" use="required" />
-    <!-- The key of the parent species. The parent is ByBranch. -->
+    <!-- The key of the parent species. The parent is ByBranch. A branch takes only Affinity and Resistance from its parent: its names, bodies, origin and player option are its own. -->
     <xs:attribute name="BranchOf" type="hyb:SpeciesKey" use="optional" />
     <!-- Element keys. A branch without them takes the values of its parent. -->
     <xs:attribute name="Affinity" type="hyb:ElementKey" use="optional" />

@@ -60,9 +60,21 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
         return false;
     }
 
-    /// <summary>The parent of a branch, or null when the species is not a branch or the parent is not loaded.</summary>
-    public Species GetParent(IWorldDataManager manager) =>
-        IsBranch && manager.TryGetValueByIndex(BranchOf.ToLowerInvariant(), out Species parent) ? parent : null;
+    /// <summary>
+    ///     Find a loaded species by key. Case does not matter, as for body keys. Use this, not the store key, because
+    ///     the store compares primary keys with case.
+    /// </summary>
+    public static bool TryGet(IWorldDataManager manager, string key, out Species species)
+    {
+        species = null;
+        return !string.IsNullOrEmpty(key) && manager.TryGetValueByIndex(key.ToLowerInvariant(), out species);
+    }
+
+    /// <summary>
+    ///     The parent of a branch, or null when the species is not a branch or the parent is not loaded. A branch takes
+    ///     only <see cref="Affinity" /> and <see cref="Resistance" /> from its parent.
+    /// </summary>
+    public Species GetParent(IWorldDataManager manager) => IsBranch && TryGet(manager, BranchOf, out var parent) ? parent : null;
 
     /// <summary>The affinity element key. A branch without its own affinity takes its parent's.</summary>
     public string GetAffinity(IWorldDataManager manager) =>

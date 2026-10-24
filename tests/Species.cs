@@ -141,6 +141,21 @@ public class SpeciesTests
         Assert.Equal(3, manager.GetValidationResult<Species>().TotalProcessed);
     }
 
+    [Theory]
+    [InlineData("Vosk", true)]
+    [InlineData("vosk", true)]
+    [InlineData("VOSK", true)]
+    [InlineData("Gnome", false)]
+    [InlineData("", false)]
+    [InlineData(null, false)]
+    public void TryGetFindsASpeciesWithoutCase(string? key, bool found)
+    {
+        var manager = Catalog(Kobold, Vosk);
+
+        Assert.Equal(found, Species.TryGet(manager, key!, out var species));
+        Assert.Equal(found ? "Vosk" : null, species?.Key);
+    }
+
     [Fact]
     public void BranchTakesElementsFromItsParent()
     {
@@ -241,7 +256,7 @@ public class SpeciesTests
         Assert.Empty(Species.Deserialize(Dwarf).Validate(table));
         Assert.Empty(Species.Deserialize(Vosk).Validate(table));
         Assert.Equal(2, Species.Deserialize(Make(attributes: "Origin=\"Aosda\" PlayerOption=\"Starter\" Affinity=\"Storm\" Resistance=\"Wood\"")).Validate(table).Count);
-        Assert.Throws<ArgumentNullException>(() => Species.Deserialize(Dwarf).Validate((ElementTable) null));
+        Assert.Throws<ArgumentNullException>(() => Species.Deserialize(Dwarf).Validate((ElementTable) null!));
     }
 
     // Loading
