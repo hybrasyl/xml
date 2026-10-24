@@ -17,7 +17,7 @@
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
 using System;
-using System.Collections.Generic;
+using System.Linq;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -33,58 +33,50 @@ public partial class Variant
         variantItem.ParentGuid = originalItem.Guid;
         variantItem.IsVariant = true;
 
-        if (variantItem.Properties.Flags != 0)
-            variantItem.Properties.Flags = Properties.Flags;
+        variantItem.Properties.Flags |= Properties.Flags;
 
-        var newValue = originalItem.Properties.Physical.Value * Properties.Physical?.Value ?? 1;
-        var newDura = originalItem.Properties.Physical.Durability * Properties.Physical?.Durability ?? 1;
-        var newWeight = originalItem.Properties.Physical.Weight * Properties.Physical?.Weight ?? 1;
+        var physical = variantItem.Properties.Physical;
+        physical.Value = Math.Min(physical.Value * (Properties.Physical?.Value ?? 1), ushort.MaxValue);
+        physical.Durability = Math.Min(physical.Durability * (Properties.Physical?.Durability ?? 1), ushort.MaxValue);
+        physical.Weight = Math.Min(physical.Weight * (Properties.Physical?.Weight ?? 1), ushort.MaxValue);
 
-        variantItem.Properties.StatModifiers ??= new StatModifiers();
-
-        variantItem.Properties.Physical.Value = newValue > ushort.MaxValue ? ushort.MaxValue : newValue;
-        variantItem.Properties.Physical.Durability = newDura > ushort.MaxValue ? ushort.MaxValue : newDura;
-        variantItem.Properties.Physical.Weight = newWeight > ushort.MaxValue ? ushort.MaxValue : newWeight;
-
-        // ensure boot hiding is carried to variants
-        variantItem.Properties.Appearance.HideBoots = originalItem.Properties.Appearance.HideBoots;
-        if (Properties.Restrictions?.Level != null)
-            variantItem.Properties.Restrictions.Level.Min = (byte)Math.Min(99,
-                variantItem.Properties.Restrictions.Level.Min + Properties.Restrictions.Level.Min);
+        if (Properties.Restrictions?.Level is { } level)
+        {
+            variantItem.Properties.Restrictions ??= new ItemRestrictions();
+            var baseLevel = variantItem.Properties.Restrictions.Level ??= new RestrictionsLevel();
+            // The server treats an item with no minimum level as level 1.
+            baseLevel.Min = (byte)Math.Min(99, Math.Max(1, (int)baseLevel.Min) + level.Min);
+        }
 
         if (Properties.Appearance != null)
             variantItem.Properties.Appearance.Color = Properties.Appearance.Color;
 
-        if (Properties.StatModifiers != null)
-            variantItem.Properties.StatModifiers += Properties.StatModifiers;
-
-        if (originalItem.Properties.Equipment.Slot == EquipmentSlot.Weapon && Properties.Damage != null)
+        variantItem.Properties.StatModifiers ??= new StatModifiers();
+        if (Properties.StatModifiers is { } modifiers)
         {
-            variantItem.Properties.Damage.LargeMin =
-                (ushort)(originalItem.Properties.Damage.LargeMin * Properties.Damage.LargeMin);
-            variantItem.Properties.Damage.LargeMax =
-                (ushort)(originalItem.Properties.Damage.LargeMax * Properties.Damage.LargeMax);
-            variantItem.Properties.Damage.SmallMin =
-                (ushort)(originalItem.Properties.Damage.SmallMin * Properties.Damage.SmallMin);
-            variantItem.Properties.Damage.SmallMin =
-                (ushort)(originalItem.Properties.Damage.SmallMin * Properties.Damage.SmallMin);
+            variantItem.Properties.StatModifiers += modifiers;
+            // The generated element properties have no Specified flag, so None is the only way to tell an
+            // element the variant leaves unset; the clone already holds the base item's.
+            if (modifiers.BaseDefensiveElement != ElementType.None)
+                variantItem.Properties.StatModifiers.BaseDefensiveElement = modifiers.BaseDefensiveElement;
+            if (modifiers.BaseOffensiveElement != ElementType.None)
+                variantItem.Properties.StatModifiers.BaseOffensiveElement = modifiers.BaseOffensiveElement;
         }
 
-        if (Properties.StatModifiers?.BaseDefensiveElement != null)
-            variantItem.Properties.StatModifiers.BaseDefensiveElement =
-                Properties.StatModifiers.BaseDefensiveElement;
-        else
-            variantItem.Properties.StatModifiers.BaseDefensiveElement =
-                originalItem.Properties.StatModifiers?.BaseDefensiveElement ?? ElementType.None;
+        if (originalItem.Properties.Equipment?.Slot == EquipmentSlot.Weapon &&
+            Properties.Damage is { } scale && variantItem.Properties.Damage is { } damage)
+        {
+            damage.LargeMin = ScaleDamage(damage.LargeMin, scale.LargeMin);
+            damage.LargeMax = ScaleDamage(damage.LargeMax, scale.LargeMax);
+            damage.SmallMin = ScaleDamage(damage.SmallMin, scale.SmallMin);
+            damage.SmallMax = ScaleDamage(damage.SmallMax, scale.SmallMax);
+        }
 
-        if (Properties.StatModifiers?.BaseOffensiveElement != null)
-            variantItem.Properties.StatModifiers.BaseOffensiveElement =
-                Properties.StatModifiers.BaseOffensiveElement;
-        else
-            variantItem.Properties.StatModifiers.BaseDefensiveElement =
-                Properties.StatModifiers?.BaseOffensiveElement ?? ElementType.None;
-
-        variantItem.Properties?.Tags?.AddRange(Properties?.Tags ?? new List<ItemTag>());
+        variantItem.Properties.Tags.AddRange(Properties.Tags.Except(variantItem.Properties.Tags).ToList());
         return variantItem;
     }
+
+    // Clamped before the cast, which would otherwise wrap an out-of-range value (80000 becomes 14464).
+    private static ushort ScaleDamage(float value, float multiplier) =>
+        (ushort)Math.Clamp(value * multiplier, 0, ushort.MaxValue);
 }
