@@ -119,6 +119,8 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
         var errors = new List<string>();
         var bodies = Bodies ?? [];
 
+        if (IsBadKey(Key))
+            errors.Add("Key is empty, or it has a space at the start or the end.");
         if (Names == null)
             errors.Add("The species has no Names.");
         if (bodies.Count == 0 && PlayerOption is SpeciesPlayerOption.Starter or SpeciesPlayerOption.Unlockable)
@@ -126,8 +128,8 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
         var defaults = bodies.Count(b => b.Default);
         if (bodies.Count > 0 && defaults != 1)
             errors.Add($"Exactly one body must have Default=\"true\". This species has {defaults}.");
-        foreach (var body in bodies.Where(b => string.IsNullOrEmpty(b.Key)))
-            errors.Add($"Body id {body.Id} has no key.");
+        foreach (var body in bodies.Where(b => IsBadKey(b.Key)))
+            errors.Add($"Body id {body.Id} has no key, or its key has a space at the start or the end.");
         foreach (var key in bodies.Select(b => b.Key).Duplicates(KeyComparer))
             errors.Add($"Body key {key} is not unique.");
         foreach (var id in bodies.Select(b => b.Id).Duplicates())
@@ -157,6 +159,10 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
 
         return errors;
     }
+
+    // Keys are saved, and the loader does not trim them, so " Dwarf " is a different key from "Dwarf". Validate
+    // rejects such a key instead of trimming it, because a change to a saved key must be explicit.
+    private static bool IsBadKey(string key) => string.IsNullOrWhiteSpace(key) || key.Trim() != key;
 
     /// <summary>
     ///     Check that <see cref="Affinity" /> and <see cref="Resistance" /> name elements of <paramref name="table" />.

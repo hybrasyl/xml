@@ -178,6 +178,17 @@ public class SpeciesTests
         Assert.Equal(1, ValidateAll(manager));
     }
 
+    [Theory]
+    [InlineData(" Gnoll", "Grey")] // a species key with a space at the start
+    [InlineData("Gnoll", "Grey ")] // a body key with a space at the end
+    [InlineData("Gnoll", " ")] // a blank body key
+    public void ValidateRejectsAPaddedKey(string key, string bodyKey)
+    {
+        // The schema pattern rejects these in a file, but the loader does not check files against the schema (HXML-35).
+        var gnoll = Species.Deserialize(Make(key, 9, body: Names + $"<Bodies><Body Key=\"{bodyKey}\" Id=\"90\" Default=\"true\" /></Bodies>"));
+        Assert.Single(gnoll.Validate(Catalog()));
+    }
+
     [Fact]
     public void ValidateAllRejectsKeysThatDifferOnlyInCase()
     {
