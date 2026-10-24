@@ -59,6 +59,7 @@
   <!-- A named set of elements. Content picks a random member with Random:<Key>. -->
   <xs:complexType name="ElementTableGroup">
     <xs:attribute name="Key" type="hyb:ElementKey" use="required" />
+    <!-- Each entry is one chance in a random pick. A member listed twice is picked twice as often. -->
     <xs:attribute name="Members" type="hyb:ElementKeyList" use="required" />
   </xs:complexType>
 

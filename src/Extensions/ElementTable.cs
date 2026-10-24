@@ -131,7 +131,8 @@ public partial class ElementTable : ILoadOnStart<ElementTable>, IAdditionalValid
     /// <summary>
     ///     Resolve a selector from content to one element: an element key, <c>Random:&lt;Group&gt;</c>, or an
     ///     old name in <see cref="LegacyRandomSelectors" />. A group member that the table does not define is
-    ///     never picked.
+    ///     never picked. Each entry in <c>Members</c> is one chance, so a member listed twice is picked twice as
+    ///     often. Content uses this to weight a group.
     /// </summary>
     /// <returns>
     ///     False for an empty selector, an unknown key or group, a group with no defined member, and a creature
@@ -144,8 +145,8 @@ public partial class ElementTable : ILoadOnStart<ElementTable>, IAdditionalValid
         if (!TryGetGroupKey(selector, out var groupKey)) return TryGetElement(selector, out element);
         if (!TryGetGroup(groupKey, out var group) || group.Members == null) return false;
 
-        // Reservoir sampling: each defined member is kept with probability 1/n, so the pick is uniform over the
-        // defined members, in one pass and without a list.
+        // Reservoir sampling: the nth defined entry is kept with probability 1/n, so the pick is uniform over the
+        // defined entries, in one pass and without a list. A repeated member has more entries, and more weight.
         var defined = 0;
         foreach (var key in group.Members)
             if (TryGetElement(key, out var candidate) && Random.Shared.Next(++defined) == 0)
@@ -200,7 +201,9 @@ public partial class ElementTable : ILoadOnStart<ElementTable>, IAdditionalValid
         foreach (var group in groups)
         {
             var members = group.Members ?? [];
-            if (reserved.Contains(group.Key, KeyComparer))
+            if (string.IsNullOrEmpty(group.Key))
+                errors.Add("A group has no key.");
+            else if (reserved.Contains(group.Key, KeyComparer))
                 errors.Add($"Group key {group.Key} is reserved for a selector.");
             if (members.Count == 0)
                 errors.Add($"Group {group.Key} has no members.");
@@ -208,6 +211,8 @@ public partial class ElementTable : ILoadOnStart<ElementTable>, IAdditionalValid
                 errors.Add($"Group {group.Key} names element {member}, which the table does not define.");
         }
 
+        if (rows.Count == 0)
+            errors.Add("The table has no Source rows.");
         foreach (var dup in Duplicates(rows.Select(s => s.Element), KeyComparer))
             errors.Add($"Source element {dup} has more than one row.");
         foreach (var row in rows)

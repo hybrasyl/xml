@@ -323,6 +323,26 @@ public class ElementTableTests
         Assert.False(table.TryResolve("Random:Gone", out _));
     }
 
+    [Fact]
+    public void TryResolveWeightsARepeatedMember()
+    {
+        // A member listed twice is picked twice as often. Content uses this to weight a group.
+        var table = Sample();
+        table.Groups.Add(new ElementTableGroup { Key = "Weighted", Members = ["Fire", "Fire", "Water"] });
+        Assert.Empty(table.Validate());
+
+        const int picks = 6000;
+        var fire = 0;
+        for (var i = 0; i < picks; i++)
+        {
+            Assert.True(table.TryResolve("Random:Weighted", out var element));
+            if (element.Key == "Fire") fire++;
+        }
+
+        // The expected share is 2/3. The bounds are more than eight standard deviations from it.
+        Assert.InRange(fire / (double) picks, 0.61, 0.72);
+    }
+
     [Theory]
     [InlineData("Wind", true)]
     [InlineData("Random:Cardinal", true)]
@@ -420,6 +440,22 @@ public class ElementTableTests
     {
         var table = Sample();
         table.Source[0].Target.Add(new ElementTableTargetElement { Element = "wind" });
+        Assert.Single(table.Validate());
+    }
+
+    [Fact]
+    public void ValidateRejectsGroupWithoutKey()
+    {
+        var table = Sample();
+        table.Groups.Add(new ElementTableGroup { Key = null, Members = ["Fire"] });
+        Assert.Single(table.Validate());
+    }
+
+    [Fact]
+    public void ValidateRejectsTableWithoutSourceRows()
+    {
+        var table = Sample();
+        table.Source.Clear();
         Assert.Single(table.Validate());
     }
 
