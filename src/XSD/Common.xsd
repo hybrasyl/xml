@@ -791,6 +791,9 @@
   </xs:complexType>
 
   <xs:complexType name="CreatureTypes">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">The loader adds each Type as a separate creature. A type takes nothing from its parent creature, so give each type its own Loot, Hostility, SetCookies and Description.</xs:documentation>
+    </xs:annotation>
     <xs:sequence>
       <xs:element name="Type" type="hyb:Creature" minOccurs="0" maxOccurs="unbounded" />
     </xs:sequence>
