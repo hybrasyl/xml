@@ -25,23 +25,8 @@ namespace Hybrasyl.Xml.Objects
         [System.Xml.Serialization.XmlElementAttribute("Description")]
         public string Description { get; set; }
         
-        /// <summary>
-        /// <para xml:lang="en">Minimum length: 1.</para>
-        /// <para xml:lang="en">Maximum length: 255.</para>
-        /// </summary>
-        [System.ComponentModel.DataAnnotations.MinLengthAttribute(1)]
-        [System.ComponentModel.DataAnnotations.MaxLengthAttribute(255)]
         [System.Xml.Serialization.XmlElementAttribute("ExclusiveGroup")]
-        public string ExclusiveGroup { get; set; }
-        
-        [System.Xml.Serialization.XmlElementAttribute("ExclusivePolicy")]
-        public ExclusivePolicy ExclusivePolicy { get; set; }
-        
-        /// <summary>
-        /// <para xml:lang="en">Gets or sets a value indicating whether the ExclusivePolicy property is specified.</para>
-        /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ExclusivePolicySpecified { get; set; }
+        public TraitExclusiveGroup ExclusiveGroup { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.Generic.List<string> _conflictsWith;

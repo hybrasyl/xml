@@ -44,8 +44,7 @@ public class TraitTests
         $"""
          <Trait xmlns="{Ns}" Name="Dockworker" Icon="112" IconSet="Skill" Category="Background">
            <Description>Years on the docks have made you unusually strong.</Description>
-           <ExclusiveGroup>Background</ExclusiveGroup>
-           <ExclusivePolicy>Replace</ExclusivePolicy>
+           <ExclusiveGroup Policy="Replace">Background</ExclusiveGroup>
            <ConflictsWith>
              <Trait>Scribe</Trait>
              <Trait>Courtier</Trait>
@@ -93,9 +92,10 @@ public class TraitTests
 
     [Theory]
     [InlineData("Icon=\"65535\" IconSet=\"Skill\"", "")]
-    [InlineData(Icon, "<ExclusivePolicy>Reject</ExclusivePolicy>")]
-    [InlineData(Icon, "<ExclusivePolicy>Replace</ExclusivePolicy>")]
-    public void IconUpTo65535AndBothPoliciesAreValid(string icon, string body)
+    [InlineData(Icon, "<ExclusiveGroup>Background</ExclusiveGroup>")]
+    [InlineData(Icon, "<ExclusiveGroup Policy=\"Reject\">Background</ExclusiveGroup>")]
+    [InlineData(Icon, "<ExclusiveGroup Policy=\"Replace\">Background</ExclusiveGroup>")]
+    public void IconUpTo65535AndEachGroupPolicyIsValid(string icon, string body)
     {
         Assert.Empty(Validate(Minimal(body: body, icon: icon)));
     }
@@ -103,9 +103,11 @@ public class TraitTests
     [Theory]
     [InlineData("Icon=\"65536\" IconSet=\"Skill\"", "")]
     [InlineData("Icon=\"40\" IconSet=\"Utility\"", "")]
-    [InlineData(Icon, "<ExclusivePolicy>Stack</ExclusivePolicy>")]
-    [InlineData(Icon, "<ExclusivePolicy />")]
-    public void IconOutOfRangeUnknownSheetAndUnknownPolicyAreInvalid(string icon, string body)
+    [InlineData(Icon, "<ExclusiveGroup Policy=\"Stack\">Background</ExclusiveGroup>")]
+    [InlineData(Icon, "<ExclusiveGroup Policy=\"\">Background</ExclusiveGroup>")]
+    [InlineData(Icon, "<ExclusiveGroup Policy=\"Replace\" />")]
+    [InlineData(Icon, "<ExclusivePolicy>Replace</ExclusivePolicy>")]
+    public void IconOutOfRangeUnknownSheetAndBadGroupAreInvalid(string icon, string body)
     {
         Assert.NotEmpty(Validate(Minimal(body: body, icon: icon)));
     }
@@ -138,8 +140,8 @@ public class TraitTests
         Assert.Equal(112, trait.Icon);
         Assert.Equal(IconSet.Skill, trait.IconSet);
         Assert.Equal("Background", trait.Category);
-        Assert.Equal("Background", trait.ExclusiveGroup);
-        Assert.Equal(ExclusivePolicy.Replace, trait.ExclusivePolicy);
+        Assert.Equal("Background", trait.ExclusiveGroup.Value);
+        Assert.Equal(ExclusivePolicy.Replace, trait.ExclusiveGroup.Policy);
         Assert.Equal(["Scribe", "Courtier"], trait.ConflictsWith);
         Assert.Equal("3", trait.StatModifiers.BonusStr);
     }
@@ -152,9 +154,17 @@ public class TraitTests
         Assert.Null(trait.Description);
         Assert.Null(trait.Category);
         Assert.Null(trait.ExclusiveGroup);
-        Assert.Equal(ExclusivePolicy.Reject, trait.ExclusivePolicy);
         Assert.Empty(trait.ConflictsWith);
         Assert.Null(trait.StatModifiers);
+    }
+
+    [Fact]
+    public void ExclusiveGroupWithoutPolicyRejects()
+    {
+        var trait = Trait.Deserialize(Minimal(body: "<ExclusiveGroup>Background</ExclusiveGroup>"));
+
+        Assert.Equal("Background", trait.ExclusiveGroup.Value);
+        Assert.Equal(ExclusivePolicy.Reject, trait.ExclusiveGroup.Policy);
     }
 
     // Loading

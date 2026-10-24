@@ -44,6 +44,15 @@
     </xs:restriction>
   </xs:simpleType>
 
+  <!-- A mechanical rule: a character has at most one trait from each group. Category is for display, and it does not set a group. -->
+  <xs:complexType name="TraitExclusiveGroup">
+    <xs:simpleContent>
+      <xs:extension base="hyb:String8">
+        <xs:attribute name="Policy" type="hyb:ExclusivePolicy" use="optional" default="Reject" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
   <xs:complexType name="TraitConflictList">
     <xs:sequence>
       <xs:element name="Trait" type="hyb:String8" minOccurs="1" maxOccurs="unbounded" />
@@ -54,10 +63,7 @@
   <xs:complexType name="Trait">
     <xs:sequence>
       <xs:element name="Description" type="xs:string" minOccurs="0" maxOccurs="1" />
-      <!-- A mechanical rule: a character has at most one trait from each group. Category is for display, and it does not set a group. -->
-      <xs:element name="ExclusiveGroup" type="hyb:String8" minOccurs="0" maxOccurs="1" />
-      <!-- When this element is absent, the policy is Reject. The schema sets no default, because an empty element would then pass the schema and fail to load. -->
-      <xs:element name="ExclusivePolicy" type="hyb:ExclusivePolicy" minOccurs="0" maxOccurs="1" />
+      <xs:element name="ExclusiveGroup" type="hyb:TraitExclusiveGroup" minOccurs="0" maxOccurs="1" />
       <!-- Traits that a character cannot have at the same time as this trait. -->
       <xs:element name="ConflictsWith" type="hyb:TraitConflictList" minOccurs="0" maxOccurs="1" />
       <xs:element name="StatModifiers" type="hyb:StatModifiers" minOccurs="0" maxOccurs="1" />
