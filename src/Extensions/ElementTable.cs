@@ -1,33 +1,35 @@
 ﻿// This file is part of Project Hybrasyl.
-// 
+//
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the Affero General Public License as published by
 // the Free Software Foundation, version 3.
-// 
+//
 // This program is distributed in the hope that it will be useful, but
 // without ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
 // or FITNESS FOR A PARTICULAR PURPOSE. See the Affero General Public License
 // for more details.
-// 
+//
 // You should have received a copy of the Affero General Public License along
 // with this program. If not, see <http://www.gnu.org/licenses/>.
-// 
+//
 // (C) 2020-2023 ERISCO, LLC
-// 
+//
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hybrasyl.Xml.Interfaces;
+using Hybrasyl.Xml.Manager;
 
 namespace Hybrasyl.Xml.Objects;
 
 /// <remarks>
-///     The element table defines the elements of a world. Content refers to an element by its key. Keys compare
-///     without case.
+///     The element table defines the elements of a world. Content refers to an element by its key. At run time,
+///     keys compare without case (<see cref="KeyComparer" />). The schema compares them with case, so content must
+///     use the case of the key, and <see cref="Validate" /> rejects two keys that differ only in case.
 /// </remarks>
-public partial class ElementTable : ILoadOnStart<ElementTable>
+public partial class ElementTable : ILoadOnStart<ElementTable>, IAdditionalValidation<ElementTable>
 {
     /// <summary>The prefix of a selector that picks a random member of a group, as in <c>Random:Cardinal</c>.</summary>
     public const string RandomPrefix = "Random:";
@@ -35,15 +37,24 @@ public partial class ElementTable : ILoadOnStart<ElementTable>
     /// <summary>Wire value for "no element" in a modern packet. No element can have this id.</summary>
     public const byte NoElementId = 255;
 
-    /// <summary>The highest element id a retail client can display.</summary>
-    public const byte MaxRetailId = 9;
+    // The highest element id a retail client can display (the schema's maxInclusive for RetailId).
+    private const byte MaxRetailId = 9;
+
+    /// <summary>Compares element keys, group keys and selectors.</summary>
+    public static readonly StringComparer KeyComparer = StringComparer.OrdinalIgnoreCase;
+
+    private static readonly string[] CreatureSelectorKeys = ["Current", "Belt", "Necklace"];
 
     /// <summary>Selectors that need the state of a creature. The server resolves them, not the table.</summary>
-    public static readonly IReadOnlyList<string> CreatureSelectors = ["Current", "Belt", "Necklace"];
+    public static readonly IReadOnlyList<string> CreatureSelectors = CreatureSelectorKeys;
 
     /// <summary>Old selector names, and the group that each one names now. Content can use them for one release.</summary>
+    /// <remarks>
+    ///     The world must define these groups. Before the element table defined the elements, RandomTemuair picked
+    ///     by enum position and so also picked Light and Dark. It now picks only from the Cardinal group.
+    /// </remarks>
     public static readonly IReadOnlyDictionary<string, string> LegacyRandomSelectors =
-        new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        new Dictionary<string, string>(KeyComparer)
         {
             ["RandomTemuair"] = "Cardinal",
             ["RandomExpanded"] = "Ordinal"
@@ -54,19 +65,36 @@ public partial class ElementTable : ILoadOnStart<ElementTable>
     public new static void LoadAll(IWorldDataManager manager, string path = null) =>
         HybrasylEntity<ElementTable>.LoadAll(manager, path);
 
+    /// <summary>Run <see cref="Validate" /> on each loaded table, and store the errors as the validation result.</summary>
+    public static void ValidateAll(IWorldDataManager manager)
+    {
+        var result = new XmlValidationResult();
+        foreach (var table in manager.Values<ElementTable>())
+        {
+            result.TotalProcessed++;
+            var errors = table.Validate();
+            if (errors.Count > 0)
+                result.Errors.Add(table.Guid, $"Element table {table.Name}: {string.Join(" ", errors)}");
+        }
+
+        manager.UpdateResult<ElementTable>(result);
+    }
+
     /// <summary>The element with <c>Default="true"</c>. A creature without an element uses it.</summary>
-    public ElementTableElement DefaultElement => Elements.FirstOrDefault(e => e.Default);
+    public ElementTableElement DefaultElement => Elements?.FirstOrDefault(e => e.Default);
 
     public bool TryGetElement(string key, out ElementTableElement element)
     {
-        element = string.IsNullOrEmpty(key) ? null : Elements.FirstOrDefault(e => KeyEquals(e.Key, key));
-        return element != null;
-    }
+        element = null;
+        if (string.IsNullOrEmpty(key) || Elements == null) return false;
+        foreach (var candidate in Elements)
+        {
+            if (!KeyComparer.Equals(candidate.Key, key)) continue;
+            element = candidate;
+            return true;
+        }
 
-    public bool TryGetGroup(string key, out ElementTableGroup group)
-    {
-        group = string.IsNullOrEmpty(key) ? null : Groups.FirstOrDefault(g => KeyEquals(g.Key, key));
-        return group != null;
+        return false;
     }
 
     /// <summary>
@@ -77,39 +105,59 @@ public partial class ElementTable : ILoadOnStart<ElementTable>
     ///     A table declares only the pairs it needs. A pair uses the Multiplier of its Target entry, then the
     ///     DefaultMultiplier of its Source row, then the <see cref="DefaultMultiplier" /> of the table.
     /// </remarks>
+    public double GetMultiplier(ElementTableElement source, ElementTableElement target) =>
+        GetMultiplier(source?.Key, target?.Key);
+
+    /// <summary>
+    ///     Get the multiplier for two element keys. A selector is not a key: it matches no row and so gets the
+    ///     default. Resolve a selector with <see cref="TryResolve" />, or use the overload for elements.
+    /// </summary>
     public double GetMultiplier(string source, string target)
     {
-        var row = Source.FirstOrDefault(s => KeyEquals(s.Element, source));
-        var entry = row?.Target.FirstOrDefault(t => KeyEquals(t.Element, target));
+        var row = Source?.FirstOrDefault(s => KeyComparer.Equals(s.Element, source));
+        var entry = row?.Target?.FirstOrDefault(t => KeyComparer.Equals(t.Element, target));
         if (entry is { MultiplierSpecified: true }) return entry.Multiplier;
         return row is { DefaultMultiplierSpecified: true } ? row.DefaultMultiplier : DefaultMultiplier;
     }
 
-    public static bool IsCreatureSelector(string selector) => CreatureSelectors.Any(s => KeyEquals(s, selector));
+    public static bool IsCreatureSelector(string selector)
+    {
+        foreach (var key in CreatureSelectorKeys)
+            if (KeyComparer.Equals(key, selector))
+                return true;
+        return false;
+    }
 
     /// <summary>
     ///     Resolve a selector from content to one element: an element key, <c>Random:&lt;Group&gt;</c>, or an
-    ///     old name in <see cref="LegacyRandomSelectors" />.
+    ///     old name in <see cref="LegacyRandomSelectors" />. A group member that the table does not define is
+    ///     never picked.
     /// </summary>
     /// <returns>
-    ///     False for an empty selector, an unknown key or group, an empty group, and a creature selector
-    ///     (<see cref="CreatureSelectors" />), which the server resolves.
+    ///     False for an empty selector, an unknown key or group, a group with no defined member, and a creature
+    ///     selector (<see cref="CreatureSelectors" />), which the server resolves.
     /// </returns>
     public bool TryResolve(string selector, out ElementTableElement element)
     {
         element = null;
         if (string.IsNullOrEmpty(selector) || IsCreatureSelector(selector)) return false;
+        if (!TryGetGroupKey(selector, out var groupKey)) return TryGetElement(selector, out element);
+        if (!TryGetGroup(groupKey, out var group) || group.Members == null) return false;
 
-        string groupKey = null;
-        if (selector.StartsWith(RandomPrefix, StringComparison.OrdinalIgnoreCase))
-            groupKey = selector[RandomPrefix.Length..];
-        else if (LegacyRandomSelectors.TryGetValue(selector, out var legacyGroup))
-            groupKey = legacyGroup;
-
-        if (groupKey == null) return TryGetElement(selector, out element);
-        if (!TryGetGroup(groupKey, out var group) || group.Members.Count == 0) return false;
-        return TryGetElement(group.Members.PickRandom(), out element);
+        // Reservoir sampling: each defined member is kept with probability 1/n, so the pick is uniform over the
+        // defined members, in one pass and without a list.
+        var defined = 0;
+        foreach (var key in group.Members)
+            if (TryGetElement(key, out var candidate) && Random.Shared.Next(++defined) == 0)
+                element = candidate;
+        return element != null;
     }
+
+    /// <summary>
+    ///     Check that a selector from content can resolve: a creature selector, a group with at least one defined
+    ///     member, or an element key. The server can check content with it at load.
+    /// </summary>
+    public bool CanResolve(string selector) => IsCreatureSelector(selector) || TryResolve(selector, out _);
 
     /// <summary>
     ///     Check the rules that the schema cannot check, or that a table built in code can break.
@@ -118,21 +166,24 @@ public partial class ElementTable : ILoadOnStart<ElementTable>
     public List<string> Validate()
     {
         var errors = new List<string>();
+        var elements = Elements ?? [];
+        var groups = Groups ?? [];
+        var rows = Source ?? [];
         var reserved = CreatureSelectors.Concat(LegacyRandomSelectors.Keys).ToList();
 
-        if (Elements.Count == 0)
+        if (elements.Count == 0)
             errors.Add("The table defines no elements.");
 
-        foreach (var dup in Duplicates(Elements.Select(e => e.Key)))
+        foreach (var dup in Duplicates(elements.Select(e => e.Key), KeyComparer))
             errors.Add($"Element key {dup} is not unique.");
-        foreach (var dup in Elements.GroupBy(e => e.Id).Where(g => g.Count() > 1))
-            errors.Add($"Element id {dup.Key} is not unique.");
+        foreach (var dup in Duplicates(elements.Select(e => e.Id), EqualityComparer<byte>.Default))
+            errors.Add($"Element id {dup} is not unique.");
 
-        foreach (var element in Elements)
+        foreach (var element in elements)
         {
             if (string.IsNullOrEmpty(element.Key))
                 errors.Add($"Element id {element.Id} has no key.");
-            else if (reserved.Any(r => KeyEquals(r, element.Key)))
+            else if (reserved.Contains(element.Key, KeyComparer))
                 errors.Add($"Element key {element.Key} is reserved for a selector.");
             if (element.Id == NoElementId)
                 errors.Add($"Element {element.Key} has id {NoElementId}, which means \"no element\".");
@@ -140,42 +191,59 @@ public partial class ElementTable : ILoadOnStart<ElementTable>
                 errors.Add($"Element {element.Key} has RetailId {element.RetailId}. The maximum is {MaxRetailId}.");
         }
 
-        var defaults = Elements.Count(e => e.Default);
+        var defaults = elements.Count(e => e.Default);
         if (defaults != 1)
             errors.Add($"Exactly one element must have Default=\"true\". This table has {defaults}.");
 
-        foreach (var dup in Duplicates(Groups.Select(g => g.Key)))
+        foreach (var dup in Duplicates(groups.Select(g => g.Key), KeyComparer))
             errors.Add($"Group key {dup} is not unique.");
-        foreach (var group in Groups)
+        foreach (var group in groups)
         {
-            if (reserved.Any(r => KeyEquals(r, group.Key)))
+            var members = group.Members ?? [];
+            if (reserved.Contains(group.Key, KeyComparer))
                 errors.Add($"Group key {group.Key} is reserved for a selector.");
-            if (group.Members.Count == 0)
+            if (members.Count == 0)
                 errors.Add($"Group {group.Key} has no members.");
-            foreach (var member in group.Members.Where(m => !TryGetElement(m, out _)))
+            foreach (var member in members.Where(m => !TryGetElement(m, out _)))
                 errors.Add($"Group {group.Key} names element {member}, which the table does not define.");
         }
 
-        foreach (var dup in Duplicates(Source.Select(s => s.Element)))
+        foreach (var dup in Duplicates(rows.Select(s => s.Element), KeyComparer))
             errors.Add($"Source element {dup} has more than one row.");
-        foreach (var row in Source)
+        foreach (var row in rows)
         {
+            var targets = row.Target ?? [];
             if (!TryGetElement(row.Element, out _))
                 errors.Add($"Source row {row.Element} names an element that the table does not define.");
-            foreach (var dup in Duplicates(row.Target.Select(t => t.Element)))
+            foreach (var dup in Duplicates(targets.Select(t => t.Element), KeyComparer))
                 errors.Add($"Source row {row.Element} has more than one Target for {dup}.");
-            foreach (var target in row.Target.Where(t => !TryGetElement(t.Element, out _)))
+            foreach (var target in targets.Where(t => !TryGetElement(t.Element, out _)))
                 errors.Add($"Source row {row.Element} has a Target for {target.Element}, which the table does not define.");
         }
 
         return errors;
     }
 
-    private static bool KeyEquals(string a, string b) => string.Equals(a, b, StringComparison.OrdinalIgnoreCase);
+    // A Random:<Group> selector, or an old name for one, gives the key of its group.
+    private static bool TryGetGroupKey(string selector, out string groupKey)
+    {
+        if (selector.StartsWith(RandomPrefix, StringComparison.OrdinalIgnoreCase))
+            groupKey = selector[RandomPrefix.Length..];
+        else
+            LegacyRandomSelectors.TryGetValue(selector, out groupKey);
+        return groupKey != null;
+    }
 
-    private static IEnumerable<string> Duplicates(IEnumerable<string> keys) =>
-        keys.Where(k => !string.IsNullOrEmpty(k))
-            .GroupBy(k => k, StringComparer.OrdinalIgnoreCase)
+    private bool TryGetGroup(string key, out ElementTableGroup group)
+    {
+        group = string.IsNullOrEmpty(key) ? null : Groups?.FirstOrDefault(g => KeyComparer.Equals(g.Key, key));
+        return group != null;
+    }
+
+    // Each value that occurs more than once. An empty key is reported elsewhere, so it is not a duplicate here.
+    private static IEnumerable<T> Duplicates<T>(IEnumerable<T> values, IEqualityComparer<T> comparer) =>
+        values.Where(v => v is not (null or ""))
+            .GroupBy(v => v, comparer)
             .Where(g => g.Count() > 1)
             .Select(g => g.Key);
 }

@@ -69,23 +69,14 @@ public partial class StatModifiers
     }
 
 
-    public double GetElementalAugment(string element)
-    {
-        if (ElementalModifiers == null) return 1.0;
-        var augment = ElementalModifiers
-            .FirstOrDefault(predicate: x => x.Type == ElementalModifierType.Augment &&
-                                            string.Equals(x.Element, element, StringComparison.OrdinalIgnoreCase));
-        return augment?.Modifier ?? 1.0;
-    }
+    public double GetElementalAugment(string element) => GetElementalModifier(ElementalModifierType.Augment, element);
 
-    public double GetElementalResistance(string element)
-    {
-        if (ElementalModifiers == null) return 1.0;
-        var augment = ElementalModifiers
-            .FirstOrDefault(predicate: x => x.Type == ElementalModifierType.Resistance &&
-                                            string.Equals(x.Element, element, StringComparison.OrdinalIgnoreCase));
-        return augment?.Modifier ?? 1.0;
-    }
+    public double GetElementalResistance(string element) =>
+        GetElementalModifier(ElementalModifierType.Resistance, element);
+
+    private double GetElementalModifier(ElementalModifierType type, string element) =>
+        ElementalModifiers?.FirstOrDefault(predicate: x =>
+            x.Type == type && ElementTable.KeyComparer.Equals(x.Element, element))?.Modifier ?? 1.0;
 
     public static string FormatBonusPct(string bonus, string name, float scale = 1)
     {

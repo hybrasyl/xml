@@ -156,8 +156,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
     public bool ImmuneToElement(string type, out CreatureImmunity immunity)
     {
         immunity = Immunities?.FirstOrDefault(predicate: x =>
-            x.Type == CreatureImmunityType.Element &&
-            string.Equals(x.Value, type, StringComparison.CurrentCultureIgnoreCase));
+            x.Type == CreatureImmunityType.Element && ElementTable.KeyComparer.Equals(x.Value, type));
         return immunity != null;
     }
 

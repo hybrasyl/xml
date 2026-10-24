@@ -19,9 +19,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
 using Xunit;
 
@@ -210,6 +212,16 @@ public class ElementTableTests
     }
 
     [Fact]
+    public void GetMultiplierAcceptsResolvedElements()
+    {
+        var table = Sample();
+        Assert.True(table.TryResolve("Fire", out var fire));
+        Assert.True(table.TryResolve("Wind", out var wind));
+        Assert.Equal(1.5, table.GetMultiplier(fire, wind));
+        Assert.Equal(1.0, table.GetMultiplier(null, wind));
+    }
+
+    [Fact]
     public void GetMultiplierUsesTableDefaultForMissingTarget()
     {
         Assert.Equal(0.9, Sample("DefaultMultiplier=\"0.9\"").GetMultiplier("Fire", "Earth"));
@@ -290,10 +302,40 @@ public class ElementTableTests
     [InlineData("Wood")]
     [InlineData("")]
     [InlineData(null)]
-    public void TryResolveRejectsWhatTheTableCannotResolve(string selector)
+    public void TryResolveRejectsWhatTheTableCannotResolve(string? selector)
     {
         Assert.False(Sample().TryResolve(selector, out var element));
         Assert.Null(element);
+    }
+
+    [Fact]
+    public void TryResolveNeverPicksAnUndefinedMember()
+    {
+        var table = Sample();
+        table.Groups.Add(new ElementTableGroup { Key = "Mixed", Members = ["Wood", "Fire", "Lava"] });
+        table.Groups.Add(new ElementTableGroup { Key = "Gone", Members = ["Wood"] });
+        for (var i = 0; i < 50; i++)
+        {
+            Assert.True(table.TryResolve("Random:Mixed", out var element));
+            Assert.Equal("Fire", element.Key);
+        }
+
+        Assert.False(table.TryResolve("Random:Gone", out _));
+    }
+
+    [Theory]
+    [InlineData("Wind", true)]
+    [InlineData("Random:Cardinal", true)]
+    [InlineData("RandomTemuair", true)]
+    [InlineData("Current", true)]
+    [InlineData("RandomExpanded", false)]
+    [InlineData("Random:Missing", false)]
+    [InlineData("Wood", false)]
+    [InlineData("", false)]
+    public void CanResolveChecksWithoutPicking(string selector, bool expected)
+    {
+        // The sample table has no Ordinal group, so the old name RandomExpanded cannot resolve.
+        Assert.Equal(expected, Sample().CanResolve(selector));
     }
 
     // Validate
@@ -348,5 +390,51 @@ public class ElementTableTests
         table.Elements.Add(new ElementTableElement { Key = "Void", Id = ElementTable.NoElementId });
         table.Elements.Add(new ElementTableElement { Key = "Time", Id = 32, RetailId = 10 });
         Assert.Equal(2, table.Validate().Count);
+    }
+
+    [Fact]
+    public void ValidateReportsNullCollectionsAsErrors()
+    {
+        var table = Sample();
+        table.Groups.Add(new ElementTableGroup { Key = "Empty", Members = null });
+        table.Source.Add(new ElementTableSourceElement { Element = "Dark", Target = null });
+        Assert.Single(table.Validate());
+
+        table.Elements = null;
+        table.Groups = null;
+        table.Source = null;
+        Assert.NotEmpty(table.Validate());
+        Assert.False(table.TryResolve("Random:Cardinal", out _));
+        Assert.Equal(1.0, table.GetMultiplier("Fire", "Wind"));
+    }
+}
+
+[Collection("Xml")]
+public class ElementTableValidateAllTests : IClassFixture<XmlManagerFixture>
+{
+    private readonly XmlManagerFixture fixture;
+
+    public ElementTableValidateAllTests(XmlManagerFixture fixture)
+    {
+        this.fixture = fixture;
+    }
+
+    [Fact]
+    public void ValidateAllStoresOneErrorForEachInvalidTable()
+    {
+        var manager = fixture.SyncManager;
+        manager.ValidateAll<ElementTable>();
+        var result = manager.GetValidationResult<ElementTable>();
+        var tables = manager.Values<ElementTable>().ToList();
+        Assert.Equal(tables.Count, result.TotalProcessed);
+        Assert.Equal(tables.Count(t => t.Validate().Count > 0), result.ErrorCount);
+    }
+
+    [Fact]
+    public void ResultSummariesIncludeElementTableValidation()
+    {
+        var summary = Assert.Single(fixture.SyncManager.GetResultSummaries(),
+            s => s.Stage == XmlResultStage.Validation && s.TypeName == nameof(ElementTable));
+        Assert.Equal(fixture.SyncManager.Values<ElementTable>().Count(), summary.TotalProcessed);
     }
 }
