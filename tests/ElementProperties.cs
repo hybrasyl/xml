@@ -60,6 +60,34 @@ public class StatModifiersElementTests
         Assert.Equal(1.0, modifiers.GetElementalAugment("Earth"));
         Assert.Equal(1.0, new StatModifiers { ElementalModifiers = null }.GetElementalAugment("Fire"));
     }
+
+    [Fact]
+    public void SumKeepsTheElementalModifiersOfBothSides()
+    {
+        var fireResistance = new ElementalModifier
+            { Type = ElementalModifierType.Resistance, Element = "Fire", Modifier = 0.03 };
+
+        var sum = Modifiers() + new StatModifiers { ElementalModifiers = [fireResistance] };
+
+        Assert.Equal(3, sum.ElementalModifiers.Count);
+        Assert.Contains(fireResistance, sum.ElementalModifiers);
+        Assert.Equal(1.2, sum.GetElementalAugment("Fire"));
+    }
+
+    [Fact]
+    public void SumMakesTheListWhenOnlyTheRightSideHasElementalModifiers()
+    {
+        var sum = new StatModifiers { ElementalModifiers = null } + Modifiers();
+
+        Assert.Equal(2, sum.ElementalModifiers.Count);
+    }
+
+    [Fact]
+    public void SumKeepsTheLeftListWhenTheRightSideHasNoElementalModifiers()
+    {
+        Assert.Equal(2, (Modifiers() + new StatModifiers { ElementalModifiers = null }).ElementalModifiers.Count);
+        Assert.Equal(2, (Modifiers() + new StatModifiers()).ElementalModifiers.Count);
+    }
 }
 
 public class CastableElementTests

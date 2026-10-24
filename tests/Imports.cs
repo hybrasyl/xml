@@ -29,6 +29,26 @@ public class ImportTests(ITestOutputHelper output, XmlManagerFixture fixture) : 
     }
 
     [Fact]
+    public void CreatureBehaviorSetImportKeepsTheElementalModifiersOfBothSets()
+    {
+        static CreatureBehaviorSet Set(string name, string element) => new()
+        {
+            Name = name,
+            StatModifiers = new StatModifiers
+            {
+                ElementalModifiers =
+                [
+                    new ElementalModifier { Type = ElementalModifierType.Resistance, Element = element, Modifier = 0.1 }
+                ]
+            }
+        };
+
+        var merged = Set("Child", "Fire") & Set("Parent", "Water");
+
+        Assert.Equal(["Fire", "Water"], merged.StatModifiers.Resistances.Select(m => m.Element));
+    }
+
+    [Fact]
     public void CreatureBehaviorSetImportsShouldImportCorrectly()
     {
         Assert.True(Fixture.SyncManager.TryGetValue("RareGabbaDynamic", out CreatureBehaviorSet setWithImport));
