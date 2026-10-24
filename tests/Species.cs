@@ -43,15 +43,19 @@ public class SpeciesTests
          </Species>
          """;
 
-    private static string Make(string key = "Dwarf", byte id = 4, string attributes = "Origin=\"Aosda\" PlayerOption=\"Starter\" Affinity=\"Wind\" Resistance=\"Wind\"",
-        string body = Names + Bodies) =>
+    // A starter species without elements, and with them.
+    private const string Starter = "Origin=\"Aosda\" PlayerOption=\"Starter\"";
+    private const string Playable = Starter + " Affinity=\"Wind\" Resistance=\"Wind\"";
+
+    private static string Make(string key = "Dwarf", byte id = 4, string attributes = Playable, string body = Names + Bodies) =>
         $"<Species xmlns=\"{Ns}\" Key=\"{key}\" Id=\"{id}\" {attributes}>{body}</Species>";
 
-    private const string Kobold =
-        $"<Species xmlns=\"{Ns}\" Key=\"Kobold\" Id=\"5\" Origin=\"Fanaidhe\" PlayerOption=\"ByBranch\" Affinity=\"Nature\" Resistance=\"Wind\"><Names Singular=\"Kobold\" Plural=\"Kobolds\" Adjective=\"Koboldine\" /></Species>";
+    private static readonly string Kobold = Make("Kobold", 5,
+        "Origin=\"Fanaidhe\" PlayerOption=\"ByBranch\" Affinity=\"Nature\" Resistance=\"Wind\"",
+        "<Names Singular=\"Kobold\" Plural=\"Kobolds\" Adjective=\"Koboldine\" />");
 
-    private const string Vosk =
-        $"<Species xmlns=\"{Ns}\" Key=\"Vosk\" Id=\"6\" Origin=\"Fanaidhe\" PlayerOption=\"Starter\" BranchOf=\"Kobold\"><Names Singular=\"Vosk\" Plural=\"Vosken\" Adjective=\"Voskar\" /><Bodies><Body Key=\"Moss\" Id=\"60\" Default=\"true\" /></Bodies></Species>";
+    private static readonly string Vosk = Make("Vosk", 6, "Origin=\"Fanaidhe\" PlayerOption=\"Starter\" BranchOf=\"Kobold\"",
+        "<Names Singular=\"Vosk\" Plural=\"Vosken\" Adjective=\"Voskar\" /><Bodies><Body Key=\"Moss\" Id=\"60\" Default=\"true\" /></Bodies>");
 
     // Schema
 
@@ -69,19 +73,17 @@ public class SpeciesTests
     }
 
     [Theory]
-    [InlineData("Origin=\"Aosdha\" PlayerOption=\"Starter\"", Names + Bodies)]
-    [InlineData("Origin=\"Aosda\" PlayerOption=\"Hidden\"", Names + Bodies)]
-    [InlineData("PlayerOption=\"Starter\"", Names + Bodies)]
-    [InlineData("Origin=\"Aosda\" PlayerOption=\"Starter\" Affinity=\"Storm Wind\"", Names + Bodies)]
-    [InlineData("Origin=\"Aosda\" PlayerOption=\"Starter\"", Bodies)]
-    [InlineData("Origin=\"Aosda\" PlayerOption=\"Starter\"", Names + "<Bodies />")]
-    [InlineData("Origin=\"Aosda\" PlayerOption=\"Starter\"", Names + "<Bodies><Body Key=\"Ruddy\" Id=\"40\" RetailSkinColor=\"10\" /></Bodies>")]
-    [InlineData("Origin=\"Aosda\" PlayerOption=\"Starter\"", Names + "<Bodies><Body Key=\"Ruddy\" Id=\"40\" /><Body Key=\"Ruddy\" Id=\"41\" /></Bodies>")]
-    [InlineData("Origin=\"Aosda\" PlayerOption=\"Starter\"", Names + "<Bodies><Body Key=\"Ruddy\" Id=\"40\" /><Body Key=\"Ashen\" Id=\"40\" /></Bodies>")]
+    [InlineData("Origin=\"Aosdha\" PlayerOption=\"Starter\"", Names + Bodies)] // unknown origin
+    [InlineData("Origin=\"Aosda\" PlayerOption=\"Hidden\"", Names + Bodies)] // unknown option
+    [InlineData("PlayerOption=\"Starter\"", Names + Bodies)] // no origin
+    [InlineData(Starter + " Affinity=\"Storm Wind\"", Names + Bodies)] // an element key with a space
+    [InlineData(Starter, Bodies)] // no names
+    [InlineData(Starter, Names + "<Bodies />")] // an empty body list
+    [InlineData(Starter, Names + "<Bodies><Body Key=\"Ruddy\" Id=\"40\" RetailSkinColor=\"10\" /></Bodies>")] // retail value above 9
+    [InlineData(Starter, Names + "<Bodies><Body Key=\"Ruddy\" Id=\"40\" /><Body Key=\"Ruddy\" Id=\"41\" /></Bodies>")] // body key twice
+    [InlineData(Starter, Names + "<Bodies><Body Key=\"Ruddy\" Id=\"40\" /><Body Key=\"Ashen\" Id=\"40\" /></Bodies>")] // body id twice
     public void SchemaRejectsBadSpecies(string attributes, string body)
     {
-        // An unknown origin or option, a missing origin, an element key with a space, no names, an empty body
-        // list, a retail value above 9, and a body key or body id twice.
         Assert.NotEmpty(SchemaValidation.Validate(Make(attributes: attributes, body: body)));
     }
 
@@ -155,25 +157,20 @@ public class SpeciesTests
     private const string GnollBodies =
         "<Bodies><Body Key=\"Grey\" Id=\"90\" Default=\"true\" /><Body Key=\"Brown\" Id=\"91\" /></Bodies>";
 
-    private const string Playable = "Origin=\"Aosda\" PlayerOption=\"Starter\" Affinity=\"Wind\" Resistance=\"Wind\"";
-
     [Theory]
-    [InlineData(Playable, Names)]
-    [InlineData("Origin=\"Aosda\" PlayerOption=\"Unlockable\" Affinity=\"Wind\" Resistance=\"Wind\"", Names)]
-    [InlineData("Origin=\"Aosda\" PlayerOption=\"Starter\" Resistance=\"Wind\"", Names + GnollBodies)]
-    [InlineData("Origin=\"Aosda\" PlayerOption=\"Starter\" Affinity=\"Wind\"", Names + GnollBodies)]
-    [InlineData(Playable, Names + "<Bodies><Body Key=\"Grey\" Id=\"90\" /></Bodies>")]
-    [InlineData(Playable, Names + "<Bodies><Body Key=\"Grey\" Id=\"90\" Default=\"true\" /><Body Key=\"Brown\" Id=\"91\" Default=\"true\" /></Bodies>")]
-    [InlineData("Origin=\"Aosda\" PlayerOption=\"Starter\" BranchOf=\"Gnome\"", Names + GnollBodies)]
-    [InlineData("Origin=\"Aosda\" PlayerOption=\"Starter\" BranchOf=\"Vosk\"", Names + GnollBodies)]
-    [InlineData("Origin=\"Aosda\" PlayerOption=\"Starter\" BranchOf=\"Dwarf\"", Names + GnollBodies)]
-    [InlineData("Origin=\"Aosda\" PlayerOption=\"ByBranch\" BranchOf=\"Kobold\"", Names)]
-    [InlineData(Playable, GnollBodies)]
+    [InlineData(Playable, Names)] // a Starter species with no bodies
+    [InlineData("Origin=\"Aosda\" PlayerOption=\"Unlockable\" Affinity=\"Wind\" Resistance=\"Wind\"", Names)] // an Unlockable species with no bodies
+    [InlineData(Starter + " Resistance=\"Wind\"", Names + GnollBodies)] // no affinity
+    [InlineData(Starter + " Affinity=\"Wind\"", Names + GnollBodies)] // no resistance
+    [InlineData(Playable, Names + "<Bodies><Body Key=\"Grey\" Id=\"90\" /></Bodies>")] // no default body
+    [InlineData(Playable, Names + "<Bodies><Body Key=\"Grey\" Id=\"90\" Default=\"true\" /><Body Key=\"Brown\" Id=\"91\" Default=\"true\" /></Bodies>")] // two default bodies
+    [InlineData(Starter + " BranchOf=\"Gnome\"", Names + GnollBodies)] // a parent that is not loaded
+    [InlineData(Starter + " BranchOf=\"Vosk\"", Names + GnollBodies)] // a parent that is a branch
+    [InlineData(Starter + " BranchOf=\"Dwarf\"", Names + GnollBodies)] // a parent that is not ByBranch
+    [InlineData("Origin=\"Aosda\" PlayerOption=\"ByBranch\" BranchOf=\"Kobold\"", Names)] // a branch that is ByBranch
+    [InlineData(Playable, GnollBodies)] // no names
     public void ValidateRejectsOneProblem(string attributes, string body)
     {
-        // A playable species with no bodies (two options), no affinity, no resistance, no default body, two default
-        // bodies, a parent that is not loaded, that is a branch, or that is not ByBranch, a branch that is ByBranch,
-        // and no names.
         var manager = Catalog(Dwarf, Kobold, Vosk, Make("Gnoll", 9, attributes, body));
         manager.TryGetValue("Gnoll", out Species gnoll);
 

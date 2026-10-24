@@ -177,7 +177,7 @@ public partial class ElementTable : ILoadOnStart<ElementTable>, IAdditionalValid
 
         foreach (var dup in elements.Select(e => e.Key).Duplicates(KeyComparer))
             errors.Add($"Element key {dup} is not unique.");
-        foreach (var dup in elements.Select(e => e.Id).Duplicates(EqualityComparer<byte>.Default))
+        foreach (var dup in elements.Select(e => e.Id).Duplicates())
             errors.Add($"Element id {dup} is not unique.");
 
         foreach (var element in elements)

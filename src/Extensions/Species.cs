@@ -48,8 +48,16 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
 
     public bool TryGetBody(string key, out SpeciesBody body)
     {
-        body = string.IsNullOrEmpty(key) ? null : Bodies?.FirstOrDefault(b => KeyComparer.Equals(b.Key, key));
-        return body != null;
+        body = null;
+        if (string.IsNullOrEmpty(key) || Bodies == null) return false;
+        foreach (var candidate in Bodies)
+        {
+            if (!KeyComparer.Equals(candidate.Key, key)) continue;
+            body = candidate;
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>The parent of a branch, or null when the species is not a branch or the parent is not loaded.</summary>
@@ -75,19 +83,21 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
         var all = manager.Values<Species>().ToList();
         var errors = all.ToDictionary(s => s.Guid, s => s.Validate(manager));
 
-        // Two keys that differ only in case have one lower-case index key, so a lookup finds either species.
-        foreach (var key in all.Select(s => s.Key).Duplicates(KeyComparer))
-        foreach (var species in all.Where(s => KeyComparer.Equals(s.Key, key)))
-            errors[species.Guid].Add($"Species key {species.Key} differs from another key only in case.");
+        // Add a message to each species that shares a value with another species.
+        void Shared<T>(Func<Species, IEnumerable<T>> values, IEqualityComparer<T> comparer, Func<T, string> message)
+        {
+            var pairs = all.SelectMany(s => values(s).Where(v => v is not (null or "")).Distinct(comparer)
+                .Select(v => (Species: s, Value: v)));
+            foreach (var group in pairs.GroupBy(p => p.Value, comparer).Where(g => g.Count() > 1))
+            foreach (var (species, _) in group)
+                errors[species.Guid].Add(message(group.Key));
+        }
 
-        foreach (var group in all.GroupBy(s => s.Id).Where(g => g.Count() > 1))
-        foreach (var species in group)
-            errors[species.Guid].Add($"Species id {group.Key} is not unique.");
-
-        foreach (var group in all.SelectMany(s => (s.Bodies ?? []).Select(b => (Species: s, Body: b)))
-                     .GroupBy(x => x.Body.Id).Where(g => g.Select(x => x.Species).Distinct().Count() > 1))
-        foreach (var species in group.Select(x => x.Species).Distinct())
-            errors[species.Guid].Add($"Body id {group.Key} is used by more than one species.");
+        // Two keys that differ only in case have one lower-case index key, so a lookup finds either species. This is a
+        // stopgap: when the store reports a case-only collision for every type (HXML-34), remove it.
+        Shared<string>(s => [s.Key], KeyComparer, key => $"Species key {key} is not unique. Keys compare without case.");
+        Shared<byte>(s => [s.Id], null, id => $"Species id {id} is not unique.");
+        Shared<ushort>(s => (s.Bodies ?? []).Select(b => b.Id), null, id => $"Body id {id} is used by more than one species.");
 
         foreach (var species in all)
         {
@@ -113,8 +123,9 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
             errors.Add("The species has no Names.");
         if (bodies.Count == 0 && PlayerOption is SpeciesPlayerOption.Starter or SpeciesPlayerOption.Unlockable)
             errors.Add($"A {PlayerOption} species has no bodies.");
-        if (bodies.Count > 0 && bodies.Count(b => b.Default) != 1)
-            errors.Add($"Exactly one body must have Default=\"true\". This species has {bodies.Count(b => b.Default)}.");
+        var defaults = bodies.Count(b => b.Default);
+        if (bodies.Count > 0 && defaults != 1)
+            errors.Add($"Exactly one body must have Default=\"true\". This species has {defaults}.");
         foreach (var body in bodies.Where(b => string.IsNullOrEmpty(b.Key)))
             errors.Add($"Body id {body.Id} has no key.");
         foreach (var key in bodies.Select(b => b.Key).Duplicates(KeyComparer))
