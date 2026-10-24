@@ -60,23 +60,6 @@
     "South": 2,
     "West": 3
   },
-  "ElementType": {
-    "Belt": 13,
-    "Current": 14,
-    "Dark": 6,
-    "Earth": 4,
-    "Fire": 1,
-    "Light": 5,
-    "Metal": 8,
-    "Necklace": 12,
-    "None": 0,
-    "RandomExpanded": 11,
-    "RandomTemuair": 10,
-    "Undead": 9,
-    "Water": 2,
-    "Wind": 3,
-    "Wood": 7
-  },
   "ElementalModifierType": {
     "Augment": 0,
     "Resistance": 1

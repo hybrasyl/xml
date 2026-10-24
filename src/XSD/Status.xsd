@@ -33,7 +33,7 @@
       <xs:element name="Formula" type="xs:string" />
     </xs:sequence>
     <xs:attribute name="Type" type="hyb:DamageType" />
-    <xs:attribute name="Element" type="hyb:ElementType" />
+    <xs:attribute name="Element" type="hyb:ElementKey" />
   </xs:complexType>
 
   <xs:complexType name="StatusHeal">

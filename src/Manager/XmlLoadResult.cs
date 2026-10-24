@@ -40,3 +40,11 @@ public struct XmlProcessResult : IProcessResult
     public int TotalProcessed { get; set; }
     public int AdditionalCount { get; set; }
 }
+
+public struct XmlValidationResult : IValidationResult
+{
+    public XmlValidationResult() { }
+    public Dictionary<Guid, string> Errors { get; set; } = new();
+    public int ErrorCount => Errors.Count;
+    public int TotalProcessed { get; set; }
+}

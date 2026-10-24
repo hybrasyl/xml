@@ -21,9 +21,13 @@ namespace Hybrasyl.Xml.Objects
     public partial class ElementalModifier
     {
         
+        /// <summary>
+        /// <para xml:lang="en">Pattern: [A-Za-z][A-Za-z0-9]*.</para>
+        /// </summary>
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("[A-Za-z][A-Za-z0-9]*")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Element")]
-        public ElementType Element { get; set; }
+        public string Element { get; set; }
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Modifier")]

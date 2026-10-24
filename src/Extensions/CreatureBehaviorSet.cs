@@ -73,9 +73,10 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
     public static void ValidateAll(IWorldDataManager manager)
     {
-        var ret = new XmlProcessResult();
+        var ret = new XmlValidationResult();
         foreach (var cbs in manager.Values<CreatureBehaviorSet>())
         {
+            ret.TotalProcessed++;
             if (cbs.Castables?.Castable == null)
                 ret.Errors.Add(cbs.Guid, "Creature behavior set has no castables");
         }
@@ -152,19 +153,10 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
 
     // Helper functions to determine immunities
 
-    public bool ImmuneToElement(ElementType type, out CreatureImmunity immunity)
-    {
-        immunity = Immunities?.FirstOrDefault(predicate: x =>
-            x.Type == CreatureImmunityType.Element &&
-            string.Equals(x.Value, type.ToString(), StringComparison.CurrentCultureIgnoreCase));
-        return immunity != null;
-    }
-
     public bool ImmuneToElement(string type, out CreatureImmunity immunity)
     {
         immunity = Immunities?.FirstOrDefault(predicate: x =>
-            x.Type == CreatureImmunityType.Element &&
-            string.Equals(x.Value, type, StringComparison.CurrentCultureIgnoreCase));
+            x.Type == CreatureImmunityType.Element && ElementTable.KeyComparer.Equals(x.Value, type));
         return immunity != null;
     }
 

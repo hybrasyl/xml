@@ -24,7 +24,6 @@ namespace Hybrasyl.Xml.Objects
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.Generic.List<ElementTableTargetElement> _target;
         
-        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlElementAttribute("Target")]
         public System.Collections.Generic.List<ElementTableTargetElement> Target
         {
@@ -39,6 +38,19 @@ namespace Hybrasyl.Xml.Objects
         }
         
         /// <summary>
+        /// <para xml:lang="en">Gets a value indicating whether the Target collection is empty.</para>
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool TargetSpecified
+        {
+            get
+            {
+                return ((this.Target != null) 
+                            && (this.Target.Count != 0));
+            }
+        }
+        
+        /// <summary>
         /// <para xml:lang="en">Initializes a new instance of the <see cref="ElementTableSourceElement" /> class.</para>
         /// </summary>
         public ElementTableSourceElement()
@@ -46,8 +58,21 @@ namespace Hybrasyl.Xml.Objects
             this._target = new System.Collections.Generic.List<ElementTableTargetElement>();
         }
         
+        /// <summary>
+        /// <para xml:lang="en">Pattern: [A-Za-z][A-Za-z0-9]*.</para>
+        /// </summary>
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("[A-Za-z][A-Za-z0-9]*")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Element")]
-        public Hybrasyl.Xml.Enums.ElementType Element { get; set; }
+        public string Element { get; set; }
+        
+        [System.Xml.Serialization.XmlAttributeAttribute("DefaultMultiplier")]
+        public double DefaultMultiplier { get; set; }
+        
+        /// <summary>
+        /// <para xml:lang="en">Gets or sets a value indicating whether the DefaultMultiplier property is specified.</para>
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool DefaultMultiplierSpecified { get; set; }
     }
 }

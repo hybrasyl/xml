@@ -23,6 +23,64 @@ namespace Hybrasyl.Xml.Objects
     {
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
+        private System.Collections.Generic.List<ElementTableElement> _elements;
+        
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
+        [System.Xml.Serialization.XmlArrayAttribute("Elements")]
+        [System.Xml.Serialization.XmlArrayItemAttribute("Element", Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
+        public System.Collections.Generic.List<ElementTableElement> Elements
+        {
+            get
+            {
+                return _elements;
+            }
+            set
+            {
+                _elements = value;
+            }
+        }
+        
+        /// <summary>
+        /// <para xml:lang="en">Initializes a new instance of the <see cref="ElementTable" /> class.</para>
+        /// </summary>
+        public ElementTable()
+        {
+            this._elements = new System.Collections.Generic.List<ElementTableElement>();
+            this._groups = new System.Collections.Generic.List<ElementTableGroup>();
+            this._source = new System.Collections.Generic.List<ElementTableSourceElement>();
+        }
+        
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        private System.Collections.Generic.List<ElementTableGroup> _groups;
+        
+        [System.Xml.Serialization.XmlArrayAttribute("Groups")]
+        [System.Xml.Serialization.XmlArrayItemAttribute("Group", Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]
+        public System.Collections.Generic.List<ElementTableGroup> Groups
+        {
+            get
+            {
+                return _groups;
+            }
+            set
+            {
+                _groups = value;
+            }
+        }
+        
+        /// <summary>
+        /// <para xml:lang="en">Gets a value indicating whether the Groups collection is empty.</para>
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool GroupsSpecified
+        {
+            get
+            {
+                return ((this.Groups != null) 
+                            && (this.Groups.Count != 0));
+            }
+        }
+        
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.Generic.List<ElementTableSourceElement> _source;
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
@@ -37,14 +95,6 @@ namespace Hybrasyl.Xml.Objects
             {
                 _source = value;
             }
-        }
-        
-        /// <summary>
-        /// <para xml:lang="en">Initializes a new instance of the <see cref="ElementTable" /> class.</para>
-        /// </summary>
-        public ElementTable()
-        {
-            this._source = new System.Collections.Generic.List<ElementTableSourceElement>();
         }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
