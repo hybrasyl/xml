@@ -182,6 +182,7 @@ public partial class Statuses : HybrasylEntity<Statuses> { }
 public partial class TargetUrl : HybrasylEntity<TargetUrl> { }
 public partial class Time : HybrasylEntity<Time> { }
 public partial class TlsInfo : HybrasylEntity<TlsInfo> { }
+public partial class Trait : HybrasylEntity<Trait> { }
 public partial class Use : HybrasylEntity<Use> { }
 public partial class Variant : HybrasylEntity<Variant> { }
 public partial class VariantGroup : HybrasylEntity<VariantGroup> { }

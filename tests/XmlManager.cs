@@ -365,7 +365,7 @@ public class XmlManagerTests : IClassFixture<XmlManagerFixture>
     {
         Assert.True(fixture.SyncManager.TryGetValueByIndex<Item>("Variant All Belt", out var variant));
         Assert.True(fixture.SyncManager.TryGetValueByIndex<Item>("Abundance Variant All Belt", out var baseItem));
-        Assert.True(fixture.SyncManager.TryGetValue<VariantGroup>("enchant1", out var variantGroup));
+        Assert.True(fixture.SyncManager.TryGetValue<VariantGroup>("enchant", out var variantGroup));
     }
 
     [Fact]
