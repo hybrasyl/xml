@@ -34,22 +34,14 @@ namespace Hybrasyl.Xml.Objects
         [System.Xml.Serialization.XmlElementAttribute("ExclusiveGroup")]
         public string ExclusiveGroup { get; set; }
         
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private ExclusivePolicy _exclusivePolicy = Hybrasyl.Xml.Enums.ExclusivePolicy.Reject;
-        
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.ExclusivePolicy.Reject)]
         [System.Xml.Serialization.XmlElementAttribute("ExclusivePolicy")]
-        public ExclusivePolicy ExclusivePolicy
-        {
-            get
-            {
-                return _exclusivePolicy;
-            }
-            set
-            {
-                _exclusivePolicy = value;
-            }
-        }
+        public ExclusivePolicy ExclusivePolicy { get; set; }
+        
+        /// <summary>
+        /// <para xml:lang="en">Gets or sets a value indicating whether the ExclusivePolicy property is specified.</para>
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool ExclusivePolicySpecified { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.Generic.List<string> _conflictsWith;

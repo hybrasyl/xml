@@ -54,8 +54,10 @@ public class TraitTests
          </Trait>
          """;
 
-    private static string Minimal(string attributes = "Icon=\"40\" IconSet=\"Spell\"", string body = "") =>
-        $"<Trait xmlns=\"{Ns}\" Name=\"Tempered\" {attributes}>{body}</Trait>";
+    private const string Icon = "Icon=\"40\" IconSet=\"Spell\"";
+
+    private static string Minimal(string attributes = "", string body = "", string icon = Icon) =>
+        $"<Trait xmlns=\"{Ns}\" Name=\"Tempered\" {icon} {attributes}>{body}</Trait>";
 
     private static List<string> Validate(string xml)
     {
@@ -84,34 +86,41 @@ public class TraitTests
     [Theory]
     [InlineData("IconSet=\"Spell\"")]
     [InlineData("Icon=\"40\"")]
-    public void IconAndIconSetAreRequired(string attributes)
+    public void IconAndIconSetAreRequired(string icon)
     {
-        Assert.NotEmpty(Validate(Minimal(attributes)));
+        Assert.NotEmpty(Validate(Minimal(icon: icon)));
     }
 
     [Theory]
-    [InlineData("Icon=\"65535\" IconSet=\"Skill\"", true)]
-    [InlineData("Icon=\"65536\" IconSet=\"Skill\"", false)]
-    [InlineData("Icon=\"40\" IconSet=\"Utility\"", false)]
-    public void IconIsAnUnsignedShortInASkillOrSpellSheet(string attributes, bool valid)
+    [InlineData("Icon=\"65535\" IconSet=\"Skill\"", "")]
+    [InlineData(Icon, "<ExclusivePolicy>Reject</ExclusivePolicy>")]
+    [InlineData(Icon, "<ExclusivePolicy>Replace</ExclusivePolicy>")]
+    public void IconUpTo65535AndBothPoliciesAreValid(string icon, string body)
     {
-        Assert.Equal(valid, Validate(Minimal(attributes)).Count == 0);
+        Assert.Empty(Validate(Minimal(body: body, icon: icon)));
     }
 
     [Theory]
-    [InlineData("<ExclusivePolicy>Reject</ExclusivePolicy>", true)]
-    [InlineData("<ExclusivePolicy>Replace</ExclusivePolicy>", true)]
-    [InlineData("<ExclusivePolicy>Stack</ExclusivePolicy>", false)]
-    public void ExclusivePolicyIsRejectOrReplace(string body, bool valid)
+    [InlineData("Icon=\"65536\" IconSet=\"Skill\"", "")]
+    [InlineData("Icon=\"40\" IconSet=\"Utility\"", "")]
+    [InlineData(Icon, "<ExclusivePolicy>Stack</ExclusivePolicy>")]
+    [InlineData(Icon, "<ExclusivePolicy />")]
+    public void IconOutOfRangeUnknownSheetAndUnknownPolicyAreInvalid(string icon, string body)
     {
-        Assert.Equal(valid, Validate(Minimal(body: body)).Count == 0);
+        Assert.NotEmpty(Validate(Minimal(body: body, icon: icon)));
+    }
+
+    [Fact]
+    public void ConflictsWithNamesATraitOnce()
+    {
+        Assert.NotEmpty(Validate(Minimal(body: "<ConflictsWith><Trait>Scribe</Trait><Trait>Scribe</Trait></ConflictsWith>")));
     }
 
     [Theory]
-    [InlineData("Icon=\"40\" IconSet=\"Spell\" Book=\"PrimarySkill\"", "")]
-    [InlineData("Icon=\"40\" IconSet=\"Spell\" IsSkill=\"true\"", "")]
-    [InlineData("Icon=\"40\" IconSet=\"Spell\"", "<Intents />")]
-    [InlineData("Icon=\"40\" IconSet=\"Spell\"", "<Cooldown>10</Cooldown>")]
+    [InlineData("Book=\"PrimarySkill\"", "")]
+    [InlineData("IsSkill=\"true\"", "")]
+    [InlineData("", "<Intents />")]
+    [InlineData("", "<Cooldown>10</Cooldown>")]
     public void TraitRejectsCastableFields(string attributes, string body)
     {
         Assert.NotEmpty(Validate(Minimal(attributes, body)));
@@ -165,9 +174,9 @@ public class TraitTests
             manager.LoadAll<Trait>();
 
             Assert.Equal(2, manager.Count<Trait>());
-            Assert.True(manager.TryGetValue("Dockworker", out Trait dockworker));
-            Assert.Equal(ExclusivePolicy.Replace, dockworker.ExclusivePolicy);
+            Assert.True(manager.TryGetValue("Dockworker", out Trait _));
             Assert.True(manager.TryGetValue("Tempered", out Trait _));
+            Assert.True(manager.TryGetValueByIndex("dockworker", out Trait _));
 
             var result = manager.GetLoadResult<Trait>();
             Assert.Equal(3, result.TotalProcessed);

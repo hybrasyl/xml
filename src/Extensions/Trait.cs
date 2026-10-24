@@ -16,6 +16,7 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using System.Collections.Generic;
 using Hybrasyl.Xml.Interfaces;
 
 namespace Hybrasyl.Xml.Objects;
@@ -23,6 +24,8 @@ namespace Hybrasyl.Xml.Objects;
 public partial class Trait : ILoadOnStart<Trait>
 {
     public override string PrimaryKey => Name;
+
+    public override List<string> SecondaryKeys => Name == null ? [] : [Name.ToLower()];
 
     public new static void LoadAll(IWorldDataManager manager, string path) =>
         HybrasylEntity<Trait>.LoadAll(manager, path);

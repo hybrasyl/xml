@@ -56,7 +56,8 @@
       <xs:element name="Description" type="xs:string" minOccurs="0" maxOccurs="1" />
       <!-- A mechanical rule: a character has at most one trait from each group. Category is for display, and it does not set a group. -->
       <xs:element name="ExclusiveGroup" type="hyb:String8" minOccurs="0" maxOccurs="1" />
-      <xs:element name="ExclusivePolicy" type="hyb:ExclusivePolicy" minOccurs="0" maxOccurs="1" default="Reject" />
+      <!-- When this element is absent, the policy is Reject. The schema sets no default, because an empty element would then pass the schema and fail to load. -->
+      <xs:element name="ExclusivePolicy" type="hyb:ExclusivePolicy" minOccurs="0" maxOccurs="1" />
       <!-- Traits that a character cannot have at the same time as this trait. -->
       <xs:element name="ConflictsWith" type="hyb:TraitConflictList" minOccurs="0" maxOccurs="1" />
       <xs:element name="StatModifiers" type="hyb:StatModifiers" minOccurs="0" maxOccurs="1" />
@@ -68,6 +69,11 @@
     <xs:attribute name="Category" type="hyb:String8" use="optional" />
   </xs:complexType>
 
-  <xs:element name="Trait" type="hyb:Trait" />
+  <xs:element name="Trait" type="hyb:Trait">
+    <xs:unique name="TraitConflictUnique">
+      <xs:selector xpath="hyb:ConflictsWith/hyb:Trait" />
+      <xs:field xpath="." />
+    </xs:unique>
+  </xs:element>
 
 </xs:schema>
