@@ -57,6 +57,7 @@ public class WorldDataDirectoryTests
         ["ServerConfig"] = "serverconfigs",
         ["SpawnGroup"] = "spawngroups",
         ["Status"] = "statuses",
+        ["Trait"] = "traits",
         ["VariantGroup"] = "variantgroups",
         ["WorldMap"] = "worldmaps"
     };

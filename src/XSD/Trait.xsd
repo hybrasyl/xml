@@ -1,0 +1,73 @@
+<?xml version="1.0"
+      encoding="utf-8"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02"
+           xmlns:hyb="http://www.hybrasyl.com/XML/Hybrasyl/2020-02"
+           xmlns="http://www.hybrasyl.com/XML/Hybrasyl/2020-02" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:documentation xml:lang="en">
+      This file is part of Project Hybrasyl.
+
+      This program is free software; you can redistribute it and/or modify
+      it under the terms of the Affero General Public License as published by
+      the Free Software Foundation, version 3.
+
+      This program is distributed in the hope that it will be useful, but
+      without ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+      or FITNESS FOR A PARTICULAR PURPOSE. See the Affero General Public License
+      for more details.
+
+      You should have received a copy of the Affero General Public License along
+      with this program. If not, see http://www.gnu.org/licenses/ .
+
+      (C) 2020-2026 ERISCO, LLC
+
+      For contributors and individual authors please refer to CONTRIBUTORS.MD.
+    </xs:documentation>
+  </xs:annotation>
+
+  <!-- The icon sheet that an icon number is in. A castable's book selects its sheet. A trait has no book, so it names the sheet. -->
+  <xs:simpleType name="IconSet">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="Skill" />
+      <xs:enumeration value="Spell" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- What happens when a character gets a trait and already has a trait in the same ExclusiveGroup. -->
+  <xs:simpleType name="ExclusivePolicy">
+    <xs:restriction base="xs:token">
+      <!-- The new trait is not added. -->
+      <xs:enumeration value="Reject" />
+      <!-- The new trait removes the trait that the character has. -->
+      <xs:enumeration value="Replace" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="TraitConflictList">
+    <xs:sequence>
+      <xs:element name="Trait" type="hyb:String8" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- A passive property of a character. A trait is never used: it has no intents, book, cost, cooldown or targeting. Content that a player uses is a castable. -->
+  <xs:complexType name="Trait">
+    <xs:sequence>
+      <xs:element name="Description" type="xs:string" minOccurs="0" maxOccurs="1" />
+      <!-- A mechanical rule: a character has at most one trait from each group. Category is for display, and it does not set a group. -->
+      <xs:element name="ExclusiveGroup" type="hyb:String8" minOccurs="0" maxOccurs="1" />
+      <xs:element name="ExclusivePolicy" type="hyb:ExclusivePolicy" minOccurs="0" maxOccurs="1" default="Reject" />
+      <!-- Traits that a character cannot have at the same time as this trait. -->
+      <xs:element name="ConflictsWith" type="hyb:TraitConflictList" minOccurs="0" maxOccurs="1" />
+      <xs:element name="StatModifiers" type="hyb:StatModifiers" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <!-- The key. Characters save traits by name, so a renamed trait needs a migration. -->
+    <xs:attribute name="Name" type="hyb:String8" use="required" />
+    <xs:attribute name="Icon" type="xs:unsignedShort" use="required" />
+    <xs:attribute name="IconSet" type="hyb:IconSet" use="required" />
+    <xs:attribute name="Category" type="hyb:String8" use="optional" />
+  </xs:complexType>
+
+  <xs:element name="Trait" type="hyb:Trait" />
+
+</xs:schema>

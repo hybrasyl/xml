@@ -87,10 +87,18 @@
     "Waist": 11,
     "Weapon": 1
   },
+  "ExclusivePolicy": {
+    "Reject": 0,
+    "Replace": 1
+  },
   "Gender": {
     "Female": 2,
     "Male": 1,
     "Neutral": 0
+  },
+  "IconSet": {
+    "Skill": 0,
+    "Spell": 1
   },
   "IntentDirection": {
     "Back": 2,
