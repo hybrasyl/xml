@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
 using Hybrasyl.Xml.Manager;
@@ -165,6 +166,45 @@ public class TraitTests
 
         Assert.Equal("Background", trait.ExclusiveGroup.Value);
         Assert.Equal(ExclusivePolicy.Reject, trait.ExclusiveGroup.Policy);
+    }
+
+    // Validation
+
+    private static XmlDataManager Catalog(params string[] traits)
+    {
+        var manager = new XmlDataManager();
+        foreach (var xml in traits)
+            manager.Add(Trait.Deserialize(xml));
+        return manager;
+    }
+
+    private static string Named(string name, string body = "") =>
+        $"<Trait xmlns=\"{Ns}\" Name=\"{name}\" {Icon}>{body}</Trait>";
+
+    [Fact]
+    public void ValidateAcceptsConflictsWithLoadedTraits()
+    {
+        var manager = Catalog(Named("Dockworker", "<ConflictsWith><Trait>Scribe</Trait></ConflictsWith>"),
+            Named("Scribe"));
+        manager.ValidateAll<Trait>();
+
+        var result = manager.GetValidationResult<Trait>();
+        Assert.Equal(2, result.TotalProcessed);
+        Assert.Equal(0, result.ErrorCount);
+    }
+
+    [Theory]
+    [InlineData("<ConflictsWith><Trait>Courtier</Trait></ConflictsWith>")]
+    [InlineData("<ConflictsWith><Trait>Dockworker</Trait></ConflictsWith>")]
+    [InlineData("<ExclusiveGroup Policy=\"Replace\" />")]
+    public void ValidateRejectsWhatTheSchemaOrCatalogForbids(string body)
+    {
+        // An unknown trait, the trait itself, and a group with no name.
+        var manager = Catalog(Named("Dockworker", body));
+        Assert.Single(manager.Values<Trait>().Single().Validate(manager));
+
+        manager.ValidateAll<Trait>();
+        Assert.Equal(1, manager.GetValidationResult<Trait>().ErrorCount);
     }
 
     // Loading
