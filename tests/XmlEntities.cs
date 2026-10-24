@@ -49,15 +49,15 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
     [Fact]
     public void ElementSourceTableIsNotList()
     {
-        var check = new ElementTableSourceElement();
-        Assert.IsType<ElementType>(check.Element);
+        Assert.Equal(typeof(string),
+            typeof(ElementTableSourceElement).GetProperty(nameof(ElementTableSourceElement.Element))!.PropertyType);
     }
 
     [Fact]
     public void ElementTargetTableIsNotList()
     {
-        var check = new ElementTableTargetElement();
-        Assert.IsType<ElementType>(check.Element);
+        Assert.Equal(typeof(string),
+            typeof(ElementTableTargetElement).GetProperty(nameof(ElementTableTargetElement.Element))!.PropertyType);
     }
 
     [Fact]
@@ -122,7 +122,7 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
         var belt = fixture.SyncManager.Find<Item>(condition: x => x.Name.Contains("Light Variant Single Belt"))
             .FirstOrDefault();
         Assert.NotNull(belt);
-        Assert.True(belt.Properties.StatModifiers.BaseDefensiveElement == ElementType.Light);
+        Assert.Equal("Light", belt.Properties.StatModifiers.BaseDefensiveElement);
     }
 
     [Fact]
@@ -149,8 +149,7 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
     [Fact]
     public void StatusDamageIsNotList()
     {
-        var sd = new StatusDamage();
-        Assert.Equal(typeof(ElementType), sd.Element.GetType());
+        Assert.Equal(typeof(string), typeof(StatusDamage).GetProperty(nameof(StatusDamage.Element))!.PropertyType);
     }
 
     [Fact]
@@ -199,7 +198,7 @@ public class XmlEntityTests : IClassFixture<XmlManagerFixture>
 
         // Mutating the clone must not touch the original.
         var originalElement = original.Properties.StatModifiers.BaseDefensiveElement;
-        clone.Properties.StatModifiers.BaseDefensiveElement = ElementType.Fire;
+        clone.Properties.StatModifiers.BaseDefensiveElement = "Fire";
         Assert.Equal(originalElement, original.Properties.StatModifiers.BaseDefensiveElement);
         Assert.NotEqual(original.Properties.StatModifiers.BaseDefensiveElement,
             clone.Properties.StatModifiers.BaseDefensiveElement);

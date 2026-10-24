@@ -55,11 +55,10 @@ public partial class Variant
         if (Properties.StatModifiers is { } modifiers)
         {
             variantItem.Properties.StatModifiers += modifiers;
-            // The generated element properties have no Specified flag, so None is the only way to tell an
-            // element the variant leaves unset; the clone already holds the base item's.
-            if (modifiers.BaseDefensiveElement != ElementType.None)
+            // An element the variant leaves unset is null; the clone already holds the base item's.
+            if (!string.IsNullOrEmpty(modifiers.BaseDefensiveElement))
                 variantItem.Properties.StatModifiers.BaseDefensiveElement = modifiers.BaseDefensiveElement;
-            if (modifiers.BaseOffensiveElement != ElementType.None)
+            if (!string.IsNullOrEmpty(modifiers.BaseOffensiveElement))
                 variantItem.Properties.StatModifiers.BaseOffensiveElement = modifiers.BaseOffensiveElement;
         }
 

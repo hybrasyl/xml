@@ -229,12 +229,12 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
     [XmlIgnore] public byte MaxAbility => Properties.Restrictions?.Level?.Max ?? 255;
 
     [XmlIgnore]
-    public ElementType Element
+    public string Element
     {
         get
         {
-            var off = Properties.StatModifiers?.BaseOffensiveElement ?? ElementType.None;
-            var def = Properties.StatModifiers?.BaseDefensiveElement ?? ElementType.None;
+            var off = Properties.StatModifiers?.BaseOffensiveElement;
+            var def = Properties.StatModifiers?.BaseDefensiveElement;
             return Properties.Equipment?.Slot == EquipmentSlot.Necklace ? off : def;
         }
     }

@@ -63,13 +63,11 @@ namespace Hybrasyl.Xml.Objects
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         public bool TypeSpecified { get; set; }
         
-        [System.Xml.Serialization.XmlAttributeAttribute("Element")]
-        public Hybrasyl.Xml.Enums.ElementType Element { get; set; }
-        
         /// <summary>
-        /// <para xml:lang="en">Gets or sets a value indicating whether the Element property is specified.</para>
+        /// <para xml:lang="en">Pattern: [A-Za-z][A-Za-z0-9]*.</para>
         /// </summary>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool ElementSpecified { get; set; }
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("[A-Za-z][A-Za-z0-9]*")]
+        [System.Xml.Serialization.XmlAttributeAttribute("Element")]
+        public string Element { get; set; }
     }
 }

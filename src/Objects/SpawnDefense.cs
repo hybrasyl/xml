@@ -28,10 +28,10 @@ namespace Hybrasyl.Xml.Objects
         public string Mr { get; set; }
         
         [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private System.Collections.Generic.List<Hybrasyl.Xml.Enums.ElementType> _elements;
+        private System.Collections.Generic.List<string> _elements;
         
         [System.Xml.Serialization.XmlAttributeAttribute("Elements")]
-        public System.Collections.Generic.List<Hybrasyl.Xml.Enums.ElementType> Elements
+        public System.Collections.Generic.List<string> Elements
         {
             get
             {
@@ -61,7 +61,7 @@ namespace Hybrasyl.Xml.Objects
         /// </summary>
         public SpawnDefense()
         {
-            this._elements = new System.Collections.Generic.List<Hybrasyl.Xml.Enums.ElementType>();
+            this._elements = new System.Collections.Generic.List<string>();
         }
     }
 }

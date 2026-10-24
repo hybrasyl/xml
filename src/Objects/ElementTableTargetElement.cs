@@ -21,22 +21,13 @@ namespace Hybrasyl.Xml.Objects
     public partial class ElementTableTargetElement
     {
         
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        private Hybrasyl.Xml.Enums.ElementType _element = Hybrasyl.Xml.Enums.ElementType.None;
-        
-        [System.ComponentModel.DefaultValueAttribute(Hybrasyl.Xml.Enums.ElementType.None)]
+        /// <summary>
+        /// <para xml:lang="en">Pattern: [A-Za-z][A-Za-z0-9]*.</para>
+        /// </summary>
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("[A-Za-z][A-Za-z0-9]*")]
+        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Element")]
-        public Hybrasyl.Xml.Enums.ElementType Element
-        {
-            get
-            {
-                return _element;
-            }
-            set
-            {
-                _element = value;
-            }
-        }
+        public string Element { get; set; }
         
         [System.Xml.Serialization.XmlAttributeAttribute("Multiplier")]
         public double Multiplier { get; set; }

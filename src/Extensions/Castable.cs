@@ -42,7 +42,8 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
     public List<CastableReactor> Reactors => Effects?.Reactors ?? new List<CastableReactor>();
     public byte CastableLevel { get; set; }
 
-    public ElementType Element
+    /// <summary>One selector from <c>Elements</c>, or null. Resolve it with <see cref="ElementTable.TryResolve" />.</summary>
+    public string Element
     {
         get
         {
@@ -50,7 +51,7 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
             {
                 1 => Elements.First(),
                 > 1 => Elements.PickRandom(),
-                _ => ElementType.None
+                _ => null
             };
         }
     }

@@ -245,7 +245,7 @@ public class XmlDataManager : IWorldDataManager
                          AdditionalCount: result.AdditionalCount)))
             yield return summary;
 
-        foreach (var summary in Summarize<IValidationResult>(_validatableTypes, "GetProcessResult",
+        foreach (var summary in Summarize<IValidationResult>(_validatableTypes, "GetValidationResult",
                      (type, result) => new XmlResultSummary(XmlResultStage.Validation, type.Name,
                          result.TotalProcessed, result.ErrorCount, ResolveErrors(result.Errors, type))))
             yield return summary;
