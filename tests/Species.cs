@@ -114,6 +114,7 @@ public class SpeciesTests
         Assert.False(ashen.Default);
         Assert.Equal(0, ashen.RetailSkinColor);
         Assert.False(dwarf.TryGetBody("Pale", out _));
+        Assert.False(dwarf.TryGetBody("", out _));
     }
 
     // Validation
@@ -157,11 +158,25 @@ public class SpeciesTests
     }
 
     [Fact]
+    public void BranchWithoutALoadedParentHasNoElements()
+    {
+        var manager = Catalog(Vosk);
+        manager.TryGetValue("Vosk", out Species vosk);
+
+        Assert.Null(vosk.GetParent(manager));
+        Assert.Null(vosk.GetAffinity(manager));
+        Assert.Null(vosk.GetResistance(manager));
+    }
+
+    [Fact]
     public void BranchTakesElementsFromItsParent()
     {
         var manager = Catalog(Kobold, Vosk);
+        manager.TryGetValue("Kobold", out Species kobold);
         manager.TryGetValue("Vosk", out Species vosk);
 
+        Assert.Equal("Nature", kobold.GetAffinity(manager));
+        Assert.Equal("Wind", kobold.GetResistance(manager));
         Assert.True(vosk.IsBranch);
         Assert.Equal("Kobold", vosk.GetParent(manager).Key);
         Assert.Equal("Nature", vosk.GetAffinity(manager));
@@ -184,6 +199,10 @@ public class SpeciesTests
     [InlineData(Starter + " BranchOf=\"Dwarf\"", Names + GnollBodies)] // a parent that is not ByBranch
     [InlineData("Origin=\"Aosda\" PlayerOption=\"ByBranch\" BranchOf=\"Kobold\"", Names)] // a branch that is ByBranch
     [InlineData(Playable, GnollBodies)] // no names
+    [InlineData(Playable, "<Names Singular=\"Gnoll\" Plural=\"Gnolls\" />" + GnollBodies)] // a missing name form
+    [InlineData(Playable, "<Names Singular=\"\" Plural=\"Gnolls\" Adjective=\"Gnollish\" />" + GnollBodies)] // an empty name form
+    [InlineData(Playable, "<Names Singular=\"Gnoll\" Plural=\" \" Adjective=\"Gnollish\" />" + GnollBodies)] // a blank name form
+    [InlineData(Playable, "<Names Singular=\"Gnoll\" Plural=\"Gnolls\" Adjective=\"Gnollish \" />" + GnollBodies)] // a padded name form
     public void ValidateRejectsOneProblem(string attributes, string body)
     {
         var manager = Catalog(Dwarf, Kobold, Vosk, Make("Gnoll", 9, attributes, body));
@@ -209,6 +228,32 @@ public class SpeciesTests
     {
         var manager = Catalog(Dwarf, Make("DWARF", 9, body: Names + GnollBodies));
         Assert.Equal(2, ValidateAll(manager));
+    }
+
+    [Fact]
+    public void ValidateAllRejectsAByBranchSpeciesWithoutBranches()
+    {
+        var manager = Catalog(Kobold);
+        manager.TryGetValue("Kobold", out Species kobold);
+
+        Assert.Empty(kobold.Validate(manager));
+        Assert.Equal(1, ValidateAll(manager));
+        // BranchOf compares without case.
+        Assert.Equal(0, ValidateAll(Catalog(Kobold, Vosk.Replace("BranchOf=\"Kobold\"", "BranchOf=\"kobold\""))));
+    }
+
+    [Fact]
+    public void SpeciesWithNullBodiesIsValid()
+    {
+        // The constructor makes an empty list, but code can set Bodies to null.
+        var manager = Catalog(Kobold, Vosk);
+        manager.TryGetValue("Kobold", out Species kobold);
+        kobold.Bodies = null;
+
+        Assert.Null(kobold.DefaultBody);
+        Assert.False(kobold.TryGetBody("Moss", out _));
+        Assert.Empty(kobold.Validate(manager));
+        Assert.Equal(0, ValidateAll(manager));
     }
 
     [Fact]

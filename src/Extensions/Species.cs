@@ -86,8 +86,8 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
 
     /// <summary>
     ///     Run <see cref="Validate(IWorldDataManager)" /> on each species, and check the rules across species: keys that
-    ///     differ only in case, unique species ids, and body ids that are unique across all species. The manager runs
-    ///     it at load.
+    ///     differ only in case, unique species ids, body ids that are unique across all species, and a branch for each
+    ///     ByBranch species. The manager runs it at load.
     /// </summary>
     public static void ValidateAll(IWorldDataManager manager)
     {
@@ -111,6 +111,13 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
         Shared<byte>(s => [s.Id], null, id => $"Species id {id} is not unique.");
         Shared<ushort>(s => (s.Bodies ?? []).Select(b => b.Id), null, id => $"Body id {id} is used by more than one species.");
 
+        // Nobody can pick a ByBranch species without branches. The usual cause is a typo in a branch's BranchOf, which
+        // gives the branch an error, so the intended parent gets one too.
+        var parents = all.Where(s => s.IsBranch).Select(s => s.BranchOf).ToHashSet(KeyComparer);
+        foreach (var species in all.Where(s => s.PlayerOption == SpeciesPlayerOption.ByBranch && !s.IsBranch))
+            if (!parents.Contains(species.Key))
+                errors[species.Guid].Add("The species is ByBranch, but no species is a branch of it.");
+
         foreach (var species in all)
         {
             result.TotalProcessed++;
@@ -131,16 +138,20 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
         var errors = new List<string>();
         var bodies = Bodies ?? [];
 
-        if (IsBadKey(Key))
+        if (IsBadValue(Key))
             errors.Add("Key is empty, or it has a space at the start or the end.");
         if (Names == null)
             errors.Add("The species has no Names.");
+        else
+            foreach (var (form, name) in new[] { ("Singular", Names.Singular), ("Plural", Names.Plural), ("Adjective", Names.Adjective) })
+                if (IsBadValue(name))
+                    errors.Add($"The {form} name is empty, or it has a space at the start or the end.");
         if (bodies.Count == 0 && PlayerOption is SpeciesPlayerOption.Starter or SpeciesPlayerOption.Unlockable)
             errors.Add($"A {PlayerOption} species has no bodies.");
         var defaults = bodies.Count(b => b.Default);
         if (bodies.Count > 0 && defaults != 1)
             errors.Add($"Exactly one body must have Default=\"true\". This species has {defaults}.");
-        foreach (var body in bodies.Where(b => IsBadKey(b.Key)))
+        foreach (var body in bodies.Where(b => IsBadValue(b.Key)))
             errors.Add($"Body id {body.Id} has no key, or its key has a space at the start or the end.");
         foreach (var key in bodies.Select(b => b.Key).Duplicates(KeyComparer))
             errors.Add($"Body key {key} is not unique.");
@@ -173,8 +184,9 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
     }
 
     // Keys are saved, and the loader does not trim them, so " Dwarf " is a different key from "Dwarf". Validate
-    // rejects such a key instead of trimming it, because a change to a saved key must be explicit.
-    private static bool IsBadKey(string key) => string.IsNullOrWhiteSpace(key) || key.Trim() != key;
+    // rejects such a key instead of trimming it, because a change to a saved key must be explicit. The name forms go to
+    // the client, so the same check applies to them.
+    private static bool IsBadValue(string value) => string.IsNullOrWhiteSpace(value) || value.Trim() != value;
 
     /// <summary>
     ///     Check that <see cref="Affinity" /> and <see cref="Resistance" /> name elements of <paramref name="table" />.
