@@ -175,9 +175,9 @@ public partial class ElementTable : ILoadOnStart<ElementTable>, IAdditionalValid
         if (elements.Count == 0)
             errors.Add("The table defines no elements.");
 
-        foreach (var dup in Duplicates(elements.Select(e => e.Key), KeyComparer))
+        foreach (var dup in elements.Select(e => e.Key).Duplicates(KeyComparer))
             errors.Add($"Element key {dup} is not unique.");
-        foreach (var dup in Duplicates(elements.Select(e => e.Id), EqualityComparer<byte>.Default))
+        foreach (var dup in elements.Select(e => e.Id).Duplicates())
             errors.Add($"Element id {dup} is not unique.");
 
         foreach (var element in elements)
@@ -196,7 +196,7 @@ public partial class ElementTable : ILoadOnStart<ElementTable>, IAdditionalValid
         if (defaults != 1)
             errors.Add($"Exactly one element must have Default=\"true\". This table has {defaults}.");
 
-        foreach (var dup in Duplicates(groups.Select(g => g.Key), KeyComparer))
+        foreach (var dup in groups.Select(g => g.Key).Duplicates(KeyComparer))
             errors.Add($"Group key {dup} is not unique.");
         foreach (var group in groups)
         {
@@ -213,14 +213,14 @@ public partial class ElementTable : ILoadOnStart<ElementTable>, IAdditionalValid
 
         if (rows.Count == 0)
             errors.Add("The table has no Source rows.");
-        foreach (var dup in Duplicates(rows.Select(s => s.Element), KeyComparer))
+        foreach (var dup in rows.Select(s => s.Element).Duplicates(KeyComparer))
             errors.Add($"Source element {dup} has more than one row.");
         foreach (var row in rows)
         {
             var targets = row.Target ?? [];
             if (!TryGetElement(row.Element, out _))
                 errors.Add($"Source row {row.Element} names an element that the table does not define.");
-            foreach (var dup in Duplicates(targets.Select(t => t.Element), KeyComparer))
+            foreach (var dup in targets.Select(t => t.Element).Duplicates(KeyComparer))
                 errors.Add($"Source row {row.Element} has more than one Target for {dup}.");
             foreach (var target in targets.Where(t => !TryGetElement(t.Element, out _)))
                 errors.Add($"Source row {row.Element} has a Target for {target.Element}, which the table does not define.");
@@ -245,10 +245,4 @@ public partial class ElementTable : ILoadOnStart<ElementTable>, IAdditionalValid
         return group != null;
     }
 
-    // Each value that occurs more than once. An empty key is reported elsewhere, so it is not a duplicate here.
-    private static IEnumerable<T> Duplicates<T>(IEnumerable<T> values, IEqualityComparer<T> comparer) =>
-        values.Where(v => v is not (null or ""))
-            .GroupBy(v => v, comparer)
-            .Where(g => g.Count() > 1)
-            .Select(g => g.Key);
 }

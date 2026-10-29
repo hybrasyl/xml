@@ -20,8 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
-using System.Xml.Schema;
 using System.Xml.Serialization;
 using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
@@ -31,16 +29,7 @@ namespace Hybrasyl.XmlTests;
 
 public class ElementTableTests
 {
-    private const string Ns = "http://www.hybrasyl.com/XML/Hybrasyl/2020-02";
-
-    private static readonly Lazy<XmlSchemaSet> Schemas = new(() =>
-    {
-        var set = new XmlSchemaSet();
-        foreach (var file in Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "XSD"), "*.xsd"))
-            set.Add(Ns, file);
-        set.Compile();
-        return set;
-    });
+    private const string Ns = SchemaValidation.Ns;
 
     private const string Elements =
         "<Elements>" +
@@ -78,15 +67,7 @@ public class ElementTableTests
 
     private static ElementTable Sample(string attributes = "") => Deserialize(Table(FireRow + UndeadRow, attributes));
 
-    private static List<string> Validate(string xml)
-    {
-        var errors = new List<string>();
-        var settings = new XmlReaderSettings { ValidationType = ValidationType.Schema, Schemas = Schemas.Value };
-        settings.ValidationEventHandler += (_, e) => errors.Add(e.Message);
-        using var reader = XmlReader.Create(new StringReader(xml), settings);
-        while (reader.Read()) { }
-        return errors;
-    }
+    private static List<string> Validate(string xml) => SchemaValidation.Validate(xml);
 
     private static string AddElement(string element) => Elements.Replace("</Elements>", element + "</Elements>");
 

@@ -56,6 +56,7 @@ public class WorldDataDirectoryTests
         ["Npc"] = "npcs",
         ["ServerConfig"] = "serverconfigs",
         ["SpawnGroup"] = "spawngroups",
+        ["Species"] = "species",
         ["Status"] = "statuses",
         ["Trait"] = "traits",
         ["VariantGroup"] = "variantgroups",
@@ -92,6 +93,7 @@ public class WorldDataDirectoryTests
 
     [Theory]
     [InlineData("Status", "statuses")] // sibilant: -s takes -es, and this one is live
+    [InlineData("Species", "species")] // invariant plural, and this one is live
     [InlineData("Box", "boxes")]
     [InlineData("Buzz", "buzzes")]
     [InlineData("Branch", "branches")]

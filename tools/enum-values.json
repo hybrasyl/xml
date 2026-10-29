@@ -298,6 +298,17 @@
     "ItemProhibited": 1,
     "ItemRequired": 0
   },
+  "SpeciesOrigin": {
+    "Aosda": 0,
+    "Fanaidhe": 2,
+    "Tuatha": 1
+  },
+  "SpeciesPlayerOption": {
+    "ByBranch": 3,
+    "Locked": 0,
+    "Starter": 1,
+    "Unlockable": 2
+  },
   "SpellUseType": {
     "FourDigit": 3,
     "NoTarget": 5,

@@ -20,8 +20,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
-using System.Xml.Schema;
 using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
 using Xunit;
@@ -30,16 +28,7 @@ namespace Hybrasyl.XmlTests;
 
 public class TraitTests
 {
-    private const string Ns = "http://www.hybrasyl.com/XML/Hybrasyl/2020-02";
-
-    private static readonly Lazy<XmlSchemaSet> Schemas = new(() =>
-    {
-        var set = new XmlSchemaSet();
-        foreach (var file in Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "XSD"), "*.xsd"))
-            set.Add(Ns, file);
-        set.Compile();
-        return set;
-    });
+    private const string Ns = SchemaValidation.Ns;
 
     private const string Dockworker =
         $"""
@@ -59,15 +48,7 @@ public class TraitTests
     private static string Minimal(string attributes = "", string body = "", string icon = Icon) =>
         $"<Trait xmlns=\"{Ns}\" Name=\"Tempered\" {icon} {attributes}>{body}</Trait>";
 
-    private static List<string> Validate(string xml)
-    {
-        var errors = new List<string>();
-        var settings = new XmlReaderSettings { ValidationType = ValidationType.Schema, Schemas = Schemas.Value };
-        settings.ValidationEventHandler += (_, e) => errors.Add(e.Message);
-        using var reader = XmlReader.Create(new StringReader(xml), settings);
-        while (reader.Read()) { }
-        return errors;
-    }
+    private static List<string> Validate(string xml) => SchemaValidation.Validate(xml);
 
     // Schema
 
