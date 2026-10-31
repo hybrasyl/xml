@@ -1,0 +1,3 @@
+# Generated and hand-written model files use LF on every platform (HXML-26).
+src/Objects/*.cs text eol=lf
+src/Enums/*.cs text eol=lf
