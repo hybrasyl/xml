@@ -226,7 +226,7 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
 
     [XmlIgnore] public byte MaxLevel => Properties.Restrictions?.Level?.Max ?? 255;
 
-    [XmlIgnore] public byte MaxAbility => Properties.Restrictions?.Level?.Max ?? 255;
+    [XmlIgnore] public byte MaxAbility => Properties.Restrictions?.Ab?.Max ?? 255;
 
     [XmlIgnore]
     public string Element

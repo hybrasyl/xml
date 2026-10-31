@@ -34,6 +34,8 @@ defaults carry game semantics). The patch script is strict: if the
 generator's output shape changes, it fails loudly and writes nothing
 rather than emitting a subtly wrong model.
 
+The last step, `tools/normalize-generated.py`, writes `src/Objects` as the output path in each header and ends every line in `src/Objects` and `src/Enums` with LF, so a regeneration gives the same files on Windows, macOS and Linux.
+
 Some types are maintained by hand and are not generated: the flags enums
 in [Enums](https://github.com/hybrasyl/xml/tree/main/src/Enums),
 `HybrasylEntity` and its per-type bases file. Each says so in its header.

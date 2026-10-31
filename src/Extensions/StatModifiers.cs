@@ -169,6 +169,13 @@ public partial class StatModifiers
         sm1.BaseInboundDamageToMp = Combine(sm1.BaseInboundDamageToMp, sm2.BaseInboundDamageToMp);
         sm1.BonusInboundDamageToMp = Combine(sm1.BonusInboundDamageToMp, sm2.BonusInboundDamageToMp);
         sm1.Shield = Combine(sm1.Shield, sm2.Shield);
+        // Keep both lists. The server adds entries of the same type and element.
+        if (sm2.ElementalModifiers is { Count: > 0 })
+        {
+            sm1.ElementalModifiers ??= new List<ElementalModifier>();
+            sm1.ElementalModifiers.AddRange(sm2.ElementalModifiers);
+        }
+
         return sm1;
     }
 }

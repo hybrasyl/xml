@@ -36,7 +36,11 @@ if ! command -v "$XSCGEN" >/dev/null 2>&1; then
 fi
 
 NAMESPACE='http://www.hybrasyl.com/XML/Hybrasyl/2020-02=Hybrasyl.Xml.Objects'
-OUT="$(mktemp -d)"
+# xscgen writes its arguments, -o included, into each file header. A fixed
+# relative path keeps the header the same on every machine.
+# normalize-generated.py writes src/Objects in its place.
+OUT=obj/xscgen
+rm -rf "$OUT"
 trap 'rm -rf "$OUT"' EXIT
 
 # Every schema is passed individually, and there is deliberately no aggregate
@@ -54,11 +58,6 @@ trap 'rm -rf "$OUT"' EXIT
 
 cp "$OUT/Hybrasyl.Xml.Objects/"*.cs src/Objects/
 
-# xscgen records its own invocation in every file's header, including the
-# absolute -o path. Normalize it so regenerating on a different machine
-# produces no diff.
-sed -i 's| -o /[^ ]*| -o src/Objects|' src/Objects/*.cs
-
 python3 tools/patch-flags-enums.py
 
 # Restore each enum member's allocated value. xscgen emits none, so a member's
@@ -69,5 +68,8 @@ python3 tools/pin-enum-values.py
 # Enums are shared vocabulary with their own allocation contract, so they live
 # in Hybrasyl.Xml.Enums rather than alongside the data model.
 python3 tools/namespace-enums.py
+
+# Make the output the same on every platform. See tools/normalize-generated.py.
+python3 tools/normalize-generated.py
 
 echo "regenerate: done -- build and run the test suite before committing"
