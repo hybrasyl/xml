@@ -72,4 +72,23 @@ public class SchemaAdditionTests
     {
         Assert.NotEmpty(SchemaValidation.Validate(MapWith("""AmbientSound="256" """)));
     }
+
+    [Fact]
+    public void MapReadsItsScriptAfterSigns()
+    {
+        var xml = MapWith(children:
+            """<Signs><Sign Type="Sign" X="1" Y="1"><Name>A sign</Name></Sign></Signs><Script>mileth_map</Script>""");
+
+        Assert.Empty(SchemaValidation.Validate(xml));
+        Assert.Equal("mileth_map", Map.Deserialize(xml).Script);
+    }
+
+    [Fact]
+    public void AReactorScriptIsNotTheMapScript()
+    {
+        var xml = MapWith(children: """<Reactors><Reactor X="1" Y="1"><Script>trap</Script></Reactor></Reactors>""");
+
+        Assert.Empty(SchemaValidation.Validate(xml));
+        Assert.Null(Map.Deserialize(xml).Script);
+    }
 }

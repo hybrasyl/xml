@@ -204,6 +204,15 @@ namespace Hybrasyl.Xml.Objects
             }
         }
         
+        /// <summary>
+        /// <para xml:lang="en">Minimum length: 1.</para>
+        /// <para xml:lang="en">Maximum length: 255.</para>
+        /// </summary>
+        [System.ComponentModel.DataAnnotations.MinLengthAttribute(1)]
+        [System.ComponentModel.DataAnnotations.MaxLengthAttribute(255)]
+        [System.Xml.Serialization.XmlElementAttribute("Script")]
+        public string Script { get; set; }
+        
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Id")]
         public ushort Id { get; set; }
