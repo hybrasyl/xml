@@ -52,6 +52,7 @@ public enum DamageFlags
     NoDodge = 16,
     NoCrit = 32,
     NoElement = 64,
+    NoPositional = 128,
 }
 }
 #pragma warning restore

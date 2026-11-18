@@ -27,6 +27,12 @@ public class SchemaAdditionTests
 {
     private const string Ns = SchemaValidation.Ns;
 
+    private static void AssertValid(string xml)
+    {
+        var errors = SchemaValidation.Validate(xml);
+        Assert.True(errors.Count == 0, string.Join("; ", errors));
+    }
+
     private static string ItemWith(string vendor) =>
         $"""
          <Item xmlns="{Ns}">
@@ -45,7 +51,7 @@ public class SchemaAdditionTests
     [InlineData("""<Vendor ShopTab="Misc" />""")]
     public void VendorDescriptionIsOptional(string vendor)
     {
-        Assert.Empty(SchemaValidation.Validate(ItemWith(vendor)));
+        AssertValid(ItemWith(vendor));
         Assert.Equal("Misc", Item.Deserialize(ItemWith(vendor)).Properties.Vendor.ShopTab);
     }
 
@@ -55,7 +61,7 @@ public class SchemaAdditionTests
     [Fact]
     public void MapAmbientSoundDefaultsToNone()
     {
-        Assert.Empty(SchemaValidation.Validate(MapWith()));
+        AssertValid(MapWith());
         Assert.Equal(0, Map.Deserialize(MapWith()).AmbientSound);
     }
 
@@ -64,7 +70,7 @@ public class SchemaAdditionTests
     {
         var xml = MapWith("""Music="3" AmbientSound="12" """);
 
-        Assert.Empty(SchemaValidation.Validate(xml));
+        AssertValid(xml);
         Assert.Equal(12, Map.Deserialize(xml).AmbientSound);
     }
 
@@ -80,7 +86,7 @@ public class SchemaAdditionTests
         var xml = MapWith(children:
             """<Signs><Sign Type="Sign" X="1" Y="1"><Name>A sign</Name></Sign></Signs><Script>mileth_map</Script>""");
 
-        Assert.Empty(SchemaValidation.Validate(xml));
+        AssertValid(xml);
         Assert.Equal("mileth_map", Map.Deserialize(xml).Script);
     }
 
@@ -89,15 +95,16 @@ public class SchemaAdditionTests
     {
         var xml = MapWith(children: """<Reactors><Reactor X="1" Y="1"><Script>trap</Script></Reactor></Reactors>""");
 
-        Assert.Empty(SchemaValidation.Validate(xml));
+        AssertValid(xml);
         Assert.Null(Map.Deserialize(xml).Script);
     }
 
-    private static string CastableWith(string intent, string icon = "1") =>
+    private static string CastableWith(string intent, string icon = "1", string effects = "") =>
         $"""
          <Castable xmlns="{Ns}" Icon="{icon}" Book="PrimarySpell">
            <Name>Test Castable</Name>
            <Intents>{intent}</Intents>
+           {effects}
            <Mastery />
          </Castable>
          """;
@@ -107,7 +114,7 @@ public class SchemaAdditionTests
     {
         var xml = CastableWith("""<Intent><Beam Length="4" Width="3" Direction="Front" /></Intent>""");
 
-        Assert.Empty(SchemaValidation.Validate(xml));
+        AssertValid(xml);
         var beam = Assert.Single(Castable.Deserialize(xml).Intents[0].Beam);
         Assert.Equal(4, beam.Length);
         Assert.Equal(3, beam.Width);
@@ -119,7 +126,7 @@ public class SchemaAdditionTests
     {
         var xml = CastableWith("<Intent><Beam /></Intent>");
 
-        Assert.Empty(SchemaValidation.Validate(xml));
+        AssertValid(xml);
         var beam = Assert.Single(Castable.Deserialize(xml).Intents[0].Beam);
         Assert.Equal(1, beam.Length);
         Assert.Equal(1, beam.Width);
@@ -138,7 +145,7 @@ public class SchemaAdditionTests
     {
         var xml = CastableWith("""<Intent UseType="Prompt" Prompt="Speak the word:" />""");
 
-        Assert.Empty(SchemaValidation.Validate(xml));
+        AssertValid(xml);
         Assert.Equal("Speak the word:", Castable.Deserialize(xml).Intents[0].Prompt);
     }
 
@@ -146,5 +153,15 @@ public class SchemaAdditionTests
     public void IntentPromptIsOptional()
     {
         Assert.Null(Castable.Deserialize(CastableWith("""<Intent UseType="Prompt" />""")).Intents[0].Prompt);
+    }
+
+    [Fact]
+    public void DamageReadsTheNoPositionalFlag()
+    {
+        var xml = CastableWith("<Intent />", effects:
+            """<Effects><Damage Type="Direct"><Flags>NoCrit NoPositional</Flags><Simple>5</Simple><Formula>1</Formula></Damage></Effects>""");
+
+        AssertValid(xml);
+        Assert.Equal(DamageFlags.NoCrit | DamageFlags.NoPositional, Castable.Deserialize(xml).Effects.Damage.Flags);
     }
 }

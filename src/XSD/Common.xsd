@@ -186,6 +186,7 @@
               <xs:enumeration value="NoDodge" />
               <xs:enumeration value="NoCrit" />
               <xs:enumeration value="NoElement" />
+              <xs:enumeration value="NoPositional" />
             </xs:restriction>
           </xs:simpleType>
         </xs:list>
