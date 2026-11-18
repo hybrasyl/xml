@@ -34,7 +34,8 @@ public class CastableIntentTests
         ["Cross", (Action<CastableIntent>) (i => i.Cross.Add(new CastableCrossIntent()))],
         ["Square", (Action<CastableIntent>) (i => i.Square.Add(new CastableSquareIntent()))],
         ["Tile", (Action<CastableIntent>) (i => i.Tile.Add(new CastableTileIntent()))],
-        ["Cone", (Action<CastableIntent>) (i => i.Cone.Add(new CastableConeIntent()))]
+        ["Cone", (Action<CastableIntent>) (i => i.Cone.Add(new CastableConeIntent()))],
+        ["Beam", (Action<CastableIntent>) (i => i.Beam.Add(new CastableBeamIntent()))]
     ];
 
     [Fact]

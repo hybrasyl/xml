@@ -36,6 +36,7 @@ public partial class CastModifierReplace : HybrasylEntity<CastModifierReplace> {
 public partial class CastModifierSubtract : HybrasylEntity<CastModifierSubtract> { }
 public partial class CastRestriction : HybrasylEntity<CastRestriction> { }
 public partial class Castable : HybrasylEntity<Castable> { }
+public partial class CastableBeamIntent : HybrasylEntity<CastableBeamIntent> { }
 public partial class CastableConeIntent : HybrasylEntity<CastableConeIntent> { }
 public partial class CastableCrossIntent : HybrasylEntity<CastableCrossIntent> { }
 public partial class CastableDamage : HybrasylEntity<CastableDamage> { }

@@ -16,6 +16,7 @@
 //
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Objects;
 using Xunit;
 
@@ -90,5 +91,45 @@ public class SchemaAdditionTests
 
         Assert.Empty(SchemaValidation.Validate(xml));
         Assert.Null(Map.Deserialize(xml).Script);
+    }
+
+    private static string CastableWith(string intent, string icon = "1") =>
+        $"""
+         <Castable xmlns="{Ns}" Icon="{icon}" Book="PrimarySpell">
+           <Name>Test Castable</Name>
+           <Intents>{intent}</Intents>
+           <Mastery />
+         </Castable>
+         """;
+
+    [Fact]
+    public void BeamReadsLengthAndWidth()
+    {
+        var xml = CastableWith("""<Intent><Beam Length="4" Width="3" Direction="Front" /></Intent>""");
+
+        Assert.Empty(SchemaValidation.Validate(xml));
+        var beam = Assert.Single(Castable.Deserialize(xml).Intents[0].Beam);
+        Assert.Equal(4, beam.Length);
+        Assert.Equal(3, beam.Width);
+        Assert.Equal(IntentDirection.Front, beam.Direction);
+    }
+
+    [Fact]
+    public void BeamWithNoAttributesIsOneTileInFront()
+    {
+        var xml = CastableWith("<Intent><Beam /></Intent>");
+
+        Assert.Empty(SchemaValidation.Validate(xml));
+        var beam = Assert.Single(Castable.Deserialize(xml).Intents[0].Beam);
+        Assert.Equal(1, beam.Length);
+        Assert.Equal(1, beam.Width);
+        Assert.Equal(IntentDirection.None, beam.Direction);
+        Assert.Equal(VisualEffectType.Targets, beam.VisualEffect);
+    }
+
+    [Fact]
+    public void SchemaRejectsABeamWithAnEvenWidth()
+    {
+        Assert.NotEmpty(SchemaValidation.Validate(CastableWith("""<Intent><Beam Width="2" /></Intent>""")));
     }
 }

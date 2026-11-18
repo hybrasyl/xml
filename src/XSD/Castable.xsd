@@ -408,6 +408,16 @@
     <xs:attribute name="VisualEffect" type="hyb:VisualEffectType" default="Targets" />
   </xs:complexType>
 
+  <!-- A rectangle in front of the caster. Length is the forward extent, from the first tile in front.
+       Width is the extent across it, odd so that the beam is centered. Length 1 with a larger Width
+       is a wall. -->
+  <xs:complexType name="CastableBeamIntent">
+    <xs:attribute name="Length" type="xs:unsignedByte" use="optional" default="1" />
+    <xs:attribute name="Width" type="hyb:OddByte" use="optional" default="1" />
+    <xs:attribute name="Direction" type="hyb:IntentDirection" use="optional" default="None" />
+    <xs:attribute name="VisualEffect" type="hyb:VisualEffectType" default="Targets" />
+  </xs:complexType>
+
   <!-- Intent: What does the spell do, and whom does it affect? -->
   <xs:complexType name="CastableIntent">
     <xs:sequence>
@@ -417,6 +427,7 @@
       <xs:element name="Square" minOccurs="0" maxOccurs="unbounded" type="hyb:CastableSquareIntent" />
       <xs:element name="Tile" minOccurs="0" maxOccurs="unbounded" type="hyb:CastableTileIntent" />
       <xs:element name="Cone" minOccurs="0" maxOccurs="unbounded" type="hyb:CastableConeIntent" />
+      <xs:element name="Beam" minOccurs="0" maxOccurs="unbounded" type="hyb:CastableBeamIntent" />
     </xs:sequence>
     <xs:attribute name="UseType" type="hyb:SpellUseType" default="NoTarget" use="optional" />
     <xs:attribute name="Flags" type="hyb:IntentFlagsList" use="optional" />

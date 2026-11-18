@@ -63,6 +63,7 @@ namespace Hybrasyl.Xml.Objects
             this._square = new System.Collections.Generic.List<CastableSquareIntent>();
             this._tile = new System.Collections.Generic.List<CastableTileIntent>();
             this._cone = new System.Collections.Generic.List<CastableConeIntent>();
+            this._beam = new System.Collections.Generic.List<CastableBeamIntent>();
             this._flags = new System.Collections.Generic.List<Hybrasyl.Xml.Enums.IntentFlags>();
         }
         
@@ -179,6 +180,35 @@ namespace Hybrasyl.Xml.Objects
             {
                 return ((this.Cone != null) 
                             && (this.Cone.Count != 0));
+            }
+        }
+        
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        private System.Collections.Generic.List<CastableBeamIntent> _beam;
+        
+        [System.Xml.Serialization.XmlElementAttribute("Beam")]
+        public System.Collections.Generic.List<CastableBeamIntent> Beam
+        {
+            get
+            {
+                return _beam;
+            }
+            set
+            {
+                _beam = value;
+            }
+        }
+        
+        /// <summary>
+        /// <para xml:lang="en">Gets a value indicating whether the Beam collection is empty.</para>
+        /// </summary>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool BeamSpecified
+        {
+            get
+            {
+                return ((this.Beam != null) 
+                            && (this.Beam.Count != 0));
             }
         }
         
