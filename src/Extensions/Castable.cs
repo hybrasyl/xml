@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using Hybrasyl.Xml.Interfaces;
 
 namespace Hybrasyl.Xml.Objects;
@@ -37,10 +38,10 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
     }
 
     // Helper functions to deal with xml vagaries
-    public List<AddStatus> AddStatuses => Effects?.Statuses?.Add ?? new List<AddStatus>();
-    public List<RemoveStatus> RemoveStatuses => Effects?.Statuses?.Remove ?? new List<RemoveStatus>();
-    public List<CastableReactor> Reactors => Effects?.Reactors ?? new List<CastableReactor>();
-    public byte CastableLevel { get; set; }
+    [XmlIgnore] public List<AddStatus> AddStatuses => Effects?.Statuses?.Add ?? new List<AddStatus>();
+    [XmlIgnore] public List<RemoveStatus> RemoveStatuses => Effects?.Statuses?.Remove ?? new List<RemoveStatus>();
+    [XmlIgnore] public List<CastableReactor> Reactors => Effects?.Reactors ?? new List<CastableReactor>();
+    [XmlIgnore] public byte CastableLevel { get; set; }
 
     /// <summary>One selector from <c>Elements</c>, or null. Resolve it with <see cref="ElementTable.TryResolve" />.</summary>
     public string Element
@@ -56,7 +57,7 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
         }
     }
 
-    public DateTime LastCast { get; set; }
+    [XmlIgnore] public DateTime LastCast { get; set; }
 
     public bool IsSkill => Book is Book.PrimarySkill or Book.SecondarySkill or Book.UtilitySkill;
     public bool IsSpell => Book is Book.PrimarySpell or Book.SecondarySpell or Book.UtilitySpell;
@@ -65,9 +66,11 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
 
     public override string PrimaryKey => Id.ToString();
 
+    [XmlIgnore]
     public override List<string> SecondaryKeys =>
         Name == null ? new List<string>() : new List<string> { Name, Name.ToLower() };
 
+    [XmlIgnore]
     public List<string> CategoryList
     {
         get

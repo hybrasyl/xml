@@ -19,16 +19,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace Hybrasyl.Xml.Objects;
 
 public partial class StatModifiers
 {
+    [XmlIgnore]
     public List<ElementalModifier> Augments =>
         ElementalModifiers != null
             ? ElementalModifiers.Where(predicate: x => x.Type == ElementalModifierType.Augment).ToList()
             : new List<ElementalModifier>();
 
+    [XmlIgnore]
     public List<ElementalModifier> Resistances =>
         ElementalModifiers != null
             ? ElementalModifiers.Where(predicate: x => x.Type == ElementalModifierType.Resistance).ToList()

@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using Hybrasyl.Xml.Interfaces;
 
 namespace Hybrasyl.Xml.Objects;
@@ -39,9 +40,11 @@ public partial class Status : ICategorizable, ILoadOnStart<Status>
 
     public override string PrimaryKey => Name;
 
+    [XmlIgnore]
     public override List<string> SecondaryKeys =>
         Name == null ? new List<string>() : new List<string> { Name.ToLower() };
 
+    [XmlIgnore]
     public List<string> CategoryList => Categories.Select(selector: x => x.Value).ToList();
 
     public new static void LoadAll(IWorldDataManager manager, string path) =>

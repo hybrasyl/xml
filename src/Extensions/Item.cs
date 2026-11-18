@@ -51,12 +51,12 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
 
     [XmlIgnore][JsonIgnore] public Dictionary<string, List<Item>> Variants { get; set; }
 
-    [JsonIgnore]
+    [XmlIgnore][JsonIgnore]
     public IEnumerable<SlotRestriction> SlotRequirements =>
         (Properties?.Restrictions?.SlotRestrictions ?? new List<SlotRestriction>()).Where(predicate: x =>
             x.Type == SlotRestrictionType.ItemRequired);
 
-    [JsonIgnore]
+    [XmlIgnore][JsonIgnore]
     public IEnumerable<SlotRestriction> SlotProhibits =>
         (Properties?.Restrictions?.SlotRestrictions ?? new List<SlotRestriction>()).Where(predicate: x =>
             x.Type == SlotRestrictionType.ItemProhibited);

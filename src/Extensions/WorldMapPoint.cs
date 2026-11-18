@@ -19,12 +19,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace Hybrasyl.Xml.Objects;
 
 public partial class WorldMapPoint
 {
-    public WorldMap Parent { get; set; }
+    [XmlIgnore] public WorldMap Parent { get; set; }
     public int XOffset => X % 255;
     public int YOffset => Y % 255;
     public int XQuadrant => (X - XOffset) / 255;
