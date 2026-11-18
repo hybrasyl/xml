@@ -132,4 +132,19 @@ public class SchemaAdditionTests
     {
         Assert.NotEmpty(SchemaValidation.Validate(CastableWith("""<Intent><Beam Width="2" /></Intent>""")));
     }
+
+    [Fact]
+    public void IntentReadsPromptText()
+    {
+        var xml = CastableWith("""<Intent UseType="Prompt" Prompt="Speak the word:" />""");
+
+        Assert.Empty(SchemaValidation.Validate(xml));
+        Assert.Equal("Speak the word:", Castable.Deserialize(xml).Intents[0].Prompt);
+    }
+
+    [Fact]
+    public void IntentPromptIsOptional()
+    {
+        Assert.Null(Castable.Deserialize(CastableWith("""<Intent UseType="Prompt" />""")).Intents[0].Prompt);
+    }
 }

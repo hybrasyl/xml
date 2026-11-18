@@ -229,6 +229,15 @@ namespace Hybrasyl.Xml.Objects
             }
         }
         
+        /// <summary>
+        /// <para xml:lang="en">Minimum length: 1.</para>
+        /// <para xml:lang="en">Maximum length: 255.</para>
+        /// </summary>
+        [System.ComponentModel.DataAnnotations.MinLengthAttribute(1)]
+        [System.ComponentModel.DataAnnotations.MaxLengthAttribute(255)]
+        [System.Xml.Serialization.XmlAttributeAttribute("Prompt")]
+        public string Prompt { get; set; }
+        
         [System.Xml.Serialization.XmlIgnoreAttribute()]
         private System.Collections.Generic.List<Hybrasyl.Xml.Enums.IntentFlags> _flags;
         

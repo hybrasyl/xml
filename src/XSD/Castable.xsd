@@ -430,6 +430,8 @@
       <xs:element name="Beam" minOccurs="0" maxOccurs="unbounded" type="hyb:CastableBeamIntent" />
     </xs:sequence>
     <xs:attribute name="UseType" type="hyb:SpellUseType" default="NoTarget" use="optional" />
+    <!-- The text that the client shows for UseType Prompt. The client receives it in 0x17 AddSpell. -->
+    <xs:attribute name="Prompt" type="hyb:String8" use="optional" />
     <xs:attribute name="Flags" type="hyb:IntentFlagsList" use="optional" />
     <xs:attribute name="MaxTargets" type="xs:int" default="0" />
   </xs:complexType>
