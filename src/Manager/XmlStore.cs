@@ -161,6 +161,12 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
 
     private void StoreItem(T entity, dynamic key, params dynamic[] indexes)
     {
+        // A null key otherwise fails with a runtime binding error that does not say why. A blank key is
+        // stored, so that ValidateAll can report it with the rule that it breaks.
+        if (key is null)
+            throw new ArgumentException(
+                $"{typeof(T).Name} has no primary key, so the store cannot add it. Set the attribute or element that names it.");
+
         lock (_lock)
         {
             // If this is an overwrite, clean old entries up first & make sure the indexes are cleaned up
