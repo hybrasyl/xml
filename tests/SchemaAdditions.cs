@@ -164,4 +164,19 @@ public class SchemaAdditionTests
         AssertValid(xml);
         Assert.Equal(DamageFlags.NoCrit | DamageFlags.NoPositional, Castable.Deserialize(xml).Effects.Damage.Flags);
     }
+
+    [Fact]
+    public void CastableIconCanBeAbove255()
+    {
+        var xml = CastableWith("<Intent />", icon: "300");
+
+        AssertValid(xml);
+        Assert.Equal(300, Castable.Deserialize(xml).Icon);
+    }
+
+    [Fact]
+    public void SchemaRejectsACastableIconAbove65535()
+    {
+        Assert.NotEmpty(SchemaValidation.Validate(CastableWith("<Intent />", icon: "65536")));
+    }
 }

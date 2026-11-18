@@ -359,7 +359,7 @@
       <xs:element name="Mastery" type="hyb:CastableMastery" minOccurs="1" maxOccurs="1" />
     </xs:sequence>
     <!-- Castable attributes -->
-    <xs:attribute name="Icon" type="xs:unsignedByte" use="required" />
+    <xs:attribute name="Icon" type="xs:unsignedShort" use="required" />
     <xs:attribute name="Book" type="hyb:Book" use="required" />
     <xs:attribute name="Elements" type="hyb:ElementSelectorList" />
     <xs:attribute name="Lines" type="xs:unsignedByte" use="optional" default="0" />
