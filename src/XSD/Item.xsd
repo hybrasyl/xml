@@ -183,7 +183,7 @@
 
   <xs:complexType name="Vendor">
     <xs:sequence>
-      <xs:element name="Description" type="hyb:String8" />
+      <xs:element name="Description" minOccurs="0" type="hyb:String8" />
     </xs:sequence>
     <xs:attribute name="ShopTab" type="hyb:String8" use="required" />
   </xs:complexType>
