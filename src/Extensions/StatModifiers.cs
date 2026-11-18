@@ -77,9 +77,11 @@ public partial class StatModifiers
     public double GetElementalResistance(string element) =>
         GetElementalModifier(ElementalModifierType.Resistance, element);
 
+    // The server adds every matching entry to a total that starts at 0 (ElementalModifiers.Apply),
+    // and uses the total as a fraction: 0.03 is 3%. These helpers give the same value.
     private double GetElementalModifier(ElementalModifierType type, string element) =>
-        ElementalModifiers?.FirstOrDefault(predicate: x =>
-            x.Type == type && ElementTable.KeyComparer.Equals(x.Element, element))?.Modifier ?? 1.0;
+        ElementalModifiers?.Where(predicate: x => x.Type == type && ElementTable.KeyComparer.Equals(x.Element, element))
+            .Sum(selector: x => x.Modifier) ?? 0.0;
 
     public static string FormatBonusPct(string bonus, string name, float scale = 1)
     {

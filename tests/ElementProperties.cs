@@ -52,13 +52,29 @@ public class StatModifiersElementTests
     }
 
     [Fact]
-    public void ElementalModifierIsOneWhenNoEntryMatches()
+    public void ElementalModifierIsZeroWhenNoEntryMatches()
     {
         var modifiers = Modifiers();
         // The type must match too: Fire has an augment but no resistance.
-        Assert.Equal(1.0, modifiers.GetElementalResistance("Fire"));
-        Assert.Equal(1.0, modifiers.GetElementalAugment("Earth"));
-        Assert.Equal(1.0, new StatModifiers { ElementalModifiers = null }.GetElementalAugment("Fire"));
+        Assert.Equal(0.0, modifiers.GetElementalResistance("Fire"));
+        Assert.Equal(0.0, modifiers.GetElementalAugment("Earth"));
+        Assert.Equal(0.0, new StatModifiers { ElementalModifiers = null }.GetElementalAugment("Fire"));
+    }
+
+    [Fact]
+    public void ElementalModifierAddsEveryMatchingEntry()
+    {
+        var modifiers = Modifiers() + new StatModifiers
+        {
+            ElementalModifiers =
+            [
+                new ElementalModifier { Type = ElementalModifierType.Augment, Element = "fire", Modifier = 0.3 },
+                new ElementalModifier { Type = ElementalModifierType.Resistance, Element = "Fire", Modifier = 0.5 }
+            ]
+        };
+
+        // As the server does: 1.2 + 0.3. The resistance to Fire is not an augment.
+        Assert.Equal(1.5, modifiers.GetElementalAugment("Fire"), 10);
     }
 
     [Fact]
