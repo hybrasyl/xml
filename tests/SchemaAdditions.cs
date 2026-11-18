@@ -47,4 +47,29 @@ public class SchemaAdditionTests
         Assert.Empty(SchemaValidation.Validate(ItemWith(vendor)));
         Assert.Equal("Misc", Item.Deserialize(ItemWith(vendor)).Properties.Vendor.ShopTab);
     }
+
+    private static string MapWith(string attributes = "", string children = "") =>
+        $"""<Map xmlns="{Ns}" Id="500" X="10" Y="10" {attributes}><Name>Test Map</Name>{children}</Map>""";
+
+    [Fact]
+    public void MapAmbientSoundDefaultsToNone()
+    {
+        Assert.Empty(SchemaValidation.Validate(MapWith()));
+        Assert.Equal(0, Map.Deserialize(MapWith()).AmbientSound);
+    }
+
+    [Fact]
+    public void MapReadsAmbientSound()
+    {
+        var xml = MapWith("""Music="3" AmbientSound="12" """);
+
+        Assert.Empty(SchemaValidation.Validate(xml));
+        Assert.Equal(12, Map.Deserialize(xml).AmbientSound);
+    }
+
+    [Fact]
+    public void SchemaRejectsAnAmbientSoundAbove255()
+    {
+        Assert.NotEmpty(SchemaValidation.Validate(MapWith("""AmbientSound="256" """)));
+    }
 }

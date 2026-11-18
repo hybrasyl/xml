@@ -225,6 +225,23 @@ namespace Hybrasyl.Xml.Objects
             }
         }
         
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        private byte _ambientSound = 0;
+        
+        [System.ComponentModel.DefaultValueAttribute(0)]
+        [System.Xml.Serialization.XmlAttributeAttribute("AmbientSound")]
+        public byte AmbientSound
+        {
+            get
+            {
+                return _ambientSound;
+            }
+            set
+            {
+                _ambientSound = value;
+            }
+        }
+        
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("X")]
         public byte X { get; set; }

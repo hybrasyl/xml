@@ -123,6 +123,8 @@
     </xs:sequence>
     <xs:attribute name="Id" type="xs:unsignedShort" use="required" />
     <xs:attribute name="Music" type="xs:unsignedByte" default="0" />
+    <!-- 0 is no ambient sound. Another value is amb_{id} in an ambient sound pack. -->
+    <xs:attribute name="AmbientSound" type="xs:unsignedByte" default="0" />
     <xs:attribute name="X" type="xs:unsignedByte" use="required" />
     <xs:attribute name="Y" type="xs:unsignedByte" use="required" />
     <xs:attribute name="IsEnabled" type="xs:boolean" use="optional" default="true" />
