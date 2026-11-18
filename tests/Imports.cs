@@ -1,4 +1,5 @@
-﻿using Hybrasyl.Xml.Objects;
+﻿using Hybrasyl.Xml.Manager;
+using Hybrasyl.Xml.Objects;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -71,5 +72,66 @@ public class ImportTests(ITestOutputHelper output, XmlManagerFixture fixture) : 
         Assert.NotEmpty(importedSet.StatModifiers.BaseHp);
         Assert.Equal($"{setWithImport.BeforeImport.StatModifiers.BaseHp} + {importedSet.StatModifiers.BaseHp}", setWithImport.StatModifiers.BaseHp);
 
+    }
+
+    private static CreatureBehaviorSet SetWithBehavior(string name, CreatureHostility players, string cookie) => new()
+    {
+        Name = name,
+        Behavior = new CreatureBehavior
+        {
+            Hostility = players == null ? null : new CreatureHostilitySettings { Players = players },
+            SetCookies = cookie == null ? [] : [new CreatureCookie { Name = cookie, Value = "1" }]
+        }
+    };
+
+    [Fact]
+    public void CreatureBehaviorSetMissingImportLoadsTheSetAloneWithAnError()
+    {
+        var manager = new XmlDataManager();
+        var set = new CreatureBehaviorSet { Name = "Orphan", Import = "NoSuchSet" };
+        manager.Add(set, set.Name);
+
+        CreatureBehaviorSet.ProcessAll(manager);
+
+        Assert.True(manager.TryGetValue("Orphan", out CreatureBehaviorSet loaded));
+        Assert.Same(set, loaded);
+        var error = Assert.Single(manager.GetStore<CreatureBehaviorSet>().ProcessResult.Errors);
+        Assert.Contains("NoSuchSet", error.Value);
+    }
+
+    [Fact]
+    public void CreatureBehaviorSetImportWithNullImmunitiesKeepsTheSetsOwn()
+    {
+        var own = new CreatureImmunity { Type = CreatureImmunityType.Element, Value = "Fire" };
+        var set = new CreatureBehaviorSet { Name = "Child", Immunities = [own] };
+        var imported = new CreatureBehaviorSet { Name = "Parent", Immunities = null };
+
+        var merged = set & imported;
+
+        Assert.Equal([own], merged.Immunities);
+    }
+
+    [Fact]
+    public void CreatureBehaviorSetImportKeepsTheSetsOwnHostilityAndCookies()
+    {
+        var set = SetWithBehavior("Child", new CreatureHostility(), "child_cookie");
+        var imported = SetWithBehavior("Parent", new CreatureHostility(), "parent_cookie");
+
+        var merged = set & imported;
+
+        Assert.Same(set.Behavior.Hostility, merged.Behavior.Hostility);
+        Assert.Equal(["child_cookie"], merged.Behavior.SetCookies.Select(c => c.Name));
+    }
+
+    [Fact]
+    public void CreatureBehaviorSetImportAppliesTheImportedHostilityAndCookiesWhenTheSetHasNone()
+    {
+        var set = SetWithBehavior("Child", null, null);
+        var imported = SetWithBehavior("Parent", new CreatureHostility(), "parent_cookie");
+
+        var merged = set & imported;
+
+        Assert.Same(imported.Behavior.Hostility, merged.Behavior.Hostility);
+        Assert.Equal(["parent_cookie"], merged.Behavior.SetCookies.Select(c => c.Name));
     }
 }

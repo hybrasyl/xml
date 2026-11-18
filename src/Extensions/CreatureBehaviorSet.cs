@@ -57,6 +57,8 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
                 manager.FlagAsError(import, XmlError.ProcessingError,
                     $"{import.Filename}: Referenced import set {import.Import} not found");
                 ret.Errors.Add(import.Guid, $"{import.Filename}: Referenced import set {import.Import} not found");
+                // The set loads alone, without the import.
+                continue;
             }
 
             var newSet = import.Clone<CreatureBehaviorSet>(true);
@@ -116,8 +118,11 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
         if (cbs2.Behavior != null)
         {
             newCbs.Behavior.CastingSets.AddRange(cbs2.Behavior.CastingSets);
-            newCbs.Behavior.Hostility = cbs2.Behavior.Hostility;
-            newCbs.Behavior.SetCookies = cbs2.Behavior.SetCookies;
+            // The set's own Hostility and SetCookies win. The generated constructor makes SetCookies an
+            // empty list, so an empty list means that the set has no cookies.
+            newCbs.Behavior.Hostility ??= cbs2.Behavior.Hostility;
+            if (newCbs.Behavior.SetCookies is not { Count: > 0 })
+                newCbs.Behavior.SetCookies = cbs2.Behavior.SetCookies;
         }
 
         if (cbs1.Castables != null)
@@ -139,7 +144,9 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
                 newCbs.Castables.SpellCategories += $" {cbs2.Castables.SpellCategories}";
         }
 
-        newCbs.Immunities = cbs1.Immunities == null ? cbs2.Immunities : cbs1.Immunities.Union(cbs2.Immunities).ToList();
+        newCbs.Immunities = cbs1.Immunities == null ? cbs2.Immunities
+            : cbs2.Immunities == null ? cbs1.Immunities
+            : cbs1.Immunities.Union(cbs2.Immunities).ToList();
 
         if (cbs1.StatModifiers == null) newCbs.StatModifiers = cbs2.StatModifiers;
         else if (cbs2.StatModifiers == null) newCbs.StatModifiers = cbs1.StatModifiers;
