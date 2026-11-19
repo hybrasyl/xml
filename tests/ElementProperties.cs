@@ -86,8 +86,46 @@ public class StatModifiersElementTests
         var sum = Modifiers() + new StatModifiers { ElementalModifiers = [fireResistance] };
 
         Assert.Equal(3, sum.ElementalModifiers.Count);
-        Assert.Contains(fireResistance, sum.ElementalModifiers);
+        Assert.Contains(sum.ElementalModifiers, filter: x =>
+            x.Type == ElementalModifierType.Resistance && x.Element == "Fire" && x.Modifier == 0.03);
         Assert.Equal(1.2, sum.GetElementalAugment("Fire"));
+    }
+
+    [Fact]
+    public void SumLeavesBothOperandsUnchanged()
+    {
+        var left = Modifiers();
+        left.BonusStr = "1";
+        var right = new StatModifiers
+        {
+            BonusStr = "2",
+            ElementalModifiers =
+                [new ElementalModifier { Type = ElementalModifierType.Augment, Element = "Fire", Modifier = 0.3 }]
+        };
+
+        _ = left + right;
+        var sum = left + right;
+
+        Assert.Equal("1", left.BonusStr);
+        Assert.Equal(2, left.ElementalModifiers.Count);
+        Assert.Equal("2", right.BonusStr);
+        Assert.Single(right.ElementalModifiers);
+        Assert.Equal("3", sum.BonusStr);
+        Assert.Equal(3, sum.ElementalModifiers.Count);
+    }
+
+    [Fact]
+    public void SumSharesNoEntryWithTheOperands()
+    {
+        var left = Modifiers();
+        var right = Modifiers();
+
+        var sum = left + right;
+        sum.ElementalModifiers[0].Modifier = 9;
+        sum.ElementalModifiers[2].Modifier = 9;
+
+        Assert.Equal(1.2, left.GetElementalAugment("Fire"));
+        Assert.Equal(1.2, right.GetElementalAugment("Fire"));
     }
 
     [Fact]
