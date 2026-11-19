@@ -22,9 +22,9 @@ namespace Hybrasyl.Xml.Objects
     {
         
         /// <summary>
-        /// <para xml:lang="en">Pattern: 25[135].</para>
+        /// <para xml:lang="en">Pattern: 25[135]|2[0-4][13579]|1[0-9][13579]|[1-9][13579]|[13579].</para>
         /// </summary>
-        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("25[135]")]
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("25[135]|2[0-4][13579]|1[0-9][13579]|[1-9][13579]|[13579]")]
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Side")]
         public byte Side { get; set; }

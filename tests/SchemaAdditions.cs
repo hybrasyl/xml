@@ -16,6 +16,9 @@
 //
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Objects;
 using Xunit;
@@ -138,6 +141,24 @@ public class SchemaAdditionTests
     public void SchemaRejectsABeamWithAnEvenWidth()
     {
         Assert.NotEmpty(SchemaValidation.Validate(CastableWith("""<Intent><Beam Width="2" /></Intent>""")));
+    }
+
+    // xscgen copies the OddByte pattern into a RegularExpression attribute. Both must accept every odd
+    // byte and reject every even byte.
+    [Theory]
+    [InlineData(typeof(CastableBeamIntent), "Width", "Beam")]
+    [InlineData(typeof(CastableSquareIntent), "Side", "Square")]
+    public void OddByteSchemaAndAttributeAgreeOnEveryByte(Type type, string property, string element)
+    {
+        var attribute = type.GetProperty(property)!.GetCustomAttribute<RegularExpressionAttribute>()!;
+
+        for (var value = 0; value <= 255; value++)
+        {
+            var odd = value % 2 == 1;
+            var xml = CastableWith($"""<Intent><{element} {property}="{value}" /></Intent>""");
+            Assert.True(odd == (SchemaValidation.Validate(xml).Count == 0), $"schema, {property}={value}");
+            Assert.True(odd == attribute.IsValid(value.ToString()), $"attribute, {property}={value}");
+        }
     }
 
     [Fact]

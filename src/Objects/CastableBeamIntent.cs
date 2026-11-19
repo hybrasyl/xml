@@ -42,10 +42,10 @@ namespace Hybrasyl.Xml.Objects
         private byte _width = 1;
         
         /// <summary>
-        /// <para xml:lang="en">Pattern: 25[135].</para>
+        /// <para xml:lang="en">Pattern: 25[135]|2[0-4][13579]|1[0-9][13579]|[1-9][13579]|[13579].</para>
         /// </summary>
         [System.ComponentModel.DefaultValueAttribute(1)]
-        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("25[135]")]
+        [System.ComponentModel.DataAnnotations.RegularExpressionAttribute("25[135]|2[0-4][13579]|1[0-9][13579]|[1-9][13579]|[13579]")]
         [System.Xml.Serialization.XmlAttributeAttribute("Width")]
         public byte Width
         {

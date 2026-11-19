@@ -50,14 +50,13 @@
     </xs:restriction>
   </xs:simpleType>
 
-  <!-- An odd byte, used in castables -->
+  <!-- An odd byte, used in castables. One pattern, not five: xscgen writes only
+       the last pattern of a type into the generated RegularExpression attribute.
+       The longest branch is first, because that attribute must match the whole
+       value and .NET takes the first branch that matches. -->
   <xs:simpleType name="OddByte">
     <xs:restriction base="xs:unsignedByte">
-      <xs:pattern value="[13579]" />
-      <xs:pattern value="[1-9][13579]" />
-      <xs:pattern value="1[0-9][13579]" />
-      <xs:pattern value="2[0-4][13579]" />
-      <xs:pattern value="25[135]" />
+      <xs:pattern value="25[135]|2[0-4][13579]|1[0-9][13579]|[1-9][13579]|[13579]" />
     </xs:restriction>
   </xs:simpleType>
 
