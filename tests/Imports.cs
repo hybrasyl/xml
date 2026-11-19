@@ -112,6 +112,30 @@ public class ImportTests(ITestOutputHelper output, XmlManagerFixture fixture) : 
     }
 
     [Fact]
+    public void CreatureBehaviorSetImportWithNoImmunitiesOfItsOwnTakesTheImported()
+    {
+        var inherited = new CreatureImmunity { Type = CreatureImmunityType.Element, Value = "Water" };
+        var set = new CreatureBehaviorSet { Name = "Child", Immunities = null };
+        var imported = new CreatureBehaviorSet { Name = "Parent", Immunities = [inherited] };
+
+        var merged = set & imported;
+
+        Assert.Equal([inherited], merged.Immunities);
+    }
+
+    [Fact]
+    public void CreatureBehaviorSetImportAppliesTheImportedCookiesWhenTheSetHasANullList()
+    {
+        var set = SetWithBehavior("Child", null, null);
+        set.Behavior.SetCookies = null;
+        var imported = SetWithBehavior("Parent", null, "parent_cookie");
+
+        var merged = set & imported;
+
+        Assert.Equal(["parent_cookie"], merged.Behavior.SetCookies.Select(c => c.Name));
+    }
+
+    [Fact]
     public void CreatureBehaviorSetImportKeepsTheSetsOwnHostilityAndCookies()
     {
         var set = SetWithBehavior("Child", new CreatureHostility(), "child_cookie");
