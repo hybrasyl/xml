@@ -18,6 +18,7 @@
 
 using System;
 using System.IO;
+using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;
 using Hybrasyl.Xml.Objects;
 using Xunit;
@@ -39,20 +40,76 @@ public class MissingPrimaryKeyTests
     [Fact]
     public void LoadRecordsTheMissingPrimaryKeyForTheFile()
     {
+        var result = LoadOne<Species>($"""<Species xmlns="{SchemaValidation.Ns}" Id="4" />""", Species.LoadAll);
+
+        Assert.Equal(0, result.SuccessCount);
+        Assert.Contains("Species has no primary key", Assert.Single(result.Errors).Value);
+    }
+
+    // Item and Castable compute the key from Name, so a file with no Name has no key.
+    [Fact]
+    public void LoadRecordsTheMissingNameOfAnItem()
+    {
+        var result = LoadOne<Item>($"""<Item xmlns="{SchemaValidation.Ns}" />""", Item.LoadAll);
+
+        Assert.Equal(0, result.SuccessCount);
+        Assert.Contains("Item has no primary key", Assert.Single(result.Errors).Value);
+    }
+
+    [Fact]
+    public void LoadRecordsTheMissingNameOfACastable()
+    {
+        var result = LoadOne<Castable>($"""<Castable xmlns="{SchemaValidation.Ns}" />""", Castable.LoadAll);
+
+        Assert.Equal(0, result.SuccessCount);
+        Assert.Contains("Castable has no primary key", Assert.Single(result.Errors).Value);
+    }
+
+    // The key of a map is its Id. Its Name is a secondary key.
+    [Fact]
+    public void LoadRecordsTheMissingNameOfAMap()
+    {
+        var result = LoadOne<Map>($"""<Map xmlns="{SchemaValidation.Ns}" Id="500" X="10" Y="10" />""", Map.LoadAll);
+
+        Assert.Equal(0, result.SuccessCount);
+        Assert.Contains("Map has a null secondary key", Assert.Single(result.Errors).Value);
+    }
+
+    [Fact]
+    public void StoreRejectsANullSecondaryKeyWithAClearMessage()
+    {
+        var manager = new XmlDataManager();
+
+        var error = Assert.Throws<ArgumentException>(() =>
+            manager.AddWithIndex(new Species { Key = "elf" }, "elf", (string?)null));
+
+        Assert.Contains("Species has a null secondary key", error.Message);
+    }
+
+    // The store also reads the entity's own secondary keys, which can differ from the indexes passed in.
+    [Fact]
+    public void StoreRejectsANullSecondaryKeyOfTheEntity()
+    {
+        var manager = new XmlDataManager();
+
+        var error = Assert.Throws<ArgumentException>(() =>
+            manager.AddWithIndex(new Map { Id = 500, Name = null }, "500", "alias"));
+
+        Assert.Contains("Map has a null secondary key", error.Message);
+    }
+
+    private static ILoadResult LoadOne<T>(string xml, Action<IWorldDataManager, string> loadAll)
+        where T : HybrasylEntity<T>
+    {
         var root = Path.Combine(Path.GetTempPath(), $"hybxml-{Guid.NewGuid()}");
-        var dir = Path.Combine(root, WorldDataDirectory.NameFor<Species>());
+        var dir = Path.Combine(root, WorldDataDirectory.NameFor<T>());
         Directory.CreateDirectory(dir);
         try
         {
-            var file = Path.Combine(dir, "nokey.xml");
-            File.WriteAllText(file, $"""<Species xmlns="{SchemaValidation.Ns}" Id="4" />""");
+            File.WriteAllText(Path.Combine(dir, "nokey.xml"), xml);
             var manager = new XmlDataManager(root);
-
-            Species.LoadAll(manager, root);
-
-            var result = manager.GetStore<Species>().LoadResult;
-            Assert.Equal(0, result.SuccessCount);
-            Assert.Contains("Species has no primary key", Assert.Single(result.Errors).Value);
+            loadAll(manager, root);
+            return manager.GetStore<T>().LoadResult;
         }
         finally
         {

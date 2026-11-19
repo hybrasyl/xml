@@ -64,7 +64,8 @@ public partial class Castable : ILoadOnStart<Castable>, ICategorizable
 
     public bool OnCooldown => Cooldown > 0 && (DateTime.Now - LastCast).TotalSeconds < Cooldown;
 
-    public override string PrimaryKey => Id.ToString();
+    // Id hashes Name, so a castable with no Name has no key. The store then rejects it with a clear message.
+    public override string PrimaryKey => Name is null ? null : Id.ToString();
 
     [XmlIgnore]
     public override List<string> SecondaryKeys =>

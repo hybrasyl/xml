@@ -64,7 +64,8 @@ public partial class Item : ICategorizable, ILoadOnStart<Item>, IPostProcessable
     public string Id => GenerateId(Name, Gender);
     public int IdInt => int.Parse(Id, NumberStyles.HexNumber);
 
-    [XmlIgnore] public override string PrimaryKey => Id;
+    // Id hashes Name, so an item with no Name has no key. The store then rejects it with a clear message.
+    [XmlIgnore] public override string PrimaryKey => Name is null ? null : Id;
 
     [XmlIgnore]
     public override List<string> SecondaryKeys =>

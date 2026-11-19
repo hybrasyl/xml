@@ -166,6 +166,14 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
         if (key is null)
             throw new ArgumentException(
                 $"{typeof(T).Name} has no primary key, so the store cannot add it. Set the attribute or element that names it.");
+        // A null secondary key (for example a map with no Name) fails the same way.
+        foreach (var index in indexes)
+            if (index is null)
+                throw new ArgumentException(
+                    $"{typeof(T).Name} has a null secondary key, so the store cannot add it. Set the attribute or element that names it.");
+        if (entity.SecondaryKeys.Contains(null))
+            throw new ArgumentException(
+                $"{typeof(T).Name} has a null secondary key, so the store cannot add it. Set the attribute or element that names it.");
 
         lock (_lock)
         {
