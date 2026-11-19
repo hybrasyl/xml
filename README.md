@@ -22,9 +22,10 @@ found in [Extensions](https://github.com/hybrasyl/xml/tree/main/src/Extensions).
 Generation runs headless on any platform:
 
 ```sh
-dotnet tool install -g dotnet-xscgen
 tools/regenerate.sh
 ```
+
+`dotnet-tools.json` pins the `xscgen` version, and the script restores it. A different version gives different files, so change the pin only in a commit that also regenerates `src/Objects`.
 
 `regenerate.sh` runs `xscgen` over every schema and then
 `tools/patch-flags-enums.py`, which applies the wire-format fixups

@@ -19,7 +19,8 @@
 
 # Regenerate src/Objects from src/XSD (HTOO-377).
 #
-# Requires: dotnet tool install -g dotnet-xscgen
+# Requires: the .NET SDK. dotnet-tools.json pins the xscgen version, and
+# the script restores it. A different xscgen version gives different files.
 #
 # Generation is two steps: xscgen emits the model, then
 # patch-flags-enums.py applies the wire-format fixups XmlSerializer needs
@@ -29,11 +30,8 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-XSCGEN="${XSCGEN:-$HOME/.dotnet/tools/xscgen}"
-if ! command -v "$XSCGEN" >/dev/null 2>&1; then
-    echo "xscgen not found at $XSCGEN -- run: dotnet tool install -g dotnet-xscgen" >&2
-    exit 1
-fi
+dotnet tool restore >/dev/null
+XSCGEN=(dotnet tool run xscgen)
 
 NAMESPACE='http://www.hybrasyl.com/XML/Hybrasyl/2020-02=Hybrasyl.Xml.Objects'
 # xscgen writes its arguments, -o included, into each file header. A fixed
@@ -48,7 +46,7 @@ trap 'rm -rf "$OUT"' EXIT
 # defines every type twice, which xscgen reports by exiting 4 while still
 # emitting correct output -- a nonzero exit we would then have to ignore.
 # shellcheck disable=SC2046  # deliberate word splitting over the schema list
-"$XSCGEN" $(ls src/XSD/*.xsd) \
+"${XSCGEN[@]}" $(ls src/XSD/*.xsd) \
     -o "$OUT" \
     -n "$NAMESPACE" \
     --separateFiles \
