@@ -65,6 +65,19 @@ public class MissingPrimaryKeyTests
         Assert.Contains("Castable has no primary key", Assert.Single(result.Errors).Value);
     }
 
+    [Theory]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void LoadRecordsTheBlankNameOfAnItemOrACastable(string name)
+    {
+        var item = LoadOne<Item>($"""<Item xmlns="{SchemaValidation.Ns}"><Name>{name}</Name></Item>""", Item.LoadAll);
+        var castable = LoadOne<Castable>($"""<Castable xmlns="{SchemaValidation.Ns}"><Name>{name}</Name></Castable>""",
+            Castable.LoadAll);
+
+        Assert.Contains("Item has no primary key", Assert.Single(item.Errors).Value);
+        Assert.Contains("Castable has no primary key", Assert.Single(castable.Errors).Value);
+    }
+
     // The key of a map is its Id. Its Name is a secondary key.
     [Fact]
     public void LoadRecordsTheMissingNameOfAMap()
