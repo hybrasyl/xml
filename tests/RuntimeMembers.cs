@@ -90,4 +90,11 @@ public class RuntimeMemberTests
         Assert.Equal(["dockworker"], new Trait { Name = "Dockworker" }.SecondaryKeys);
         Assert.Empty(new Trait { Name = null }.SecondaryKeys);
     }
+
+    [Fact]
+    public void SpeciesSecondaryKeyIsTheLowercaseKey()
+    {
+        Assert.Equal(["elf"], new Species { Key = "Elf" }.SecondaryKeys);
+        Assert.Empty(new Species { Key = null }.SecondaryKeys);
+    }
 }

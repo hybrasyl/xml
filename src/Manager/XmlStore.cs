@@ -111,10 +111,10 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
     public bool ContainsIndex(dynamic index) => _index.ContainsKey(GetStoreKey(index));
 
     public bool Remove(dynamic name) =>
-        _index.TryGetValue(GetStoreKey(name, true), out Guid guid) && DeleteItem(guid, name);
+        _index.TryGetValue(GetStoreKey(name, true), out Guid guid) && RemoveEntity(guid);
 
-    public bool RemoveByIndex(dynamic index) => _index.TryGetValue(GetStoreKey(index, false), out Guid guid) &&
-                                                DeleteItem(guid, index);
+    public bool RemoveByIndex(dynamic index) =>
+        _index.TryGetValue(GetStoreKey(index, false), out Guid guid) && RemoveEntity(guid);
 
     public void Clear()
     {
@@ -123,6 +123,8 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
             _reverseIndex = new Dictionary<Guid, HashSet<StoreKey>>();
             _store = new Dictionary<Guid, T>();
             _index = new Dictionary<StoreKey, Guid>();
+            _categories.Clear();
+            _errors.Clear();
         }
     }
 
@@ -137,26 +139,40 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
 
     public bool ContainsCategory(string category) => _categories.ContainsKey(category);
 
-    private void AddCategoriesToIndex(Guid entityGuid, params string[] categories)
+    private void AddCategoriesToIndex(Guid entityGuid, IEnumerable<string> categories)
     {
         foreach (var category in categories)
-            lock (_lock)
-            {
-                if (!_categories.TryGetValue(category, out var guid))
-                    _categories[category] = new HashSet<Guid>();
-                _categories[category].Add(entityGuid);
-            }
+        {
+            if (!_categories.TryGetValue(category, out var guids))
+                _categories[category] = guids = new HashSet<Guid>();
+            guids.Add(entityGuid);
+        }
     }
 
-    private void RemoveCategoriesFromIndex(Guid entityGuid, params string[] categories)
+    // Walk every category, not the category list of the entity, because that list can change after the
+    // entity is added. An empty category is removed, so that ContainsCategory is false for it.
+    private void RemoveCategoriesFromIndex(Guid entityGuid)
     {
-        foreach (var category in categories)
-            lock (_lock)
-            {
-                if (!_categories.TryGetValue(category, out var guid))
-                    return;
-                _categories[category].Remove(entityGuid);
-            }
+        foreach (var (category, guids) in _categories)
+            if (guids.Remove(entityGuid) && guids.Count == 0)
+                _categories.Remove(category);
+    }
+
+    // Remove an entity from the store and from every index. A category or error entry left behind points at
+    // a GUID that is no longer in the store, and a lookup then throws.
+    private bool RemoveEntity(Guid guid, bool keepError = false)
+    {
+        lock (_lock)
+        {
+            var removed = _store.Remove(guid);
+            foreach (var key in _reverseIndex[guid])
+                _index.Remove(key);
+            _reverseIndex.Remove(guid);
+            RemoveCategoriesFromIndex(guid);
+            if (!keepError)
+                _errors.Remove(guid);
+            return removed;
+        }
     }
 
     private void StoreItem(T entity, dynamic key, params dynamic[] indexes)
@@ -167,24 +183,17 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
             throw new ArgumentException(
                 $"{typeof(T).Name} has no primary key, so the store cannot add it. Set the attribute or element that names it.");
         // A null secondary key (for example a map with no Name) fails the same way.
-        foreach (var index in indexes)
-            if (index is null)
-                throw new ArgumentException(
-                    $"{typeof(T).Name} has a null secondary key, so the store cannot add it. Set the attribute or element that names it.");
-        if (entity.SecondaryKeys.Contains(null))
+        var secondaryKeys = entity.SecondaryKeys;
+        if (indexes.Contains(null) || secondaryKeys.Contains(null))
             throw new ArgumentException(
                 $"{typeof(T).Name} has a null secondary key, so the store cannot add it. Set the attribute or element that names it.");
 
         lock (_lock)
         {
-            // If this is an overwrite, clean old entries up first & make sure the indexes are cleaned up
+            // If this is an overwrite, remove the old entity first. The same entity added again keeps its
+            // error flag.
             if (_index.TryGetValue(GetStoreKey(key, true), out Guid existing))
-            {
-                foreach (var entry in _reverseIndex[existing])
-                    _index.Remove(entry);
-                _reverseIndex.Remove(existing);
-                _store.Remove(existing);
-            }
+                RemoveEntity(existing, keepError: existing == entity.Guid);
 
             _store[entity.Guid] = entity;
             _reverseIndex[entity.Guid] = new HashSet<StoreKey>();
@@ -205,7 +214,7 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
             }
 
             if (entity is ICategorizable categorizable)
-                AddCategoriesToIndex(entity.Guid, categorizable.CategoryList.ToArray());
+                AddCategoriesToIndex(entity.Guid, categorizable.CategoryList);
 
             foreach (var index in indexes)
             {
@@ -214,26 +223,12 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
                 _reverseIndex[entity.Guid].Add(storeKey);
             }
 
-            foreach (var index in entity.SecondaryKeys)
+            foreach (var index in secondaryKeys)
             {
                 var storeKey = new StoreKey(index, false);
                 _index[storeKey] = entity.Guid;
                 _reverseIndex[entity.Guid].Add(storeKey);
             }
-        }
-    }
-
-    private bool DeleteItem(Guid guid, dynamic key)
-    {
-        lock (_lock)
-        {
-            if (!_store.TryGetValue(guid, out var entity)) return false;
-            var ret = _store.Remove(guid) && _index.Remove(GetStoreKey(key, true));
-            foreach (var index in _reverseIndex[guid]) _index.Remove(index);
-            ret = ret && _reverseIndex.Remove(guid);
-            if (entity is ICategorizable categorizable)
-                RemoveCategoriesFromIndex(guid, categorizable.CategoryList.ToArray());
-            return ret;
         }
     }
 
@@ -244,20 +239,12 @@ public class XmlDataStore<T> : IWorldDataStore<T> where T : HybrasylEntity<T>
 
     public T GetByFilename(string filename) => GetByIndex(filename);
 
-    public void Add(T entity) => AddWithIndex(entity, entity.PrimaryKey, entity.SecondaryKeys.ToArray());
+    // StoreItem indexes the secondary keys of the entity itself.
+    public void Add(T entity) => StoreItem(entity, entity.PrimaryKey);
 
     public bool TryGetValueByFilename(string filename, out T result)
     {
         result = TryGetValueByIndex(filename, out var ret) ? ret : null;
         return result != null;
-    }
-
-    private void UpdateIndexOnRemove(Guid guid)
-    {
-        if (!_reverseIndex.TryGetValue(guid, out var indexes)) return;
-        lock (_lock)
-        {
-            foreach (var index in indexes) _reverseIndex[guid].Remove(GetStoreKey(index));
-        }
     }
 }

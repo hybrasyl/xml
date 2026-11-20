@@ -438,4 +438,118 @@ public class XmlStoreTests
         var f = new Creature();
         Assert.IsType<byte>(f.AssailSound);
     }
+
+    private static Castable CastableIn(string name, params string[] categories) => new()
+    {
+        Name = name,
+        Categories = categories.Select(selector: c => new Category { Value = c }).ToList()
+    };
+
+    [Fact]
+    public void OverwriteRemovesTheOldEntityFromItsCategories()
+    {
+        var store = GetCastableStore();
+        store.Add(CastableIn("Same Name", "fire", "attack"), "Same Name");
+        var second = CastableIn("Same Name", "fire");
+        store.Add(second, "Same Name");
+
+        Assert.Same(second, Assert.Single(store.FindByCategory("fire")));
+        Assert.False(store.ContainsCategory("attack"));
+    }
+
+    [Fact]
+    public void OverwriteRemovesTheOldEntityFromTheErrors()
+    {
+        var store = GetCastableStore();
+        var first = CastableIn("Same Name");
+        store.Add(first, "Same Name");
+        store.FlagAsError(first.Guid, XmlError.ProcessingError, "test");
+        store.Add(CastableIn("Same Name"), "Same Name");
+
+        Assert.Empty(store.Errors);
+    }
+
+    [Fact]
+    public void RemoveCleansEveryCategoryAndTheErrors()
+    {
+        var store = GetCastableStore();
+        var castable = CastableIn("Removed", "fire", "attack");
+        store.Add(castable, "Removed");
+        store.FlagAsError(castable.Guid, XmlError.ProcessingError, "test");
+
+        Assert.True(store.Remove("Removed"));
+
+        Assert.Empty(store.FindByCategory("fire"));
+        Assert.False(store.ContainsCategory("attack"));
+        Assert.Empty(store.Errors);
+    }
+
+    [Fact]
+    public void ClearEmptiesTheCategoriesAndTheErrors()
+    {
+        var store = GetCastableStore();
+        var castable = CastableIn("Cleared", "fire");
+        store.Add(castable, "Cleared");
+        store.FlagAsError(castable.Guid, XmlError.ProcessingError, "test");
+
+        store.Clear();
+
+        Assert.False(store.ContainsCategory("fire"));
+        Assert.Empty(store.Errors);
+    }
+
+    [Fact]
+    public void RemoveCleansTheIndexedCategoriesAfterTheListChanges()
+    {
+        var store = GetCastableStore();
+        var castable = CastableIn("Removed", "fire", "attack");
+        store.Add(castable, "Removed");
+        castable.Categories.RemoveAt(1);
+        castable.Categories.Insert(0, new Category { Value = "never indexed" });
+
+        Assert.True(store.Remove("Removed"));
+
+        Assert.False(store.ContainsCategory("fire"));
+        Assert.False(store.ContainsCategory("attack"));
+        Assert.Empty(store.FindByCategory("attack"));
+    }
+
+    [Fact]
+    public void RemoveOfAMissingKeyReportsNoRemoval()
+    {
+        var store = GetCastableStore();
+        store.Add(CastableIn("Kept"), "Kept");
+
+        Assert.False(store.Remove("Missing"));
+        Assert.False(store.RemoveByIndex("missing"));
+        Assert.Equal(1, store.Count);
+    }
+
+    [Fact]
+    public void RemoveByIndexReportsTheRemoval()
+    {
+        var store = GetCastableStore();
+        var castable = CastableIn("Indexed", "fire");
+        store.AddWithIndex(castable, "Indexed", "alias");
+
+        Assert.True(store.RemoveByIndex("alias"));
+
+        Assert.Equal(0, store.Count);
+        Assert.Empty(store.Keys);
+        Assert.False(store.ContainsCategory("fire"));
+    }
+
+    [Fact]
+    public void AddingTheSameEntityAgainKeepsItsErrorFlag()
+    {
+        var store = GetCastableStore();
+        var castable = CastableIn("Flagged", "fire");
+        store.Add(castable, "Flagged");
+        store.FlagAsError(castable.Guid, XmlError.ProcessingError, "test");
+
+        store.Add(castable, "Flagged");
+
+        Assert.Same(castable, Assert.Single(store.Errors));
+        Assert.Same(castable, Assert.Single(store.FindByCategory("fire")));
+    }
 }
