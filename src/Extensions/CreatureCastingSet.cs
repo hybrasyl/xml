@@ -19,11 +19,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace Hybrasyl.Xml.Objects;
 
 public partial class CreatureCastingSet : IEquatable<CreatureCastingSet>
 {
+    [XmlIgnore]
     public List<string> CategoryList => string.IsNullOrEmpty(Categories)
         ? new List<string>()
         : Categories.Trim().Split(" ").Select(selector: x => x.ToLower()).ToList();

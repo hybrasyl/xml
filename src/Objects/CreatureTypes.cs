@@ -13,6 +13,12 @@ namespace Hybrasyl.Xml.Objects
 {
     
     
+    /// <summary>
+    /// <para xml:lang="en">The loader adds each Type as a separate creature. A type takes nothing from its parent creature, so give each type its own Loot, Hostility, SetCookies and Description.</para>
+    /// </summary>
+    [System.ComponentModel.DescriptionAttribute(("The loader adds each Type as a separate creature. A type takes nothing from its p" +
+        "arent creature, so give each type its own Loot, Hostility, SetCookies and Descri" +
+        "ption."))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("XmlSchemaClassGenerator", "3.0.1356.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute("CreatureTypes", Namespace="http://www.hybrasyl.com/XML/Hybrasyl/2020-02")]

@@ -242,7 +242,7 @@ namespace Hybrasyl.Xml.Objects
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Icon")]
-        public byte Icon { get; set; }
+        public ushort Icon { get; set; }
         
         [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=true)]
         [System.Xml.Serialization.XmlAttributeAttribute("Book")]

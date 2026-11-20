@@ -29,6 +29,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -42,14 +43,16 @@ public partial class HybrasylEntity<T> : IIndexable where T : HybrasylEntity<T>
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
     };
 
-    public Guid Guid { get; set; } = Guid.NewGuid();
+    // These members are runtime state, not world data, so Serialize does not write them.
+    // Clone uses JSON, so they have no [JsonIgnore]: a clone keeps them.
+    [XmlIgnore] public Guid Guid { get; set; } = Guid.NewGuid();
     public string Filename => string.IsNullOrWhiteSpace(LoadPath) ? null : Path.GetFileName(LoadPath);
-    public string LoadPath { get; set; }
+    [XmlIgnore] public string LoadPath { get; set; }
 
-    public XmlError Error { get; set; } = XmlError.None;
-    public string LoadErrorMessage { get; set; } = string.Empty;
+    [XmlIgnore] public XmlError Error { get; set; } = XmlError.None;
+    [XmlIgnore] public string LoadErrorMessage { get; set; } = string.Empty;
     public virtual string PrimaryKey => $"{typeof(T).Name}-{Filename}";
-    public virtual List<string> SecondaryKeys => new();
+    [XmlIgnore] public virtual List<string> SecondaryKeys => new();
 
     public T Clone<T>(bool newGuid = false) where T : HybrasylEntity<T>
     {

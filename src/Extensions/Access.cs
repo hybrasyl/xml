@@ -17,6 +17,7 @@
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace Hybrasyl.Xml.Objects;
 
@@ -25,8 +26,9 @@ public partial class Access
     private List<string> _privilegedUsers = new();
     private List<string> _reservedNames = new();
 
-    public bool AllPrivileged { get; set; }
+    [XmlIgnore] public bool AllPrivileged { get; set; }
 
+    [XmlIgnore]
     public List<string> PrivilegedUsers
     {
         get
@@ -43,6 +45,7 @@ public partial class Access
         }
     }
 
+    [XmlIgnore]
     public List<string> ReservedNames
     {
         get

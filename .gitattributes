@@ -1,0 +1,5 @@
+# Generated and hand-written model files use LF on every platform (HXML-26).
+src/Objects/*.cs text eol=lf
+src/Enums/*.cs text eol=lf
+# Bash does not run a script with CRLF line endings.
+tools/*.sh text eol=lf

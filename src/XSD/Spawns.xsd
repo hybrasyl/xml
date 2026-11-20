@@ -29,6 +29,9 @@
 
   <!-- New, ERISCO SPAWNS (TM), with the capability of being put on ANY map! -->
 
+  <!-- A spawn group file has SpawnGroup as its root element. -->
+  <xs:element name="SpawnGroup" type="hyb:SpawnGroup" />
+
   <xs:complexType name="SpawnGroup">
     <xs:sequence>
       <xs:element name="Spawns" type="hyb:Spawns" minOccurs="0" maxOccurs="1" />

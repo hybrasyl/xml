@@ -19,7 +19,8 @@
 
 # Regenerate src/Objects from src/XSD (HTOO-377).
 #
-# Requires: dotnet tool install -g dotnet-xscgen
+# Requires: the .NET SDK. dotnet-tools.json pins the xscgen version, and
+# the script restores it. A different xscgen version gives different files.
 #
 # Generation is two steps: xscgen emits the model, then
 # patch-flags-enums.py applies the wire-format fixups XmlSerializer needs
@@ -29,14 +30,15 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-XSCGEN="${XSCGEN:-$HOME/.dotnet/tools/xscgen}"
-if ! command -v "$XSCGEN" >/dev/null 2>&1; then
-    echo "xscgen not found at $XSCGEN -- run: dotnet tool install -g dotnet-xscgen" >&2
-    exit 1
-fi
+dotnet tool restore >/dev/null
+XSCGEN=(dotnet tool run xscgen)
 
 NAMESPACE='http://www.hybrasyl.com/XML/Hybrasyl/2020-02=Hybrasyl.Xml.Objects'
-OUT="$(mktemp -d)"
+# xscgen writes its arguments, -o included, into each file header. A fixed
+# relative path keeps the header the same on every machine.
+# normalize-generated.py writes src/Objects in its place.
+OUT=obj/xscgen
+rm -rf "$OUT"
 trap 'rm -rf "$OUT"' EXIT
 
 # Every schema is passed individually, and there is deliberately no aggregate
@@ -44,7 +46,7 @@ trap 'rm -rf "$OUT"' EXIT
 # defines every type twice, which xscgen reports by exiting 4 while still
 # emitting correct output -- a nonzero exit we would then have to ignore.
 # shellcheck disable=SC2046  # deliberate word splitting over the schema list
-"$XSCGEN" $(ls src/XSD/*.xsd) \
+"${XSCGEN[@]}" $(ls src/XSD/*.xsd) \
     -o "$OUT" \
     -n "$NAMESPACE" \
     --separateFiles \
@@ -53,11 +55,6 @@ trap 'rm -rf "$OUT"' EXIT
     --enumCollection
 
 cp "$OUT/Hybrasyl.Xml.Objects/"*.cs src/Objects/
-
-# xscgen records its own invocation in every file's header, including the
-# absolute -o path. Normalize it so regenerating on a different machine
-# produces no diff.
-sed -i 's| -o /[^ ]*| -o src/Objects|' src/Objects/*.cs
 
 python3 tools/patch-flags-enums.py
 
@@ -69,5 +66,20 @@ python3 tools/pin-enum-values.py
 # Enums are shared vocabulary with their own allocation contract, so they live
 # in Hybrasyl.Xml.Enums rather than alongside the data model.
 python3 tools/namespace-enums.py
+
+# Make the output the same on every platform. See tools/normalize-generated.py.
+python3 tools/normalize-generated.py
+
+# Remove each generated file that xscgen no longer writes, so that a type
+# removed from the XSD does not leave its file behind. This runs last, so a
+# failed step above does not also delete files. A hand-written file in
+# src/Objects has no xscgen header (the marker that
+# normalize-generated.py uses), so it stays.
+for f in src/Objects/*.cs; do
+    if [ ! -e "$OUT/Hybrasyl.Xml.Objects/$(basename "$f")" ] &&
+        grep -q '^// xscgen src/XSD/' "$f"; then
+        rm -- "$f"
+    fi
+done
 
 echo "regenerate: done -- build and run the test suite before committing"

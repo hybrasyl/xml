@@ -52,13 +52,139 @@ public class StatModifiersElementTests
     }
 
     [Fact]
-    public void ElementalModifierIsOneWhenNoEntryMatches()
+    public void ElementalModifierIsZeroWhenNoEntryMatches()
     {
         var modifiers = Modifiers();
         // The type must match too: Fire has an augment but no resistance.
-        Assert.Equal(1.0, modifiers.GetElementalResistance("Fire"));
-        Assert.Equal(1.0, modifiers.GetElementalAugment("Earth"));
-        Assert.Equal(1.0, new StatModifiers { ElementalModifiers = null }.GetElementalAugment("Fire"));
+        Assert.Equal(0.0, modifiers.GetElementalResistance("Fire"));
+        Assert.Equal(0.0, modifiers.GetElementalAugment("Earth"));
+        Assert.Equal(0.0, new StatModifiers { ElementalModifiers = null }.GetElementalAugment("Fire"));
+    }
+
+    [Fact]
+    public void ElementalModifierAddsEveryMatchingEntry()
+    {
+        var modifiers = Modifiers() + new StatModifiers
+        {
+            ElementalModifiers =
+            [
+                new ElementalModifier { Type = ElementalModifierType.Augment, Element = "fire", Modifier = 0.3 },
+                new ElementalModifier { Type = ElementalModifierType.Resistance, Element = "Fire", Modifier = 0.5 }
+            ]
+        };
+
+        // As the server does: 1.2 + 0.3. The resistance to Fire is not an augment.
+        Assert.Equal(1.5, modifiers.GetElementalAugment("Fire"), 10);
+    }
+
+    [Fact]
+    public void SumKeepsTheElementalModifiersOfBothSides()
+    {
+        var fireResistance = new ElementalModifier
+            { Type = ElementalModifierType.Resistance, Element = "Fire", Modifier = 0.03 };
+
+        var sum = Modifiers() + new StatModifiers { ElementalModifiers = [fireResistance] };
+
+        Assert.Equal(3, sum.ElementalModifiers.Count);
+        Assert.Contains(sum.ElementalModifiers, filter: x =>
+            x.Type == ElementalModifierType.Resistance && x.Element == "Fire" && x.Modifier == 0.03);
+        Assert.Equal(1.2, sum.GetElementalAugment("Fire"));
+    }
+
+    [Fact]
+    public void SumLeavesBothOperandsUnchanged()
+    {
+        var left = Modifiers();
+        left.BonusStr = "1";
+        var right = new StatModifiers
+        {
+            BonusStr = "2",
+            ElementalModifiers =
+                [new ElementalModifier { Type = ElementalModifierType.Augment, Element = "Fire", Modifier = 0.3 }]
+        };
+
+        _ = left + right;
+        var sum = left + right;
+
+        Assert.Equal("1", left.BonusStr);
+        Assert.Equal(2, left.ElementalModifiers.Count);
+        Assert.Equal("2", right.BonusStr);
+        Assert.Single(right.ElementalModifiers);
+        Assert.Equal("3", sum.BonusStr);
+        Assert.Equal(3, sum.ElementalModifiers.Count);
+    }
+
+    // A schema field that the operator does not combine is lost from the right operand.
+    [Fact]
+    public void SumKeepsEveryStringFieldOfTheRightOperand()
+    {
+        var right = new StatModifiers();
+        var fields = typeof(StatModifiers).GetProperties()
+            .Where(predicate: p =>
+                p.DeclaringType == typeof(StatModifiers) && p.PropertyType == typeof(string) && p.CanWrite)
+            .ToList();
+        foreach (var field in fields)
+            field.SetValue(right, "7");
+
+        var sum = new StatModifiers() + right;
+
+        Assert.All(fields, action: field => Assert.Equal("7", field.GetValue(sum)));
+    }
+
+    [Theory]
+    [InlineData(nameof(StatModifiers.BaseOffensiveElement))]
+    [InlineData(nameof(StatModifiers.BaseDefensiveElement))]
+    [InlineData(nameof(StatModifiers.OffensiveElementOverride))]
+    [InlineData(nameof(StatModifiers.DefensiveElementOverride))]
+    [InlineData(nameof(StatModifiers.DamageType))]
+    public void SumKeepsTheLeftElementOrDamageType(string name)
+    {
+        var field = typeof(StatModifiers).GetProperty(name)!;
+        var left = new StatModifiers();
+        var right = new StatModifiers();
+        field.SetValue(left, "Fire");
+        field.SetValue(right, "Water");
+
+        Assert.Equal("Fire", field.GetValue(left + right));
+    }
+
+    [Fact]
+    public void SumAddsTheCurrentAndFaithFields()
+    {
+        var sum = new StatModifiers { CurrentGold = "10", BonusExtraFaith = "2" } +
+                  new StatModifiers { CurrentGold = "5", BonusExtraFaith = "3" };
+
+        Assert.Equal("15", sum.CurrentGold);
+        Assert.Equal("5", sum.BonusExtraFaith);
+    }
+
+    [Fact]
+    public void SumSharesNoEntryWithTheOperands()
+    {
+        var left = Modifiers();
+        var right = Modifiers();
+
+        var sum = left + right;
+        sum.ElementalModifiers[0].Modifier = 9;
+        sum.ElementalModifiers[2].Modifier = 9;
+
+        Assert.Equal(1.2, left.GetElementalAugment("Fire"));
+        Assert.Equal(1.2, right.GetElementalAugment("Fire"));
+    }
+
+    [Fact]
+    public void SumMakesTheListWhenOnlyTheRightSideHasElementalModifiers()
+    {
+        var sum = new StatModifiers { ElementalModifiers = null } + Modifiers();
+
+        Assert.Equal(2, sum.ElementalModifiers.Count);
+    }
+
+    [Fact]
+    public void SumKeepsTheLeftListWhenTheRightSideHasNoElementalModifiers()
+    {
+        Assert.Equal(2, (Modifiers() + new StatModifiers { ElementalModifiers = null }).ElementalModifiers.Count);
+        Assert.Equal(2, (Modifiers() + new StatModifiers()).ElementalModifiers.Count);
     }
 }
 

@@ -27,7 +27,6 @@ namespace Hybrasyl.Xml.Objects
         /// </summary>
         [System.ComponentModel.DataAnnotations.MinLengthAttribute(1)]
         [System.ComponentModel.DataAnnotations.MaxLengthAttribute(255)]
-        [System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings=false)]
         [System.Xml.Serialization.XmlElementAttribute("Description")]
         public string Description { get; set; }
         

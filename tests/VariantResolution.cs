@@ -73,6 +73,17 @@ public class VariantResolution
     }
 
     [Fact]
+    public void ResolveVariant_KeepsTheElementalModifiersOfTheBaseAndTheVariant()
+    {
+        static string Resistance(string element, string modifier) =>
+            $"""<StatModifiers><ElementalModifiers><ElementalModifier Type="Resistance" Element="{element}" Modifier="{modifier}" /></ElementalModifiers></StatModifiers>""";
+
+        var resolved = Resolve(MakeItem(Belt + Resistance("Water", "0.05")), Resistance("Fire", "0.03"));
+
+        Assert.Equal(["Water", "Fire"], resolved.Properties.StatModifiers.Resistances.Select(m => m.Element));
+    }
+
+    [Fact]
     public void ResolveVariant_KeepsBasePhysical_WhenTheVariantHasNoPhysical()
     {
         var resolved = Resolve(MakeItem(Belt), "");

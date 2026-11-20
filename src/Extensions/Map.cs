@@ -17,6 +17,7 @@
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using Hybrasyl.Xml.Interfaces;
 
 namespace Hybrasyl.Xml.Objects;
@@ -24,7 +25,7 @@ namespace Hybrasyl.Xml.Objects;
 public partial class Map : ILoadOnStart<Map>
 {
     public override string PrimaryKey => Id.ToString();
-    public override List<string> SecondaryKeys => new() { Name };
+    [XmlIgnore] public override List<string> SecondaryKeys => new() { Name };
 
     public new static void LoadAll(IWorldDataManager manager, string path) =>
         HybrasylEntity<Map>.LoadAll(manager, path);

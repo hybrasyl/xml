@@ -19,6 +19,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using Hybrasyl.Xml.Enums;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;
@@ -36,7 +37,7 @@ public partial class Species : ILoadOnStart<Species>, IAdditionalValidation<Spec
 
     public override string PrimaryKey => Key;
 
-    public override List<string> SecondaryKeys => Key == null ? [] : [Key.ToLowerInvariant()];
+    [XmlIgnore] public override List<string> SecondaryKeys => Key == null ? [] : [Key.ToLowerInvariant()];
 
     public bool IsBranch => !string.IsNullOrEmpty(BranchOf);
 

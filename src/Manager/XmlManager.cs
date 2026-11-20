@@ -389,14 +389,4 @@ public class XmlDataManager : IWorldDataManager
     }
 
     private static string Sanitize(dynamic key) => key.ToString().Normalize().ToLower();
-
-    private void AddToStore<T>(T entity) where T : HybrasylEntity<T>
-    {
-        var store = GetStore<T>();
-
-        if (entity.SecondaryKeys.Count > 0)
-            AddWithIndex(entity, entity.PrimaryKey, entity.SecondaryKeys.ToArray());
-        else
-            Add(entity, entity.PrimaryKey);
-    }
 }

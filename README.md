@@ -22,9 +22,10 @@ found in [Extensions](https://github.com/hybrasyl/xml/tree/main/src/Extensions).
 Generation runs headless on any platform:
 
 ```sh
-dotnet tool install -g dotnet-xscgen
 tools/regenerate.sh
 ```
+
+`dotnet-tools.json` pins the `xscgen` version, and the script restores it. A different version gives different files, so change the pin only in a commit that also regenerates `src/Objects`.
 
 `regenerate.sh` runs `xscgen` over every schema and then
 `tools/patch-flags-enums.py`, which applies the wire-format fixups
@@ -33,6 +34,8 @@ XmlSerializer needs but xscgen cannot express from the schema alone
 defaults carry game semantics). The patch script is strict: if the
 generator's output shape changes, it fails loudly and writes nothing
 rather than emitting a subtly wrong model.
+
+The last step, `tools/normalize-generated.py`, writes `src/Objects` as the output path in each header and ends every line in `src/Objects` and `src/Enums` with LF, so a regeneration gives the same files on Windows, macOS and Linux.
 
 Some types are maintained by hand and are not generated: the flags enums
 in [Enums](https://github.com/hybrasyl/xml/tree/main/src/Enums),

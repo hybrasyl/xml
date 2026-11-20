@@ -18,6 +18,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using Hybrasyl.Xml.Interfaces;
 using Hybrasyl.Xml.Manager;
 
@@ -27,7 +28,7 @@ public partial class Trait : ILoadOnStart<Trait>, IAdditionalValidation<Trait>
 {
     public override string PrimaryKey => Name;
 
-    public override List<string> SecondaryKeys => Name == null ? [] : [Name.ToLower()];
+    [XmlIgnore] public override List<string> SecondaryKeys => Name == null ? [] : [Name.ToLower()];
 
     public new static void LoadAll(IWorldDataManager manager, string path) =>
         HybrasylEntity<Trait>.LoadAll(manager, path);

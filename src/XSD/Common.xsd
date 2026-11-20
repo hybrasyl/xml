@@ -50,14 +50,13 @@
     </xs:restriction>
   </xs:simpleType>
 
-  <!-- An odd byte, used in castables -->
+  <!-- An odd byte, used in castables. One pattern, not five: xscgen writes only
+       the last pattern of a type into the generated RegularExpression attribute.
+       The longest branch is first, because that attribute must match the whole
+       value and .NET takes the first branch that matches. -->
   <xs:simpleType name="OddByte">
     <xs:restriction base="xs:unsignedByte">
-      <xs:pattern value="[13579]" />
-      <xs:pattern value="[1-9][13579]" />
-      <xs:pattern value="1[0-9][13579]" />
-      <xs:pattern value="2[0-4][13579]" />
-      <xs:pattern value="25[135]" />
+      <xs:pattern value="25[135]|2[0-4][13579]|1[0-9][13579]|[1-9][13579]|[13579]" />
     </xs:restriction>
   </xs:simpleType>
 
@@ -186,6 +185,7 @@
               <xs:enumeration value="NoDodge" />
               <xs:enumeration value="NoCrit" />
               <xs:enumeration value="NoElement" />
+              <xs:enumeration value="NoPositional" />
             </xs:restriction>
           </xs:simpleType>
         </xs:list>
@@ -791,6 +791,9 @@
   </xs:complexType>
 
   <xs:complexType name="CreatureTypes">
+    <xs:annotation>
+      <xs:documentation xml:lang="en">The loader adds each Type as a separate creature. A type takes nothing from its parent creature, so give each type its own Loot, Hostility, SetCookies and Description.</xs:documentation>
+    </xs:annotation>
     <xs:sequence>
       <xs:element name="Type" type="hyb:Creature" minOccurs="0" maxOccurs="unbounded" />
     </xs:sequence>
@@ -896,7 +899,7 @@
     <xs:sequence>
       <xs:element name="CastingSets" minOccurs="0" maxOccurs="1" type="CreatureCastingSets" />
       <xs:element name="Hostility" minOccurs="0" maxOccurs="1" type="CreatureHostilitySettings" />
-      <xs:element name="SetCookies" minOccurs="0" maxOccurs="1" type="CreatureCookies " />
+      <xs:element name="SetCookies" minOccurs="0" maxOccurs="1" type="CreatureCookies" />
     </xs:sequence>
   </xs:complexType>
 
@@ -929,7 +932,7 @@
       <xs:element name="StatAlloc" minOccurs="0" maxOccurs="1" type="CreatureStatAlloc" />
       <xs:element name="Castables" minOccurs="0" maxOccurs="1" type="CreatureCastables" />
       <xs:element name="Behavior" minOccurs="0" maxOccurs="1" type="CreatureBehavior" />
-      <xs:element name="Immunities" minOccurs="0" maxOccurs="1" type="CreatureImmunities " />
+      <xs:element name="Immunities" minOccurs="0" maxOccurs="1" type="CreatureImmunities" />
       <xs:element name="StatModifiers" minOccurs="0" maxOccurs="1" type="hyb:StatModifiers" />
     </xs:sequence>
     <xs:attribute name="Name" type="xs:string" use="required" />
