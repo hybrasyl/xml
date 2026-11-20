@@ -58,6 +58,7 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
                     $"{import.Filename}: Referenced import set {import.Import} not found");
                 ret.Errors.Add(import.Guid, $"{import.Filename}: Referenced import set {import.Import} not found");
                 // The set loads alone, without the import.
+                ret.TotalProcessed++;
                 continue;
             }
 
@@ -138,6 +139,11 @@ public partial class CreatureBehaviorSet : IPostProcessable<CreatureBehaviorSet>
         if (cbs2.Castables != null)
         {
             newCbs.Castables.Castable.AddRange(cbs2.Castables.Castable);
+            // A set with no Castables takes the imported Auto. A set with Castables keeps its own Auto, also
+            // when that is the default (true), because the generated class cannot tell a default from an
+            // explicit value.
+            if (cbs1.Castables == null)
+                newCbs.Castables.Auto = cbs2.Castables.Auto;
             if (!string.IsNullOrEmpty(cbs2.Castables.SkillCategories))
                 newCbs.Castables.SkillCategories += $" {cbs2.Castables.SkillCategories}";
             if (!string.IsNullOrEmpty(cbs2.Castables.SpellCategories))

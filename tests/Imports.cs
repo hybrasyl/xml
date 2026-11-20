@@ -100,6 +100,34 @@ public class ImportTests(ITestOutputHelper output, XmlManagerFixture fixture) : 
     }
 
     [Fact]
+    public void CreatureBehaviorSetMissingImportCountsAsProcessed()
+    {
+        var manager = new XmlDataManager();
+        manager.Add(new CreatureBehaviorSet { Name = "Parent" }, "Parent");
+        manager.Add(new CreatureBehaviorSet { Name = "Child", Import = "Parent" }, "Child");
+        manager.Add(new CreatureBehaviorSet { Name = "Orphan", Import = "NoSuchSet" }, "Orphan");
+
+        CreatureBehaviorSet.ProcessAll(manager);
+
+        var result = manager.GetStore<CreatureBehaviorSet>().ProcessResult;
+        Assert.Equal(2, result.TotalProcessed);
+        Assert.Single(result.Errors);
+    }
+
+    // A set with its own Castables keeps its own Auto. A set with none takes the imported Auto.
+    [Theory]
+    [InlineData(true, true)]
+    [InlineData(false, false)]
+    public void CreatureBehaviorSetImportTakesAutoFromTheSetWithCastables(bool setHasCastables, bool expected)
+    {
+        var set = new CreatureBehaviorSet
+            { Name = "Child", Castables = setHasCastables ? new CreatureCastables { Auto = true } : null };
+        var imported = new CreatureBehaviorSet { Name = "Parent", Castables = new CreatureCastables { Auto = false } };
+
+        Assert.Equal(expected, (set & imported).Castables.Auto);
+    }
+
+    [Fact]
     public void CreatureBehaviorSetImportWithNullImmunitiesKeepsTheSetsOwn()
     {
         var own = new CreatureImmunity { Type = CreatureImmunityType.Element, Value = "Fire" };
