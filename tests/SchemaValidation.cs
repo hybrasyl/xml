@@ -29,10 +29,12 @@ internal static class SchemaValidation
 {
     public const string Ns = "http://www.hybrasyl.com/XML/Hybrasyl/2020-02";
 
+    public static string[] XsdFiles => Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "XSD"), "*.xsd");
+
     private static readonly Lazy<XmlSchemaSet> Schemas = new(() =>
     {
         var set = new XmlSchemaSet();
-        foreach (var file in Directory.GetFiles(Path.Combine(AppContext.BaseDirectory, "XSD"), "*.xsd"))
+        foreach (var file in XsdFiles)
             set.Add(Ns, file);
         set.Compile();
         return set;
