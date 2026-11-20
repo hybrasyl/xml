@@ -70,4 +70,16 @@ python3 tools/namespace-enums.py
 # Make the output the same on every platform. See tools/normalize-generated.py.
 python3 tools/normalize-generated.py
 
+# Remove each generated file that xscgen no longer writes, so that a type
+# removed from the XSD does not leave its file behind. This runs last, so a
+# failed step above does not also delete files. A hand-written file in
+# src/Objects has no xscgen header (the marker that
+# normalize-generated.py uses), so it stays.
+for f in src/Objects/*.cs; do
+    if [ ! -e "$OUT/Hybrasyl.Xml.Objects/$(basename "$f")" ] &&
+        grep -q '^// xscgen src/XSD/' "$f"; then
+        rm -- "$f"
+    fi
+done
+
 echo "regenerate: done -- build and run the test suite before committing"
