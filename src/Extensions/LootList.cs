@@ -16,6 +16,7 @@
 // 
 // For contributors and individual authors please refer to CONTRIBUTORS.MD.
 
+using System;
 using System.Collections.Generic;
 
 namespace Hybrasyl.Xml.Objects;
@@ -32,8 +33,8 @@ public partial class LootList
         if (l1?.Gold is not null || l2?.Gold is not null)
             ret.Gold = new LootGold
             {
-                Min = (l1?.Gold?.Min ?? 0) + (l2?.Gold?.Min ?? 0),
-                Max = (l1?.Gold?.Max ?? 0) + (l2?.Gold?.Max ?? 0)
+                Min = SaturatingAdd(l1?.Gold?.Min ?? 0, l2?.Gold?.Min ?? 0),
+                Max = SaturatingAdd(l1?.Gold?.Max ?? 0, l2?.Gold?.Max ?? 0)
             };
         ret.Set = new List<LootImport>();
         if (l1?.Set is not null)
@@ -45,7 +46,10 @@ public partial class LootList
             ret.Table.AddRange(l1.Table);
         if (l2?.Table is not null)
             ret.Table.AddRange(l2.Table);
-        ret.Xp = (l1?.Xp ?? 0) + (l2?.Xp ?? 0);
+        ret.Xp = SaturatingAdd(l1?.Xp ?? 0, l2?.Xp ?? 0);
         return ret;
     }
+
+    // A sum above uint.MaxValue stays at uint.MaxValue. It does not wrap to a small value.
+    private static uint SaturatingAdd(uint a, uint b) => (uint) Math.Min((ulong) a + b, uint.MaxValue);
 }

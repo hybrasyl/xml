@@ -65,4 +65,14 @@ public class LootLists
         Assert.True((new LootList() + null).IsEmpty);
         Assert.True(((LootList?) null + null).IsEmpty);
     }
+
+    [Fact]
+    public void SumStopsAtTheLargestValue()
+    {
+        var sum = WithGold(uint.MaxValue, uint.MaxValue, uint.MaxValue) + WithGold(1, 1, 1);
+
+        Assert.Equal(uint.MaxValue, sum.Xp);
+        Assert.Equal(uint.MaxValue, sum.Gold.Min);
+        Assert.Equal(uint.MaxValue, sum.Gold.Max);
+    }
 }
