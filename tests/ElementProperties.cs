@@ -114,6 +114,50 @@ public class StatModifiersElementTests
         Assert.Equal(3, sum.ElementalModifiers.Count);
     }
 
+    // A schema field that the operator does not combine is lost from the right operand.
+    [Fact]
+    public void SumKeepsEveryStringFieldOfTheRightOperand()
+    {
+        var right = new StatModifiers();
+        var fields = typeof(StatModifiers).GetProperties()
+            .Where(predicate: p =>
+                p.DeclaringType == typeof(StatModifiers) && p.PropertyType == typeof(string) && p.CanWrite)
+            .ToList();
+        foreach (var field in fields)
+            field.SetValue(right, "7");
+
+        var sum = new StatModifiers() + right;
+
+        Assert.All(fields, action: field => Assert.Equal("7", field.GetValue(sum)));
+    }
+
+    [Theory]
+    [InlineData(nameof(StatModifiers.BaseOffensiveElement))]
+    [InlineData(nameof(StatModifiers.BaseDefensiveElement))]
+    [InlineData(nameof(StatModifiers.OffensiveElementOverride))]
+    [InlineData(nameof(StatModifiers.DefensiveElementOverride))]
+    [InlineData(nameof(StatModifiers.DamageType))]
+    public void SumKeepsTheLeftElementOrDamageType(string name)
+    {
+        var field = typeof(StatModifiers).GetProperty(name)!;
+        var left = new StatModifiers();
+        var right = new StatModifiers();
+        field.SetValue(left, "Fire");
+        field.SetValue(right, "Water");
+
+        Assert.Equal("Fire", field.GetValue(left + right));
+    }
+
+    [Fact]
+    public void SumAddsTheCurrentAndFaithFields()
+    {
+        var sum = new StatModifiers { CurrentGold = "10", BonusExtraFaith = "2" } +
+                  new StatModifiers { CurrentGold = "5", BonusExtraFaith = "3" };
+
+        Assert.Equal("15", sum.CurrentGold);
+        Assert.Equal("5", sum.BonusExtraFaith);
+    }
+
     [Fact]
     public void SumSharesNoEntryWithTheOperands()
     {

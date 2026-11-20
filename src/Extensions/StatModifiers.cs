@@ -113,6 +113,9 @@ public partial class StatModifiers
         return $"{sm1} + {sm2}";
     }
 
+    // For a value that does not add, such as an element: the first value wins, else the second applies.
+    public static string FirstNonEmpty(string sm1, string sm2) => string.IsNullOrEmpty(sm1) ? sm2 : sm1;
+
     public static StatModifiers operator +(StatModifiers sm1, StatModifiers sm2)
     {
         // Return a new object. The operands do not change, and the result shares no list or entry with them.
@@ -176,6 +179,16 @@ public partial class StatModifiers
         ret.BaseInboundDamageToMp = Combine(ret.BaseInboundDamageToMp, sm2.BaseInboundDamageToMp);
         ret.BonusInboundDamageToMp = Combine(ret.BonusInboundDamageToMp, sm2.BonusInboundDamageToMp);
         ret.Shield = Combine(ret.Shield, sm2.Shield);
+        ret.CurrentGold = Combine(ret.CurrentGold, sm2.CurrentGold);
+        ret.CurrentXp = Combine(ret.CurrentXp, sm2.CurrentXp);
+        ret.CurrentFaith = Combine(ret.CurrentFaith, sm2.CurrentFaith);
+        ret.BaseExtraFaith = Combine(ret.BaseExtraFaith, sm2.BaseExtraFaith);
+        ret.BonusExtraFaith = Combine(ret.BonusExtraFaith, sm2.BonusExtraFaith);
+        ret.BaseOffensiveElement = FirstNonEmpty(ret.BaseOffensiveElement, sm2.BaseOffensiveElement);
+        ret.BaseDefensiveElement = FirstNonEmpty(ret.BaseDefensiveElement, sm2.BaseDefensiveElement);
+        ret.OffensiveElementOverride = FirstNonEmpty(ret.OffensiveElementOverride, sm2.OffensiveElementOverride);
+        ret.DefensiveElementOverride = FirstNonEmpty(ret.DefensiveElementOverride, sm2.DefensiveElementOverride);
+        ret.DamageType = FirstNonEmpty(ret.DamageType, sm2.DamageType);
         // Keep both lists. The server adds entries of the same type and element.
         if (sm2.ElementalModifiers is { Count: > 0 })
         {
